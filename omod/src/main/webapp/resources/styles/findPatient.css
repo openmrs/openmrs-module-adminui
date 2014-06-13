@@ -1,0 +1,44 @@
+.patient-result {
+    cursor: pointer;
+    padding: 1em;
+    margin-top: 1em;
+    border: 1px black solid;
+    border-radius: 0.2em;
+}
+
+.patient-result:nth-child(even) {
+    background-color: #e0e0e0;
+}
+
+.patient-result:nth-child(odd) {
+    background-color: #f0f0f0;
+}
+
+.patient-result .icon {
+    float: left;
+    margin-right: 1em;
+}
+
+.patient-result .name {
+    font-weight: bold;
+    font-size: 1.4em;
+}
+
+#search-box, #results-box {
+    display: inline-block;
+    width: 45%;
+    vertical-align: top;
+}
+
+.location-option {
+    border: 1px black solid;
+    border-radius: 5px;
+    padding: 5px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    width: 70%;
+}
+
+.selected {
+    background-color: yellow;
+}
