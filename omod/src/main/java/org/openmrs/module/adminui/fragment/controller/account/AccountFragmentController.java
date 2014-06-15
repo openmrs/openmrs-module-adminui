@@ -15,8 +15,8 @@
 package org.openmrs.module.adminui.fragment.controller.account;
 
 import org.openmrs.Person;
-import org.openmrs.module.emrapi.account.AccountDomainWrapper;
-import org.openmrs.module.emrapi.account.AccountService;
+import org.openmrs.module.adminui.account.AccountDomainWrapper;
+import org.openmrs.module.adminui.account.AccountService;
 import org.openmrs.ui.framework.UiUtils;
 import org.openmrs.ui.framework.annotation.SpringBean;
 import org.openmrs.ui.framework.fragment.action.FailureResult;
