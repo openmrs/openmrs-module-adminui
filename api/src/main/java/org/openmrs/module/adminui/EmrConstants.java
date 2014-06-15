@@ -12,7 +12,7 @@
  * Copyright (C) OpenMRS, LLC.  All Rights Reserved.
  */
 
-package org.openmrs.module.admintoolsui;
+package org.openmrs.module.adminui;
 
 public class EmrConstants {
 

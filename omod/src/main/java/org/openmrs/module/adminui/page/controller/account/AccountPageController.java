@@ -11,7 +11,7 @@
  *
  * Copyright (C) OpenMRS, LLC.  All Rights Reserved.
  */
-package org.openmrs.module.admintoolsui.page.controller.account;
+package org.openmrs.module.adminui.page.controller.account;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -20,11 +20,11 @@ import org.openmrs.api.APIException;
 import org.openmrs.api.AdministrationService;
 import org.openmrs.api.context.Context;
 import org.openmrs.messagesource.MessageSourceService;
-import org.openmrs.module.admintoolsui.EmrConstants;
+import org.openmrs.module.adminui.EmrConstants;
 import org.openmrs.module.emrapi.EmrApiConstants;
-import org.openmrs.module.emrapi.account.AccountDomainWrapper;
-import org.openmrs.module.emrapi.account.AccountService;
-import org.openmrs.module.emrapi.account.AccountValidator;
+import org.openmrs.module.adminui.account.AccountDomainWrapper;
+import org.openmrs.module.adminui.account.AccountService;
+import org.openmrs.module.adminui.account.AccountFormValidator;
 import org.openmrs.module.providermanagement.api.ProviderManagementService;
 import org.openmrs.ui.framework.annotation.BindParams;
 import org.openmrs.ui.framework.annotation.MethodParam;
@@ -74,18 +74,20 @@ public class AccountPageController {
 
     public String post(@MethodParam("getAccount") @BindParams AccountDomainWrapper account, BindingResult errors,
                        @RequestParam(value = "userEnabled", defaultValue = "false") boolean userEnabled,
+                       @RequestParam(value = "providerEnabled", defaultValue = "false") boolean providerEnabled,
                        @SpringBean("messageSource") MessageSource messageSource,
                        @SpringBean("messageSourceService") MessageSourceService messageSourceService,
                        @SpringBean("accountService") AccountService accountService,
                        @SpringBean("adminService") AdministrationService administrationService,
                        @SpringBean("providerManagementService") ProviderManagementService providerManagementService,
-                       @SpringBean("accountValidator") AccountValidator accountValidator, PageModel model,
+                       @SpringBean("newAccountValidator") AccountFormValidator newAccountValidator, PageModel model,
                        HttpServletRequest request) {
 
         // manually bind userEnabled (since checkboxes don't submit anything if unchecked));
         account.setUserEnabled(userEnabled);
+        account.setProviderEnabled(providerEnabled);
 
-        accountValidator.validate(account, errors);
+        newAccountValidator.validate(account, errors);
 
         if (!errors.hasErrors()) {
 
@@ -95,7 +97,7 @@ public class AccountPageController {
                         messageSourceService.getMessage("emr.account.saved"));
                 request.getSession().setAttribute(EmrConstants.SESSION_ATTRIBUTE_TOAST_MESSAGE, "true");
 
-                return "redirect:/emr/account/manageAccounts.page";
+                return "redirect:/adminui/account/manageAccounts.page";
             } catch (Exception e) {
                 log.warn("Some error occurred while saving account details:", e);
                 request.getSession().setAttribute(EmrConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE,
