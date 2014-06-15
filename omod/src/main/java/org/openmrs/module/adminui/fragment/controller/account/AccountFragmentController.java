@@ -12,7 +12,7 @@
  * Copyright (C) OpenMRS, LLC.  All Rights Reserved.
  */
 
-package org.openmrs.module.admintoolsui.fragment.controller.account;
+package org.openmrs.module.adminui.fragment.controller.account;
 
 import org.openmrs.Person;
 import org.openmrs.module.emrapi.account.AccountDomainWrapper;

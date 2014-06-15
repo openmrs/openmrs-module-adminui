@@ -1,4 +1,4 @@
-package org.openmrs.module.admintoolsui.page.controller.account;
+package org.openmrs.module.adminui.page.controller.account;
 
 
 import org.apache.commons.lang.StringUtils;
@@ -6,7 +6,7 @@ import org.openmrs.api.UserService;
 import org.openmrs.api.context.Context;
 import org.openmrs.api.db.DAOException;
 import org.openmrs.messagesource.MessageSourceService;
-import org.openmrs.module.admintoolsui.EmrConstants;
+import org.openmrs.module.adminui.EmrConstants;
 import org.openmrs.ui.framework.annotation.BindParams;
 import org.openmrs.ui.framework.annotation.MethodParam;
 import org.openmrs.ui.framework.annotation.SpringBean;
