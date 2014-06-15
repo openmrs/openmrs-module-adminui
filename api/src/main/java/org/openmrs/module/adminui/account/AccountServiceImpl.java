@@ -11,7 +11,7 @@ import org.openmrs.api.ProviderService;
 import org.openmrs.api.UserService;
 import org.openmrs.api.impl.BaseOpenmrsService;
 import org.openmrs.module.adminui.EmrApiConstants;
-import org.openmrs.module.adminui.EmrApiProperties;
+import org.openmrs.module.emrapi.EmrApiProperties;
 import org.openmrs.module.providermanagement.api.ProviderManagementService;
 import org.springframework.transaction.annotation.Transactional;
 

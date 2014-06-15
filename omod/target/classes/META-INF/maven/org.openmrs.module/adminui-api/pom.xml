@@ -61,14 +61,14 @@
 			<scope>test</scope>
 		</dependency>
 		
-		<!--  
+		 
 		<dependency>
 			<groupId>org.openmrs.module</groupId>
 			<artifactId>emrapi-api</artifactId>
 			<type>jar</type>
 			<scope>provided</scope>
 		</dependency>
-		-->
+		
 		
 		<dependency>
 			<groupId>org.openmrs.module</groupId>

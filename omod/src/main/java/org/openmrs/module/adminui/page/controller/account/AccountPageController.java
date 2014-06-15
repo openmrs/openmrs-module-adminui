@@ -21,10 +21,10 @@ import org.openmrs.api.AdministrationService;
 import org.openmrs.api.context.Context;
 import org.openmrs.messagesource.MessageSourceService;
 import org.openmrs.module.adminui.EmrConstants;
-import org.openmrs.module.adminui.EmrApiConstants;
+import org.openmrs.module.emrapi.EmrApiConstants;
 import org.openmrs.module.adminui.account.AccountDomainWrapper;
 import org.openmrs.module.adminui.account.AccountService;
-import org.openmrs.module.adminui.account.AccountValidator;
+import org.openmrs.module.adminui.account.AccountFormValidator;
 import org.openmrs.module.providermanagement.api.ProviderManagementService;
 import org.openmrs.ui.framework.annotation.BindParams;
 import org.openmrs.ui.framework.annotation.MethodParam;
@@ -80,7 +80,7 @@ public class AccountPageController {
                        @SpringBean("accountService") AccountService accountService,
                        @SpringBean("adminService") AdministrationService administrationService,
                        @SpringBean("providerManagementService") ProviderManagementService providerManagementService,
-                       @SpringBean("newAccountValidator") AccountValidator newAccountValidator, PageModel model,
+                       @SpringBean("newAccountValidator") AccountFormValidator newAccountValidator, PageModel model,
                        HttpServletRequest request) {
 
         // manually bind userEnabled (since checkboxes don't submit anything if unchecked));

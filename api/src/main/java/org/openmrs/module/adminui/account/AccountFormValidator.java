@@ -14,7 +14,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 @Handler(supports = {AccountDomainWrapper.class}, order = 50)
-public class AccountValidator implements Validator {
+public class AccountFormValidator implements Validator {
 
     @Autowired
     @Qualifier("messageSourceService")
