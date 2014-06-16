@@ -1,7 +1,7 @@
 <%
     ui.decorateWith("appui", "standardEmrPage")
 
-    ui.includeCss("mirebalais", "account.css")
+    ui.includeCss("adminui", "account.css")
     ui.includeJavascript("adminui", "account/account.js")
 
     def createAccount = (account.person.personId == null ? true : false);
@@ -14,13 +14,17 @@
         privilegeLevelOptions.push([ label: ui.format(it), value: it.name ])
     }
 
-
     def providerRolesOptions = []
     providerRoles. each {
         providerRolesOptions.push([ label: ui.format(it), value: it.id ])
     }
 
 %>
+
+<script type="text/javascript">
+    if(createAccount)
+    	document.accountForm.createUserAccountButton.click();
+</script>
 
 <script type="text/javascript">
     var breadcrumbs = [
@@ -37,24 +41,13 @@
     }
 </style>
 
-<% if (account.locked) { %>
-    <div id="locked-warning" class="note warning">
-        <div class="icon"><i class="icon-warning-sign medium"></i></div>
-        <div class="text">
-            <p><strong>${ ui.message("adminui.account.locked.title") }</strong></p>
-            <p><em>${ ui.message("adminui.account.locked.description") }</em></p>
 
-            <button id="unlock-button" value="${ account.person.personId }">${ ui.message("adminui.account.locked.button") }</button>
-
-        </div>
-    </div>
-<% } %>
 
 <h3>${ (createAccount) ? ui.message("adminui.createAccount") : ui.message("adminui.editAccount") }</h3>
 
 <form method="post" id="accountForm">
 	<fieldset>
-		<legend>${ ui.message("adminui.person.details") }</legend>
+		<legend><b>${ ui.message("adminui.person.details") }</b></legend>
 
         ${ ui.includeFragment("uicommons", "field/text", [
             label: ui.message("adminui.person.familyName"),
@@ -77,14 +70,14 @@
 	</fieldset>
 	
 	<fieldset>
-		<legend>${ ui.message("adminui.user.account.details") }</legend>
+		<legend><b>${ ui.message("adminui.user.account.details") }</b></legend>
 		
 		${ ui.includeFragment("adminui", "field/checkbox", [ 
                 label: ui.message("adminui.user.enabled"), 
                 id: "userEnabled", 
-                formFieldName: "userEnabled", 
+                formFieldName: "userEnabled",
                 value: "true", 
-                checked: account.userEnabled 
+                checked: (account.user ?: '') 
             ])}
 		
 		<div class="emr_userDetails" <% if (!account.user) { %> style="display: none" <% } %>>
@@ -126,7 +119,7 @@
             </p>
 
 			<% capabilities.each{ %>
-                ${ ui.includeFragment("emr", "field/checkbox", [ 
+                ${ ui.includeFragment("adminui", "field/checkbox", [ 
                     label: ui.format(it),
                     formFieldName: "capabilities", 
                     value: it.name, 
@@ -142,14 +135,14 @@
 	</fieldset>
 	
 	<fieldset>
-		<legend>${ ui.message("adminui.provider.details") }</legend>
+		<legend><b>${ ui.message("adminui.provider.details") }</b></legend>
 		
 		${ ui.includeFragment("adminui", "field/checkbox", [ 
                 label: ui.message("adminui.provider.enabled"), 
                 id: "providerEnabled", 
-                formFieldName: "userEnabled", 
+                formFieldName: "providerEnabled", 
                 value: "true", 
-                checked: account.userEnabled 
+                checked: (account.provider ?: '')  
             ])}
             
 		<div class="emr_providerDetails" <% if (!account.provider) { %> style="display: none" <% } %> >
@@ -174,7 +167,7 @@
 	</fieldset>
 
     <div>
-        <input type="button" class="cancel" value="${ ui.message("adminui.cancel") }" onclick="javascript:window.location='/${ contextPath }/emr/account/manageAccounts.page'" />
+        <input type="button" class="cancel" value="${ ui.message("adminui.cancel") }" onclick="javascript:window.location='/${ contextPath }/adminui/account/manageAccounts.page'" />
         <input type="submit" class="confirm" id="save-button" value="${ ui.message("adminui.save") }"  />
     </div>
 

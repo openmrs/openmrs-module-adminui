@@ -16,15 +16,17 @@ package org.openmrs.module.adminui.page.controller.account;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Person;
+import org.openmrs.User;
+import org.openmrs.Provider;
 import org.openmrs.api.APIException;
 import org.openmrs.api.AdministrationService;
 import org.openmrs.api.context.Context;
 import org.openmrs.messagesource.MessageSourceService;
 import org.openmrs.module.adminui.EmrConstants;
-import org.openmrs.module.emrapi.EmrApiConstants;
+import org.openmrs.module.adminui.EmrApiConstants;
 import org.openmrs.module.adminui.account.AccountDomainWrapper;
 import org.openmrs.module.adminui.account.AccountService;
-import org.openmrs.module.adminui.account.AccountFormValidator;
+//import org.openmrs.module.adminui.account.AccountFormValidator;
 import org.openmrs.module.providermanagement.api.ProviderManagementService;
 import org.openmrs.ui.framework.annotation.BindParams;
 import org.openmrs.ui.framework.annotation.MethodParam;
@@ -41,7 +43,13 @@ import javax.servlet.http.HttpServletRequest;
 public class AccountPageController {
 
     protected final Log log = LogFactory.getLog(getClass());
+    
+    private Provider provider = null;
+    private User user = null;
+    private Person person = null;
 
+    String suserEnabled;
+	String sproviderEnabled;
 
     public AccountDomainWrapper getAccount(@RequestParam(value = "personId", required = false) Person person,
                                            @SpringBean("accountService") AccountService accountService) {
@@ -80,14 +88,20 @@ public class AccountPageController {
                        @SpringBean("accountService") AccountService accountService,
                        @SpringBean("adminService") AdministrationService administrationService,
                        @SpringBean("providerManagementService") ProviderManagementService providerManagementService,
-                       @SpringBean("newAccountValidator") AccountFormValidator newAccountValidator, PageModel model,
+                       PageModel model,
                        HttpServletRequest request) {
-
+    	
+    	if(userEnabled)
+    		suserEnabled = "true";
+    	if(providerEnabled)
+    		sproviderEnabled = "true";
+    	
+ 
         // manually bind userEnabled (since checkboxes don't submit anything if unchecked));
         account.setUserEnabled(userEnabled);
         account.setProviderEnabled(providerEnabled);
 
-        newAccountValidator.validate(account, errors);
+        //accountValidator.validate(account, errors);
 
         if (!errors.hasErrors()) {
 
@@ -101,7 +115,7 @@ public class AccountPageController {
             } catch (Exception e) {
                 log.warn("Some error occurred while saving account details:", e);
                 request.getSession().setAttribute(EmrConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE,
-                        messageSourceService.getMessage("emr.account.error.save.fail", new Object[]{e.getMessage()}, Context.getLocale()));
+                        messageSourceService.getMessage("emr.account.error.save.fail"+e.getMessage()+suserEnabled+" "+sproviderEnabled, new Object[]{e.getMessage()}, Context.getLocale()));
             }
         } else {
             sendErrorMessage(errors, messageSource, request);
@@ -122,6 +136,29 @@ public class AccountPageController {
 
     }
 
+    public void setUserEnabled(Boolean UserEnabled) {
+    	if(UserEnabled)
+    		initializeUserIfNecessary();
+    }
+    
+    private void initializeUserIfNecessary() {
+        if (user == null) {
+            user = new User();
+            user.setPerson(person);
+        }
+    }
+    
+    public void setProviderEnabled(Boolean providerEnabled) {
+    	if(providerEnabled)
+    		initializeProviderIfNecessary();
+    }
+    
+    private void initializeProviderIfNecessary() {
+        if (provider == null) {
+            provider = new Provider();
+            provider.setPerson(person);
+        }
+    }
 
     private void sendErrorMessage(BindingResult errors, MessageSource messageSource, HttpServletRequest request) {
         List<ObjectError> allErrors = errors.getAllErrors();

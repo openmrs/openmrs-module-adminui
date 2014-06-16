@@ -1,17 +1,18 @@
 package org.openmrs.module.adminui.account;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.openmrs.Person;
-import org.openmrs.Privilege;
-import org.openmrs.Provider;
 import org.openmrs.Role;
 import org.openmrs.User;
-import org.openmrs.api.APIException;
 import org.openmrs.api.PersonService;
 import org.openmrs.api.ProviderService;
 import org.openmrs.api.UserService;
 import org.openmrs.api.impl.BaseOpenmrsService;
 import org.openmrs.module.adminui.EmrApiConstants;
 import org.openmrs.module.emrapi.EmrApiProperties;
+import org.openmrs.module.adminui.account.AccountDomainWrapper;
 import org.openmrs.module.providermanagement.api.ProviderManagementService;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +20,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
 
 @Transactional
 public class AccountServiceImpl extends BaseOpenmrsService implements AccountService {
@@ -30,8 +32,6 @@ public class AccountServiceImpl extends BaseOpenmrsService implements AccountSer
     private ProviderService providerService;
 
     private ProviderManagementService providerManagementService;
-
-    private ProviderIdentifierGenerator providerIdentifierGenerator = null;
 
     private EmrApiProperties emrApiProperties;
 
@@ -62,22 +62,16 @@ public class AccountServiceImpl extends BaseOpenmrsService implements AccountSer
     public void setPersonService(PersonService personService) {
         this.personService = personService;
     }
-
+    
     /**
-     * @param providerIdentifierGenerator
+     * @see org.openmrs.module.emrapi.account.AccountService#saveAccount(org.openmrs.module.emrapi.account.AccountDomainWrapper)
      */
     @Override
-    public void setProviderIdentifierGenerator(ProviderIdentifierGenerator providerIdentifierGenerator) {
-        this.providerIdentifierGenerator = providerIdentifierGenerator;
+    @Transactional
+    public void saveAccount(AccountDomainWrapper account) {
+        account.save();
     }
-
-    public void setEmrApiProperties(EmrApiProperties emrApiProperties) {
-        this.emrApiProperties = emrApiProperties;
-    }
-
-    /**
-     * @see org.openmrs.module.emrapi.account.AccountService#getAllAccounts()
-     */
+    
     @Override
     @Transactional(readOnly = true)
     public List<AccountDomainWrapper> getAllAccounts() {
@@ -91,11 +85,11 @@ public class AccountServiceImpl extends BaseOpenmrsService implements AccountSer
 
             if (!user.getPerson().isVoided()) {
                 byPerson.put(user.getPerson(), new AccountDomainWrapper(user.getPerson(), this, userService,
-                        providerService, providerManagementService, personService, providerIdentifierGenerator));
+                        providerService, providerManagementService, personService));
             }
         }
 
-        for (Provider provider : providerService.getAllProviders()) {
+        /*for (Provider provider : providerService.getAllProviders()) {
 
             // skip the baked-in unknown provider
             if (provider.equals(emrApiProperties.getUnknownProvider())) {
@@ -110,7 +104,7 @@ public class AccountServiceImpl extends BaseOpenmrsService implements AccountSer
                 byPerson.put(provider.getPerson(), new AccountDomainWrapper(provider.getPerson(), this, userService,
                         providerService, providerManagementService, personService, providerIdentifierGenerator));
             }
-        }
+        }*/
 
         List<AccountDomainWrapper> accounts = new ArrayList<AccountDomainWrapper>();
         for (AccountDomainWrapper account : byPerson.values()) {
@@ -119,35 +113,7 @@ public class AccountServiceImpl extends BaseOpenmrsService implements AccountSer
 
         return accounts;
     }
-
-    /**
-     * @see org.openmrs.module.emrapi.account.AccountService#saveAccount(org.openmrs.module.emrapi.account.AccountDomainWrapper)
-     */
-    @Override
-    @Transactional
-    public void saveAccount(AccountDomainWrapper account) {
-        account.save();
-    }
-
-    /**
-     * @see org.openmrs.module.emrapi.account.AccountService#getAccount(java.lang.Integer)
-     */
-    @Override
-    @Transactional(readOnly = true)
-    public AccountDomainWrapper getAccount(Integer personId) {
-        return getAccountByPerson(personService.getPerson(personId));
-    }
-
-    /**
-     * @see org.openmrs.module.emrapi.account.AccountService#getAccountByPerson(org.openmrs.Person)
-     */
-    @Override
-    @Transactional(readOnly = true)
-    public AccountDomainWrapper getAccountByPerson(Person person) {
-        return new AccountDomainWrapper(person, this, userService,
-                providerService, providerManagementService, personService, providerIdentifierGenerator);
-    }
-
+    
     /**
      * @see org.openmrs.module.emrapi.account.AccountService#getAllCapabilities()
      */
@@ -175,33 +141,15 @@ public class AccountServiceImpl extends BaseOpenmrsService implements AccountSer
         }
         return privilegeLevels;
     }
-
+    
+    /**
+     * @see org.openmrs.module.emrapi.account.AccountService#getAccountByPerson(org.openmrs.Person)
+     */
     @Override
-    public List<Privilege> getApiPrivileges() {
-        List<Privilege> privileges = new ArrayList<Privilege>();
-        for (Privilege candidate : userService.getAllPrivileges()) {
-            if (!isApplicationPrivilege(candidate)) {
-                privileges.add(candidate);
-            }
-        }
-        return privileges;
+    @Transactional(readOnly = true)
+    public AccountDomainWrapper getAccountByPerson(Person person) {
+        return new AccountDomainWrapper(person, this, userService,
+                providerService, providerManagementService, personService);
     }
-
-    @Override
-    public List<Privilege> getApplicationPrivileges() {
-        List<Privilege> privileges = new ArrayList<Privilege>();
-        for (Privilege candidate : userService.getAllPrivileges()) {
-            if (isApplicationPrivilege(candidate)) {
-                privileges.add(candidate);
-            }
-        }
-        return privileges;
-    }
-
-    private boolean isApplicationPrivilege(Privilege privilege) {
-        return privilege.getPrivilege().startsWith(EmrApiConstants.PRIVILEGE_PREFIX_APP)
-                || privilege.getPrivilege().startsWith(EmrApiConstants.PRIVILEGE_PREFIX_TASK);
-    }
-
 
 }
