@@ -22,9 +22,9 @@ import org.openmrs.api.context.Context;
 import org.openmrs.messagesource.MessageSourceService;
 import org.openmrs.module.adminui.EmrConstants;
 import org.openmrs.module.emrapi.EmrApiConstants;
-import org.openmrs.module.adminui.account.AccountDomainWrapper;
-import org.openmrs.module.adminui.account.AccountService;
-import org.openmrs.module.adminui.account.AccountFormValidator;
+import org.openmrs.module.emrapi.account.AccountDomainWrapper;
+import org.openmrs.module.emrapi.account.AccountService;
+import org.openmrs.module.emrapi.account.AccountValidator;
 import org.openmrs.module.providermanagement.api.ProviderManagementService;
 import org.openmrs.ui.framework.annotation.BindParams;
 import org.openmrs.ui.framework.annotation.MethodParam;
@@ -43,7 +43,7 @@ public class AccountPageController {
     protected final Log log = LogFactory.getLog(getClass());
 
 
-    public AccountDomainWrapper getAccount(@RequestParam(value = "personId", required = false) Person person,
+    public AccountDomainWrapper getAccountQ(@RequestParam(value = "personId", required = false) Person person,
                                            @SpringBean("accountService") AccountService accountService) {
 
         AccountDomainWrapper account;
@@ -59,7 +59,7 @@ public class AccountPageController {
         return account;
     }
 
-    public void get(PageModel model, @MethodParam("getAccount") AccountDomainWrapper account,
+    public void get(PageModel model, @MethodParam("getAccountQ") AccountDomainWrapper account,
                     @SpringBean("accountService") AccountService accountService,
                     @SpringBean("adminService") AdministrationService administrationService,
                     @SpringBean("providerManagementService") ProviderManagementService providerManagementService) {
@@ -72,7 +72,7 @@ public class AccountPageController {
         model.addAttribute("providerRoles", providerManagementService.getAllProviderRoles(false));
     }
 
-    public String post(@MethodParam("getAccount") @BindParams AccountDomainWrapper account, BindingResult errors,
+    public String post(@MethodParam("getAccountQ") @BindParams AccountDomainWrapper account, BindingResult errors,
                        @RequestParam(value = "userEnabled", defaultValue = "false") boolean userEnabled,
                        @RequestParam(value = "providerEnabled", defaultValue = "false") boolean providerEnabled,
                        @SpringBean("messageSource") MessageSource messageSource,
@@ -80,12 +80,12 @@ public class AccountPageController {
                        @SpringBean("accountService") AccountService accountService,
                        @SpringBean("adminService") AdministrationService administrationService,
                        @SpringBean("providerManagementService") ProviderManagementService providerManagementService,
-                       @SpringBean("newAccountValidator") AccountFormValidator newAccountValidator, PageModel model,
+                       @SpringBean("accountValidator") AccountValidator newAccountValidator, PageModel model,
                        HttpServletRequest request) {
 
         // manually bind userEnabled (since checkboxes don't submit anything if unchecked));
         account.setUserEnabled(userEnabled);
-        account.setProviderEnabled(providerEnabled);
+        //account.setProviderEnabled(providerEnabled);
 
         newAccountValidator.validate(account, errors);
 

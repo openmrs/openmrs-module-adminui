@@ -9,25 +9,32 @@
     ];
 </script>
 
+
 <h3>${  ui.message("adminui.app.accountManager.label") }</h3>
 
 
-<div id="apps">
+<div id="tasks">
+
     <a class="button app big" href="${ ui.pageLink("adminui", "account/account") }">
-        <div class="task">
             <i class="icon-plus"></i>
             ${ ui.message("adminui.createAccount.accountManagement.label") }
-        </div>
     </a>
-</div>
 
+    
 
-
-<div id="apps">
     <a class="button app big" href="${ ui.pageLink("adminui", "account/viewAccounts") }">
-        <div class="task">
             <i class="icon-list"></i>
             ${ ui.message("adminui.viewAccount.accountManagement.label") }
-        </div>
     </a>
+    
+    <a class="button app big" href="${ ui.pageLink("adminui", "account/manageRoles") }">
+            <i class="icon-user"></i>
+            ${ ui.message("Manage Roles") }
+    </a>
+    
+    <a class="button app big" href="${ ui.pageLink("adminui", "account/managePriviliges") }">
+            <i class="icon-key"></i>
+            ${ ui.message("Manage Priviliges") }
+    </a>
+    
 </div>

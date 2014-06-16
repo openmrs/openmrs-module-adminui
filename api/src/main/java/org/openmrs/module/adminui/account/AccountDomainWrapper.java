@@ -9,7 +9,8 @@ import org.openmrs.api.APIException;
 import org.openmrs.api.PersonService;
 import org.openmrs.api.ProviderService;
 import org.openmrs.api.UserService;
-import org.openmrs.module.adminui.EmrApiConstants;
+import org.openmrs.module.emrapi.EmrApiConstants;
+import org.openmrs.module.emrapi.utils.GeneralUtils;
 import org.openmrs.module.providermanagement.Provider;
 import org.openmrs.module.providermanagement.ProviderRole;
 import org.openmrs.module.providermanagement.api.ProviderManagementService;
@@ -156,10 +157,9 @@ public class AccountDomainWrapper {
         }
     }
 
- 
-//    public Locale getDefaultLocale() {
-//        return GeneralUtils.getDefaultLocale(user);
-//    }
+    public Locale getDefaultLocale() {
+        return GeneralUtils.getDefaultLocale(user);
+    }
 
     public void setPrivilegeLevel(Role privilegeLevel) {
 
