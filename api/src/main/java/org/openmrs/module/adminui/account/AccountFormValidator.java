@@ -30,6 +30,7 @@ public class AccountFormValidator implements Validator {
 
     public static final String USERNAME_MIN_LENGTH = "2";
     public static final String USERNAME_MAX_LENGTH = "50";
+    public static boolean ProviderEnabled = false;
 
     /**
      * @param messageSourceService the messageSourceService to set
@@ -71,6 +72,7 @@ public class AccountFormValidator implements Validator {
      * @see org.springframework.validation.Validator#validate(java.lang.Object,
      *      org.springframework.validation.Errors)
      */
+    
     @Override
     public void validate(Object obj, Errors errors) {
         if (obj == null || !(obj instanceof AccountDomainWrapper))
@@ -101,12 +103,14 @@ public class AccountFormValidator implements Validator {
         	}
         }
         
-        if(account.getProviderEnabled()==true) {
+        if(ProviderEnabled==true) {
     		checkIfProviderRoleIsNull(errors, account);
     	}
     }
     	
-    	
+    public void setProviderEnabled(boolean ProviderEnabled) {
+    	AccountFormValidator.ProviderEnabled = ProviderEnabled;
+    }
 
     private void checkIfPrivilegeLevelIsCorrect(Errors errors, AccountDomainWrapper account) {
         if (account.getPrivilegeLevel() == null) {
@@ -215,4 +219,5 @@ public class AccountFormValidator implements Validator {
                     new Object[]{messageSourceService.getMessage("emr.account.providerRole.label")}, null);
         }
     }
+
 }

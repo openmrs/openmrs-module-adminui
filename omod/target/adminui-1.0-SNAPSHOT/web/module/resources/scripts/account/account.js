@@ -17,7 +17,7 @@ jq(function() {
 
     jq('#unlock-button').click(function(e) {
 
-        jq.post(emr.fragmentActionLink("emr", "account/account", "unlock", { personId: jq(this).val() }), function (data) {
+        jq.post(emr.fragmentActionLink("adminui", "account/account", "unlock", { personId: jq(this).val() }), function (data) {
             emr.successMessage(data.message);
             jq('#locked-warning').hide();
         }, 'json').error(function(xhr) {

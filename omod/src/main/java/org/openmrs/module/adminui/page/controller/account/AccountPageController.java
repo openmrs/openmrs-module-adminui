@@ -24,7 +24,8 @@ import org.openmrs.module.adminui.EmrConstants;
 import org.openmrs.module.emrapi.EmrApiConstants;
 import org.openmrs.module.emrapi.account.AccountDomainWrapper;
 import org.openmrs.module.emrapi.account.AccountService;
-import org.openmrs.module.emrapi.account.AccountValidator;
+import org.openmrs.module.adminui.account.AccountFormValidator;
+import org.openmrs.module.providermanagement.Provider;
 import org.openmrs.module.providermanagement.api.ProviderManagementService;
 import org.openmrs.ui.framework.annotation.BindParams;
 import org.openmrs.ui.framework.annotation.MethodParam;
@@ -32,15 +33,21 @@ import org.openmrs.ui.framework.annotation.SpringBean;
 import org.openmrs.ui.framework.page.PageModel;
 import org.springframework.context.MessageSource;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 public class AccountPageController {
 
     protected final Log log = LogFactory.getLog(getClass());
+    
+    private Provider provider;
+    
+    private Person person;
 
 
     public AccountDomainWrapper getAccountQ(@RequestParam(value = "personId", required = false) Person person,
@@ -80,13 +87,14 @@ public class AccountPageController {
                        @SpringBean("accountService") AccountService accountService,
                        @SpringBean("adminService") AdministrationService administrationService,
                        @SpringBean("providerManagementService") ProviderManagementService providerManagementService,
-                       @SpringBean("accountValidator") AccountValidator newAccountValidator, PageModel model,
+                       @SpringBean("accountValidator") AccountFormValidator newAccountValidator, PageModel model,
                        HttpServletRequest request) {
 
         // manually bind userEnabled (since checkboxes don't submit anything if unchecked));
         account.setUserEnabled(userEnabled);
-        //account.setProviderEnabled(providerEnabled);
-
+        //setProviderEnabled(providerEnabled);
+        
+        //newAccountValidator.setProviderEnabled(providerEnabled);
         newAccountValidator.validate(account, errors);
 
         if (!errors.hasErrors()) {
@@ -121,6 +129,18 @@ public class AccountPageController {
         return "account/account";
 
     }
+    
+    /*public void setProviderEnabled(Boolean providerEnabled) {
+    	if(providerEnabled)
+    		initializeProviderIfNecessary();
+    }
+    
+    private void initializeProviderIfNecessary() {
+        if (provider == null) {
+            provider = new Provider();
+            provider.setPerson(person);
+        }
+    }*/
 
 
     private void sendErrorMessage(BindingResult errors, MessageSource messageSource, HttpServletRequest request) {

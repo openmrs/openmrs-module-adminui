@@ -14,7 +14,6 @@
         privilegeLevelOptions.push([ label: ui.format(it), value: it.name ])
     }
 
-
     def providerRolesOptions = []
     providerRoles. each {
         providerRolesOptions.push([ label: ui.format(it), value: it.id ])
@@ -174,7 +173,7 @@
 	</fieldset>
 
     <div>
-        <input type="button" class="cancel" value="${ ui.message("adminui.cancel") }" onclick="javascript:window.location='/${ contextPath }/emr/account/manageAccounts.page'" />
+        <input type="button" class="cancel" value="${ ui.message("adminui.cancel") }" onclick="javascript:window.location='/${ contextPath }/adminui/account/manageAccounts.page'" />
         <input type="submit" class="confirm" id="save-button" value="${ ui.message("adminui.save") }"  />
     </div>
 
