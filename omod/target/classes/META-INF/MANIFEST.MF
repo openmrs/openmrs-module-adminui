@@ -1,6 +1,5 @@
 Manifest-Version: 1.0
 Built-By: ujjwal
-Build-Jdk: 1.6.0_45
-Created-By: Apache Maven 3.2.1
-Archiver-Version: Plexus Archiver
+Build-Jdk: 1.8.0_05
+Created-By: Maven Integration for Eclipse
 

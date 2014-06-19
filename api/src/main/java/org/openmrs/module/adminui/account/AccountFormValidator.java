@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
-@Handler(supports = {AccountDomainWrapper.class}, order = 50)
+@Handler(supports = {org.openmrs.module.emrapi.account.AccountDomainWrapper.class}, order = 50)
 public class AccountFormValidator implements Validator {
 
     @Autowired
@@ -30,7 +30,7 @@ public class AccountFormValidator implements Validator {
 
     public static final String USERNAME_MIN_LENGTH = "2";
     public static final String USERNAME_MAX_LENGTH = "50";
-    public static boolean ProviderEnabled = false;
+    public boolean ProviderEnabled = false;
 
     /**
      * @param messageSourceService the messageSourceService to set
@@ -109,7 +109,7 @@ public class AccountFormValidator implements Validator {
     }
     	
     public void setProviderEnabled(boolean ProviderEnabled) {
-    	AccountFormValidator.ProviderEnabled = ProviderEnabled;
+    	this.ProviderEnabled = ProviderEnabled;
     }
 
     private void checkIfPrivilegeLevelIsCorrect(Errors errors, AccountDomainWrapper account) {

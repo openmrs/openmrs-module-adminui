@@ -53,7 +53,7 @@
 
 <form method="post" id="accountForm">
 	<fieldset>
-		<legend>${ ui.message("adminui.person.details") }</legend>
+		<legend><b>${ ui.message("adminui.person.details") }</b></legend>
 
         ${ ui.includeFragment("uicommons", "field/text", [
             label: ui.message("adminui.person.familyName"),
@@ -76,14 +76,13 @@
 	</fieldset>
 	
 	<fieldset>
-		<legend>${ ui.message("adminui.user.account.details") }</legend>
+		<legend><b>${ ui.message("adminui.user.account.details") }</b></legend>
 		
 		${ ui.includeFragment("adminui", "field/checkbox", [ 
                 label: ui.message("adminui.user.enabled"), 
                 id: "userEnabled", 
                 formFieldName: "userEnabled", 
-                value: "true", 
-                checked: account.userEnabled 
+                checked: "true" 
             ])}
 		
 		<div class="emr_userDetails" <% if (!account.user) { %> style="display: none" <% } %>>
@@ -125,7 +124,7 @@
             </p>
 
 			<% capabilities.each{ %>
-                ${ ui.includeFragment("emr", "field/checkbox", [ 
+                ${ ui.includeFragment("adminui", "field/checkbox", [ 
                     label: ui.format(it),
                     formFieldName: "capabilities", 
                     value: it.name, 
@@ -141,14 +140,14 @@
 	</fieldset>
 	
 	<fieldset>
-		<legend>${ ui.message("adminui.provider.details") }</legend>
+		<legend><b>${ ui.message("adminui.provider.details") }</b></legend>
 		
 		${ ui.includeFragment("adminui", "field/checkbox", [ 
                 label: ui.message("adminui.provider.enabled"), 
                 id: "providerEnabled", 
-                formFieldName: "userEnabled", 
+                formFieldName: "accountEnabled", 
                 value: "true", 
-                checked: account.userEnabled 
+                checked: "true" 
             ])}
             
 		<div class="emr_providerDetails" <% if (!account.provider) { %> style="display: none" <% } %> >

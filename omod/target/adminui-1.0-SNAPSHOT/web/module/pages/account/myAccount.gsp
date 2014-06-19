@@ -12,7 +12,7 @@
 </script>
 
 <div id="tasks">
-    <a class="button big" href="${ ui.pageLink("admintoolsui", "account/changlePassword") }">
+    <a class="button big" href="${ ui.pageLink("adminui", "account/changePassword") }">
         <div class="task">
             <i class="icon-book"></i>
             ${ ui.message("adminui.myAccount.changePassword.label") }

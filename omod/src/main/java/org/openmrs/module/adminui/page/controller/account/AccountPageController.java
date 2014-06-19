@@ -16,6 +16,8 @@ package org.openmrs.module.adminui.page.controller.account;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Person;
+import org.openmrs.User;
+import org.openmrs.Provider;
 import org.openmrs.api.APIException;
 import org.openmrs.api.AdministrationService;
 import org.openmrs.api.context.Context;
@@ -25,7 +27,6 @@ import org.openmrs.module.emrapi.EmrApiConstants;
 import org.openmrs.module.emrapi.account.AccountDomainWrapper;
 import org.openmrs.module.emrapi.account.AccountService;
 import org.openmrs.module.adminui.account.AccountFormValidator;
-import org.openmrs.module.providermanagement.Provider;
 import org.openmrs.module.providermanagement.api.ProviderManagementService;
 import org.openmrs.ui.framework.annotation.BindParams;
 import org.openmrs.ui.framework.annotation.MethodParam;
@@ -33,12 +34,10 @@ import org.openmrs.ui.framework.annotation.SpringBean;
 import org.openmrs.ui.framework.page.PageModel;
 import org.springframework.context.MessageSource;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 
 public class AccountPageController {
@@ -46,11 +45,11 @@ public class AccountPageController {
     protected final Log log = LogFactory.getLog(getClass());
     
     private Provider provider;
-    
+    private User user;
     private Person person;
 
 
-    public AccountDomainWrapper getAccountQ(@RequestParam(value = "personId", required = false) Person person,
+    public AccountDomainWrapper getAccount(@RequestParam(value = "personId", required = false) Person person,
                                            @SpringBean("accountService") AccountService accountService) {
 
         AccountDomainWrapper account;
@@ -66,7 +65,7 @@ public class AccountPageController {
         return account;
     }
 
-    public void get(PageModel model, @MethodParam("getAccountQ") AccountDomainWrapper account,
+    public void get(PageModel model, @MethodParam("getAccount") AccountDomainWrapper account,
                     @SpringBean("accountService") AccountService accountService,
                     @SpringBean("adminService") AdministrationService administrationService,
                     @SpringBean("providerManagementService") ProviderManagementService providerManagementService) {
@@ -79,7 +78,7 @@ public class AccountPageController {
         model.addAttribute("providerRoles", providerManagementService.getAllProviderRoles(false));
     }
 
-    public String post(@MethodParam("getAccountQ") @BindParams AccountDomainWrapper account, BindingResult errors,
+    public String post(@MethodParam("getAccount") @BindParams AccountDomainWrapper account, BindingResult errors,
                        @RequestParam(value = "userEnabled", defaultValue = "false") boolean userEnabled,
                        @RequestParam(value = "providerEnabled", defaultValue = "false") boolean providerEnabled,
                        @SpringBean("messageSource") MessageSource messageSource,
@@ -87,15 +86,26 @@ public class AccountPageController {
                        @SpringBean("accountService") AccountService accountService,
                        @SpringBean("adminService") AdministrationService administrationService,
                        @SpringBean("providerManagementService") ProviderManagementService providerManagementService,
-                       @SpringBean("accountValidator") AccountFormValidator newAccountValidator, PageModel model,
+                       PageModel model,
                        HttpServletRequest request) {
-
+    	
+    	log.debug(userEnabled+" "+providerEnabled);
+    	
+    	String suserEnabled = "false";
+    	String sproviderEnabled = "false";
+    	
+    	if(userEnabled)
+    		suserEnabled = "true";
+    	if(providerEnabled)
+    		sproviderEnabled = "true";
+    	
+    	//AccountFormValidator accountValidator = new AccountFormValidator();
         // manually bind userEnabled (since checkboxes don't submit anything if unchecked));
-        account.setUserEnabled(userEnabled);
-        //setProviderEnabled(providerEnabled);
-        
-        //newAccountValidator.setProviderEnabled(providerEnabled);
-        newAccountValidator.validate(account, errors);
+        //account.setUserEnabled(userEnabled);
+    	setUserEnabled(userEnabled);
+        setProviderEnabled(providerEnabled);
+        //accountValidator.setProviderEnabled(providerEnabled);
+        //accountValidator.validate(account, errors);
 
         if (!errors.hasErrors()) {
 
@@ -109,7 +119,7 @@ public class AccountPageController {
             } catch (Exception e) {
                 log.warn("Some error occurred while saving account details:", e);
                 request.getSession().setAttribute(EmrConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE,
-                        messageSourceService.getMessage("emr.account.error.save.fail", new Object[]{e.getMessage()}, Context.getLocale()));
+                        messageSourceService.getMessage("emr.account.error.save.fail"+e.getMessage()+suserEnabled+" "+sproviderEnabled, new Object[]{e.getMessage()}, Context.getLocale()));
             }
         } else {
             sendErrorMessage(errors, messageSource, request);
@@ -129,8 +139,20 @@ public class AccountPageController {
         return "account/account";
 
     }
+
+    public void setUserEnabled(Boolean UserEnabled) {
+    	if(UserEnabled)
+    		initializeUserIfNecessary();
+    }
     
-    /*public void setProviderEnabled(Boolean providerEnabled) {
+    private void initializeUserIfNecessary() {
+        if (user == null) {
+            user = new User();
+            user.setPerson(person);
+        }
+    }
+    
+    public void setProviderEnabled(Boolean providerEnabled) {
     	if(providerEnabled)
     		initializeProviderIfNecessary();
     }
@@ -140,8 +162,7 @@ public class AccountPageController {
             provider = new Provider();
             provider.setPerson(person);
         }
-    }*/
-
+    }
 
     private void sendErrorMessage(BindingResult errors, MessageSource messageSource, HttpServletRequest request) {
         List<ObjectError> allErrors = errors.getAllErrors();
