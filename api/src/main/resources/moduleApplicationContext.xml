@@ -21,6 +21,36 @@
 
 	
 	<!-- Services accessible via Context.getService() -->
+	<bean id="accountService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+        <property name="transactionManager">
+            <ref bean="transactionManager"/>
+        </property>
+        <property name="target">
+            <bean class="${project.parent.groupId}.${project.parent.artifactId}.account.AccountServiceImpl">
+                <property name="userService" ref="userService"/>
+                <property name="personService" ref="personService"/>
+                <property name="providerService" ref="providerService"/>
+                <property name="providerManagementService" ref="providerManagementService"/>
+            </bean>
+        </property>
+        <property name="preInterceptors">
+            <ref bean="serviceInterceptors"/>
+        </property>
+        <property name="transactionAttributeSource">
+            <ref bean="transactionAttributeSource"/>
+        </property>
+    </bean>
+
+    <bean parent="serviceContext">
+        <property name="moduleService">
+            <list merge="true">
+                <value>${project.parent.groupId}.${project.parent.artifactId}.account.AccountService</value>
+                <ref local="accountService"/>
+            </list>
+        </property>
+    </bean>
+
+
 	<bean parent="serviceContext">
 		<property name="moduleService">
 			<list>

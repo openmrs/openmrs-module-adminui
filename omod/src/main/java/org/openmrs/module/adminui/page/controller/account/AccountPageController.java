@@ -23,10 +23,10 @@ import org.openmrs.api.AdministrationService;
 import org.openmrs.api.context.Context;
 import org.openmrs.messagesource.MessageSourceService;
 import org.openmrs.module.adminui.EmrConstants;
-import org.openmrs.module.emrapi.EmrApiConstants;
-import org.openmrs.module.emrapi.account.AccountDomainWrapper;
-import org.openmrs.module.emrapi.account.AccountService;
-import org.openmrs.module.adminui.account.AccountFormValidator;
+import org.openmrs.module.adminui.EmrApiConstants;
+import org.openmrs.module.adminui.account.AccountDomainWrapper;
+import org.openmrs.module.adminui.account.AccountService;
+//import org.openmrs.module.adminui.account.AccountFormValidator;
 import org.openmrs.module.providermanagement.api.ProviderManagementService;
 import org.openmrs.ui.framework.annotation.BindParams;
 import org.openmrs.ui.framework.annotation.MethodParam;
@@ -44,10 +44,12 @@ public class AccountPageController {
 
     protected final Log log = LogFactory.getLog(getClass());
     
-    private Provider provider;
-    private User user;
-    private Person person;
+    private Provider provider = null;
+    private User user = null;
+    private Person person = null;
 
+    String suserEnabled;
+	String sproviderEnabled;
 
     public AccountDomainWrapper getAccount(@RequestParam(value = "personId", required = false) Person person,
                                            @SpringBean("accountService") AccountService accountService) {
@@ -89,22 +91,16 @@ public class AccountPageController {
                        PageModel model,
                        HttpServletRequest request) {
     	
-    	log.debug(userEnabled+" "+providerEnabled);
-    	
-    	String suserEnabled = "false";
-    	String sproviderEnabled = "false";
-    	
     	if(userEnabled)
     		suserEnabled = "true";
     	if(providerEnabled)
     		sproviderEnabled = "true";
     	
-    	//AccountFormValidator accountValidator = new AccountFormValidator();
+ 
         // manually bind userEnabled (since checkboxes don't submit anything if unchecked));
-        //account.setUserEnabled(userEnabled);
-    	setUserEnabled(userEnabled);
-        setProviderEnabled(providerEnabled);
-        //accountValidator.setProviderEnabled(providerEnabled);
+        account.setUserEnabled(userEnabled);
+        account.setProviderEnabled(providerEnabled);
+
         //accountValidator.validate(account, errors);
 
         if (!errors.hasErrors()) {

@@ -1,7 +1,7 @@
 <%
     ui.decorateWith("appui", "standardEmrPage")
 
-    ui.includeCss("mirebalais", "account.css")
+    ui.includeCss("adminui", "account.css")
     ui.includeJavascript("adminui", "account/account.js")
 
     def createAccount = (account.person.personId == null ? true : false);
@@ -22,6 +22,11 @@
 %>
 
 <script type="text/javascript">
+    if(createAccount)
+    	document.accountForm.createUserAccountButton.click();
+</script>
+
+<script type="text/javascript">
     var breadcrumbs = [
         { icon: "icon-home", link: '/' + OPENMRS_CONTEXT_PATH + '/index.htm' },
         { label: "${ ui.message("adminui.app.accountManager.label")}" , link: '${ui.pageLink("adminui", "account/manageAccounts")}'},
@@ -36,18 +41,7 @@
     }
 </style>
 
-<% if (account.locked) { %>
-    <div id="locked-warning" class="note warning">
-        <div class="icon"><i class="icon-warning-sign medium"></i></div>
-        <div class="text">
-            <p><strong>${ ui.message("adminui.account.locked.title") }</strong></p>
-            <p><em>${ ui.message("adminui.account.locked.description") }</em></p>
 
-            <button id="unlock-button" value="${ account.person.personId }">${ ui.message("adminui.account.locked.button") }</button>
-
-        </div>
-    </div>
-<% } %>
 
 <h3>${ (createAccount) ? ui.message("adminui.createAccount") : ui.message("adminui.editAccount") }</h3>
 
@@ -81,8 +75,9 @@
 		${ ui.includeFragment("adminui", "field/checkbox", [ 
                 label: ui.message("adminui.user.enabled"), 
                 id: "userEnabled", 
-                formFieldName: "userEnabled", 
-                checked: "true" 
+                formFieldName: "userEnabled",
+                value: "true", 
+                checked: (account.user ?: '') 
             ])}
 		
 		<div class="emr_userDetails" <% if (!account.user) { %> style="display: none" <% } %>>
@@ -145,9 +140,9 @@
 		${ ui.includeFragment("adminui", "field/checkbox", [ 
                 label: ui.message("adminui.provider.enabled"), 
                 id: "providerEnabled", 
-                formFieldName: "accountEnabled", 
+                formFieldName: "providerEnabled", 
                 value: "true", 
-                checked: "true" 
+                checked: (account.provider ?: '')  
             ])}
             
 		<div class="emr_providerDetails" <% if (!account.provider) { %> style="display: none" <% } %> >
