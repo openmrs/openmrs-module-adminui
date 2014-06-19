@@ -1,6 +1,8 @@
 /.classpath
 /.settings
 /.project
+/install_deploy_jetty.bat
+/run_jetty.bat
 /target
 /activemq-data
 /api/.classpath
