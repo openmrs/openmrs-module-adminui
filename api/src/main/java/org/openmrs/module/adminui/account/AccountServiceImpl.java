@@ -1,7 +1,9 @@
 package org.openmrs.module.adminui.account;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.openmrs.Person;
 import org.openmrs.Role;
@@ -11,15 +13,8 @@ import org.openmrs.api.ProviderService;
 import org.openmrs.api.UserService;
 import org.openmrs.api.impl.BaseOpenmrsService;
 import org.openmrs.module.adminui.EmrApiConstants;
-import org.openmrs.module.emrapi.EmrApiProperties;
-import org.openmrs.module.adminui.account.AccountDomainWrapper;
 import org.openmrs.module.providermanagement.api.ProviderManagementService;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
 
 
 @Transactional
@@ -33,8 +28,10 @@ public class AccountServiceImpl extends BaseOpenmrsService implements AccountSer
 
     private ProviderManagementService providerManagementService;
 
-    private EmrApiProperties emrApiProperties;
+    //private EmrApiProperties emrApiProperties;
 
+    //private ProviderIdentifierGenerator providerIdentifierGenerator = null;
+    
     /**
      * @param userService the userService to set
      */
@@ -64,7 +61,7 @@ public class AccountServiceImpl extends BaseOpenmrsService implements AccountSer
     }
     
     /**
-     * @see org.openmrs.module.emrapi.account.AccountService#saveAccount(org.openmrs.module.emrapi.account.AccountDomainWrapper)
+     * @see org.openmrs.module.adminui.account.AccountService#saveAccount(org.openmrs.module.adminui.account.AccountDomainWrapper)
      */
     @Override
     @Transactional
@@ -115,7 +112,7 @@ public class AccountServiceImpl extends BaseOpenmrsService implements AccountSer
     }
     
     /**
-     * @see org.openmrs.module.emrapi.account.AccountService#getAllCapabilities()
+     * @see org.openmrs.module.adminui.account.AccountService#getAllCapabilities()
      */
     @Override
     @Transactional(readOnly = true)
@@ -129,7 +126,7 @@ public class AccountServiceImpl extends BaseOpenmrsService implements AccountSer
     }
 
     /**
-     * @see org.openmrs.module.emrapi.account.AccountService#getAllPrivilegeLevels()
+     * @see org.openmrs.module.adminui.account.AccountService#getAllPrivilegeLevels()
      */
     @Override
     @Transactional(readOnly = true)
@@ -143,7 +140,7 @@ public class AccountServiceImpl extends BaseOpenmrsService implements AccountSer
     }
     
     /**
-     * @see org.openmrs.module.emrapi.account.AccountService#getAccountByPerson(org.openmrs.Person)
+     * @see org.openmrs.module.adminui.account.AccountService#getAccountByPerson(org.openmrs.Person)
      */
     @Override
     @Transactional(readOnly = true)

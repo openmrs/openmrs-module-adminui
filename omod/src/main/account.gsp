@@ -81,7 +81,6 @@
             ])}
 		
 		<div class="emr_userDetails" <% if (!account.user) { %> style="display: none" <% } %>>
-		<br>
 			${ ui.includeFragment("uicommons", "field/text", [
                 label: ui.message("adminui.user.username"), 
                 formFieldName: "username", 
@@ -143,28 +142,23 @@
                 id: "providerEnabled", 
                 formFieldName: "providerEnabled", 
                 value: "true", 
-                 
+                checked: (account.provider ?: '')  
             ])}
             
-		<div class="emr_providerDetails" <% if (1) { %> style="display: none" <% } %> >
-            <br>
+		<div class="emr_providerDetails" <% if (!account.provider) { %> style="display: none" <% } %> >
             <p>
-                ${ ui.message("Provider Role (You can choose more than one)") }
-            </p>
-            
-            <% providerRoles.each{ %>
-                ${ ui.includeFragment("adminui", "field/checkbox", [ 
-                    label: ui.format(it),
-                    formFieldName: "providerRoles", 
-                    value: it.id, 
-                    checked: account.providerSet?.contains(it)
+                ${ ui.includeFragment("uicommons", "field/dropDown", [
+                        label: ui.message("adminui.providerRole.label"),
+                        emptyOptionLabel: ui.message("adminui.chooseOne"),
+                        formFieldName: "providerRole",
+                        initialValue: (account.providerRole?.id ?: ''),
+                        options: providerRolesOptions
                 ])}
-            <% } %>
-            
+            </p>
         </div>
 
 		<div class="emr_providerDetails">
-			<% if(1) { %>
+			<% if(!account.provider) { %>
 				<button id="createProviderAccountButton" type="button" onclick="javascript:emr_createProviderAccount()">${ ui.message("adminui.provider.createProviderAccount") }</button>
 			<% } %>
 		</div>

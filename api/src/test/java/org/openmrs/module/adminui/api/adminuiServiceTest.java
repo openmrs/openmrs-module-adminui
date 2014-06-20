@@ -14,6 +14,7 @@
 package org.openmrs.module.adminui.api;
 
 import static org.junit.Assert.*;
+
 import org.junit.Test;
 import org.openmrs.api.context.Context;
 import org.openmrs.test.BaseModuleContextSensitiveTest;

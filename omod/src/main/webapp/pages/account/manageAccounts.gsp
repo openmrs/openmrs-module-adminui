@@ -32,9 +32,9 @@
             ${ ui.message("Manage Roles") }
     </a>
     
-    <a class="button app big" href="${ ui.pageLink("adminui", "account/managePriviliges") }">
+    <a class="button app big" href="${ ui.pageLink("adminui", "account/managePrivileges") }">
             <i class="icon-key"></i>
-            ${ ui.message("Manage Priviliges") }
+            ${ ui.message("Manage Privileges") }
     </a>
     
 </div>
