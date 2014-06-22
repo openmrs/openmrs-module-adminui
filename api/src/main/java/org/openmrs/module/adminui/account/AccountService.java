@@ -1,10 +1,7 @@
 package org.openmrs.module.adminui.account;
 
-import org.openmrs.Person;
-import org.openmrs.Privilege;
 import org.openmrs.Role;
-import org.openmrs.module.adminui.account.AccountDomainWrapper;
-
+import org.openmrs.Person;
 import java.util.List;
 
 public interface AccountService {

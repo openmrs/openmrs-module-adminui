@@ -81,23 +81,40 @@ public class AccountFormValidator implements Validator {
         checkIfGivenAndFamilyNameAreNotNull(errors, account);
         checkIfGenderIsNull(errors, account);
         checkIfUserAndProviderAreNull(errors, account);
+        
+        if(account.getUserEnabled()==true) {
+        	if (account.getUser() != null) {
+        		checkIfUserNameIsCorrect(errors, account.getUsername());
+        		checkIfDuplicateUsername(errors, account.getUser());
+        		checkIfPrivilegeLevelIsCorrect(errors, account);
+        		//checkIfNoCapabilities(errors, account);
+        	}
+
+        	if (checkIfUserWasCreated(user) || StringUtils.isNotBlank(account.getPassword()) || StringUtils.isNotBlank(account.getConfirmPassword())) {
+        		checkIfPasswordIsCorrect(errors, account);
+        	}
+        }
+        
+        if(ProviderEnabled==true) {
+    		checkIfProviderRoleIsNull(errors, account);
+    	}
     }
     
     private void checkIfGivenAndFamilyNameAreNotNull(Errors errors, AccountDomainWrapper account) {
         if (StringUtils.isBlank(account.getGivenName())) {
             errors.rejectValue("givenName", "error.required",
-                    new Object[]{messageSourceService.getMessage("emr.person.givenName")}, null);
+                    new Object[]{messageSourceService.getMessage("adminui.person.givenName")}, null);
         }
         if (StringUtils.isBlank(account.getFamilyName())) {
             errors.rejectValue("familyName", "error.required",
-                    new Object[]{messageSourceService.getMessage("emr.person.familyName")}, null);
+                    new Object[]{messageSourceService.getMessage("adminui.person.familyName")}, null);
         }
     }
     
     private void checkIfGenderIsNull(Errors errors, AccountDomainWrapper account) {
         if (StringUtils.isBlank(account.getGender())) {
             errors.rejectValue("gender", "error.required",
-                    new Object[]{messageSourceService.getMessage("emr.gender")}, null);
+                    new Object[]{messageSourceService.getMessage("adminui.gender")}, null);
         }
     }
     
@@ -105,7 +122,88 @@ public class AccountFormValidator implements Validator {
     	if (account.getUserEnabled()==false && account.getProviderEnabled()==false) {
             errors.rejectValue("userEnabled", "error.required",
                     new Object[]{messageSourceService.getMessage("Both User and Provider can't be null")}, null);
+    	}
     }
     
+    private void checkIfUserNameIsCorrect(Errors errors, String username) {
+        if (StringUtils.isNotBlank(username)) {
+            if (!username.matches("[A-Za-z0-9\\._\\-]{" + USERNAME_MIN_LENGTH + "," + USERNAME_MAX_LENGTH + "}")) {
+                errors.rejectValue("username", "adminui.user.username.error",
+                        new Object[]{messageSourceService.getMessage("adminui.user.username.error")}, null);
+            }
+
+        } else {
+            errors.rejectValue("username", "error.required",
+                    new Object[]{messageSourceService.getMessage("adminui.user.username")}, null);
+        }
+    }
+    
+    private void checkIfDuplicateUsername(Errors errors, User user) {
+        if (userService.hasDuplicateUsername(user)) {
+            errors.rejectValue("username", "adminui.user.duplicateUsername",
+                    new Object[]{messageSourceService.getMessage("adminui.user.duplicateUsername")}, null);
+        }
+    }
+    
+    private void checkIfPrivilegeLevelIsCorrect(Errors errors, AccountDomainWrapper account) {
+        if (account.getPrivilegeLevel() == null) {
+            errors.rejectValue("privilegeLevel", "error.required",
+                    new Object[]{messageSourceService.getMessage("adminui.user.privilegeLevel")}, null);
+        }
+    }
+    
+    /*private void checkIfNoCapabilities(Errors errors, AccountDomainWrapper account) {
+        if (account.getCapabilities() == null || account.getCapabilities().size() == 0) {
+            errors.rejectValue("capabilities", "adminui.user.Capabilities.required",
+                    new Object[]{messageSourceService.getMessage("adminui.user.Capabilities.required")}, null);
+        }
+    }*/
+    
+    private boolean checkIfUserWasCreated(User user) {
+        return (user != null && user.getUserId() == null);
+    }
+    
+    private void checkIfPasswordIsCorrect(Errors errors, AccountDomainWrapper account) {
+        String password = account.getPassword();
+        String confirmPassword = account.getConfirmPassword();
+
+        if (checkIfPasswordWasCreated(password, confirmPassword)) {
+            validatePassword(errors, account, password, confirmPassword);
+        } else {
+            errors.rejectValue("password", "error.required",
+                    new Object[]{messageSourceService.getMessage("adminui.user.password")}, null);
+            errors.rejectValue("confirmPassword", "error.required",
+                    new Object[]{messageSourceService.getMessage("adminui.user.confirmPassword")}, null);
+        }
+
+    }
+
+    private void validatePassword(Errors errors, AccountDomainWrapper account, String password, String confirmPassword) {
+        if (password.equals(confirmPassword)) {
+            getErrorInPassword(errors, account);
+        } else {
+            errors.rejectValue("password", "adminui.account.error.passwordDontMatch",
+                    new Object[]{messageSourceService.getMessage("adminui.user.password")}, null);
+        }
+    }
+
+    private void getErrorInPassword(Errors errors, AccountDomainWrapper account) {
+        try {
+            OpenmrsUtil.validatePassword(account.getUsername(), account.getPassword(), account.getUser().getSystemId());
+        } catch (PasswordException e) {
+            errors.rejectValue("password", "adminui.account.error.passwordError",
+                    new Object[]{messageSourceService.getMessage("adminui.account.error.passwordError")}, null);
+        }
+    }
+
+    private boolean checkIfPasswordWasCreated(String password, String confirmPassword) {
+        return (StringUtils.isNotBlank(password) && StringUtils.isNotBlank(confirmPassword));
+    }
+    
+    private void checkIfProviderRoleIsNull(Errors errors, AccountDomainWrapper accountDomainWrapper) {
+        if (accountDomainWrapper.getProviderRole() == null) {
+            errors.rejectValue("providerRole", "error.required",
+                    new Object[]{messageSourceService.getMessage("adminui.account.providerRole.label")}, null);
+        }
     }
 }

@@ -6,43 +6,36 @@
     var breadcrumbs = [
         { icon: "icon-home", link: '/' + OPENMRS_CONTEXT_PATH + '/index.htm' },
         { label: "${ ui.message("adminui.app.accountManager.label")}", link: '${ui.pageLink("adminui", "account/manageAccounts")}' },
-        { label: "${ ui.message("adminui.viewAccount.accountManagement.label")}" }
+        { label: "${ ui.message("adminui.managePrivileges.accountManagement.label")}" }
     ];
 </script>
 
+<% i=0 %>
 
 <hr>
-<table id="list-accounts" cellspacing="0" cellpadding="2">
+<table id="list-levels" cellspacing="0" cellpadding="2">
 	<thead>
 		<tr>
-			<th>${ ui.message("adminui.person.name")}</th>
-			<th>${ ui.message("adminui.user.username") }</th>
-			<th>${ ui.message("adminui.gender") }</th>
-            <th>${ ui.message("adminui.account.providerRole.label") }</th>
-            <th>${ ui.message("adminui.account.personIdentifier.label") }</th>
+			<th>${ ui.message("adminui.sno")}</th>
+			<th>${ ui.message("adminui.privilege.name") }</th>
+			<th>${ ui.message("adminui.privilege.children") }</th>
 			<th></th>
 		</tr>
 	</thead>
 	<tbody>
-		<% accounts.each{  %>
+		<% privilegeLevels.each{  %>
 	 	<tr>
 	 		<td>
-				${ ui.format(it.person.personName)}
+				${ ++i }
 			</td>
 			<td>
-				 ${ ui.format(it?.username) }
+				 ${ ui.format(it.name) }
 			</td>
 			<td>
-				${ ui.format(it.person.gender) }
-			</td>
-            <td>
-                ${ ui.format(it.providerRole) }
-            </td>
-            <td>
-                ${ ui.format(it.person.personId) }
+				${ ui.format(it.childRoles) }
             </td>
 			<td>
-	            <a href="/${ contextPath }/adminui/account/account.page?personId=${ it.person.personId }">
+	            <a href="/${ contextPath }/adminui/account/managePrivileges.page }">
 	                <button>${ ui.message("adminui.edit") }</button>
 	            </a>
         	</td>
@@ -52,8 +45,8 @@
 </table>
 
 
-<% if ( (accounts != null) && (accounts.size() > 0) ) { %>
-${ ui.includeFragment("uicommons", "widget/dataTable", [ object: "#list-accounts",
+<% if ( (privilegeLevels != null) && (privilegeLevels.size() > 0) ) { %>
+${ ui.includeFragment("uicommons", "widget/dataTable", [ object: "#list-levels",
         options: [
                 bFilter: true,
                 bJQueryUI: true,

@@ -16,8 +16,6 @@ package org.openmrs.module.adminui.page.controller.account;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Person;
-import org.openmrs.User;
-import org.openmrs.Provider;
 import org.openmrs.api.APIException;
 import org.openmrs.api.AdministrationService;
 import org.openmrs.api.context.Context;
@@ -26,7 +24,7 @@ import org.openmrs.module.adminui.EmrConstants;
 import org.openmrs.module.adminui.EmrApiConstants;
 import org.openmrs.module.adminui.account.AccountDomainWrapper;
 import org.openmrs.module.adminui.account.AccountService;
-//import org.openmrs.module.adminui.account.AccountFormValidator;
+import org.openmrs.module.adminui.account.AccountFormValidator;
 import org.openmrs.module.providermanagement.api.ProviderManagementService;
 import org.openmrs.ui.framework.annotation.BindParams;
 import org.openmrs.ui.framework.annotation.MethodParam;
@@ -43,10 +41,6 @@ import javax.servlet.http.HttpServletRequest;
 public class AccountPageController {
 
     protected final Log log = LogFactory.getLog(getClass());
-    
-    private Provider provider = null;
-    private User user = null;
-    private Person person = null;
 
     String suserEnabled;
 	String sproviderEnabled;
@@ -76,7 +70,6 @@ public class AccountPageController {
         model.addAttribute("capabilities", accountService.getAllCapabilities());
         model.addAttribute("privilegeLevels", accountService.getAllPrivilegeLevels());
         model.addAttribute("rolePrefix", EmrApiConstants.ROLE_PREFIX_CAPABILITY);
-        model.addAttribute("allowedLocales", administrationService.getAllowedLocales());
         model.addAttribute("providerRoles", providerManagementService.getAllProviderRoles(false));
     }
 
@@ -88,6 +81,7 @@ public class AccountPageController {
                        @SpringBean("accountService") AccountService accountService,
                        @SpringBean("adminService") AdministrationService administrationService,
                        @SpringBean("providerManagementService") ProviderManagementService providerManagementService,
+                       @SpringBean("accountFormValidator") AccountFormValidator accountValidator, 
                        PageModel model,
                        HttpServletRequest request) {
     	
@@ -101,21 +95,22 @@ public class AccountPageController {
         account.setUserEnabled(userEnabled);
         account.setProviderEnabled(providerEnabled);
 
-        //accountValidator.validate(account, errors);
+        if(userEnabled)
+        	accountValidator.validate(account, errors);
 
         if (!errors.hasErrors()) {
 
             try {
                 accountService.saveAccount(account);
                 request.getSession().setAttribute(EmrConstants.SESSION_ATTRIBUTE_INFO_MESSAGE,
-                        messageSourceService.getMessage("emr.account.saved"));
+                        messageSourceService.getMessage("adminui.account.saved"));
                 request.getSession().setAttribute(EmrConstants.SESSION_ATTRIBUTE_TOAST_MESSAGE, "true");
 
                 return "redirect:/adminui/account/manageAccounts.page";
             } catch (Exception e) {
                 log.warn("Some error occurred while saving account details:", e);
                 request.getSession().setAttribute(EmrConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE,
-                        messageSourceService.getMessage("emr.account.error.save.fail"+e.getMessage()+suserEnabled+" "+sproviderEnabled, new Object[]{e.getMessage()}, Context.getLocale()));
+                        messageSourceService.getMessage("adminui.account.error.save.fail "+e.getMessage()+suserEnabled+" "+sproviderEnabled, new Object[]{e.getMessage()}, Context.getLocale()));
             }
         } else {
             sendErrorMessage(errors, messageSource, request);
@@ -134,30 +129,6 @@ public class AccountPageController {
 
         return "account/account";
 
-    }
-
-    public void setUserEnabled(Boolean UserEnabled) {
-    	if(UserEnabled)
-    		initializeUserIfNecessary();
-    }
-    
-    private void initializeUserIfNecessary() {
-        if (user == null) {
-            user = new User();
-            user.setPerson(person);
-        }
-    }
-    
-    public void setProviderEnabled(Boolean providerEnabled) {
-    	if(providerEnabled)
-    		initializeProviderIfNecessary();
-    }
-    
-    private void initializeProviderIfNecessary() {
-        if (provider == null) {
-            provider = new Provider();
-            provider.setPerson(person);
-        }
     }
 
     private void sendErrorMessage(BindingResult errors, MessageSource messageSource, HttpServletRequest request) {

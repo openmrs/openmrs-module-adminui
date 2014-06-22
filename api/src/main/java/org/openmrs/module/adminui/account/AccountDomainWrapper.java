@@ -1,6 +1,7 @@
 package org.openmrs.module.adminui.account;
 
-import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.openmrs.Person;
@@ -13,12 +14,13 @@ import org.openmrs.api.ProviderService;
 import org.openmrs.api.UserService;
 import org.openmrs.module.adminui.EmrApiConstants;
 import org.openmrs.module.adminui.account.AccountService;
+//import org.openmrs.module.adminui.account.ProviderIdentifierGenerator;
 import org.openmrs.module.providermanagement.Provider;
 import org.openmrs.module.providermanagement.ProviderRole;
 import org.openmrs.module.providermanagement.api.ProviderManagementService;
 import org.openmrs.util.OpenmrsConstants;
 
-public class AccountDomainWrapper {
+public class AccountDomainWrapper{
 
     private Person person;
 
@@ -39,15 +41,20 @@ public class AccountDomainWrapper {
     private ProviderService providerService;
 
     private ProviderManagementService providerManagementService;
+    
+    //private ProviderIdentifierGenerator providerIdentifierGenerator;
+    
+    //private ProviderRole providerRole;
 
     public AccountDomainWrapper(Person person, AccountService accountService, UserService userService, ProviderService providerService,
-                                ProviderManagementService providerManagementService, PersonService personService) {
+                                ProviderManagementService providerManagementService, PersonService personService
+                                /*ProviderIdentifierGenerator providerIdentifierGenerator*/) {
         this.accountService = accountService;
         this.userService = userService;
         this.providerService = providerService;
         this.providerManagementService = providerManagementService;
         this.personService = personService;
-
+        //this.providerIdentifierGenerator = providerIdentifierGenerator;
         this.person = person;
         }
     
@@ -229,6 +236,66 @@ public class AccountDomainWrapper {
             }
         }
     }
+    
+    public void setCapabilities(Set<Role> capabilities) {
+
+        if (capabilities != null && capabilities.size() > 0) {
+            if (!accountService.getAllCapabilities().containsAll(capabilities)) {
+                throw new APIException("Attempt to set invalid capability");
+            }
+
+            initializeUserIfNecessary();
+
+            if (user.getRoles() != null) {
+                user.getRoles().removeAll(accountService.getAllCapabilities());
+            }
+
+            for (Role role : capabilities) {
+                user.addRole(role);
+            }
+        } else if (user != null && user.getRoles() != null) {
+            user.getRoles().removeAll(accountService.getAllCapabilities());
+        }
+    }
+    
+    public Set<Role> getCapabilities() {
+
+        if (user == null) {
+            return null;
+        }
+
+        Set<Role> capabilities = new HashSet<Role>();
+
+        if (user.getRoles() != null) {
+            for (Role role : user.getRoles()) {
+                if (role.getRole().startsWith(EmrApiConstants.ROLE_PREFIX_CAPABILITY)) {
+                    capabilities.add(role);
+                }
+            }
+        }
+        return capabilities;
+    }
+    
+    /*public void setProviderRoles(String[] providerRoles) {
+
+        if (providerRoles != null && providerRoles.length > 0) {
+            initializeProviderIfNecessary();
+            
+            providerRole.get
+
+            for (ProviderRole role : providerRoles) {
+                provider.setProviderRole(role);
+            }
+        
+        }
+    }*/
+    
+    public String generateIdentifier()
+    {
+    	long a = Math.round(Math.random()*1000);
+    	long b = Math.round(Math.random()*10);
+    	return a+"-"+b;
+    }
 
     public void save() {
 
@@ -247,6 +314,10 @@ public class AccountDomainWrapper {
         }
 
         if (provider != null) {
+        	provider.setName(getGivenName());
+        	//if (StringUtils.isBlank(provider.getIdentifier())) {
+            provider.setIdentifier(/*providerIdentifierGenerator.*/generateIdentifier());
+        	//}
             providerService.saveProvider(provider);
         }
     }
