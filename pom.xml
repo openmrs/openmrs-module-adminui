@@ -98,22 +98,6 @@
 			<!-- End OpenMRS core -->
 			
 			<!-- Begin OpenMRS modules --> 
-			<dependency>
-				<groupId>org.openmrs.module</groupId>
-				<artifactId>emrapi-api</artifactId>
-				<version>1.0</version>
-				<type>jar</type>
-				<scope>provided</scope>
-			</dependency>
-        
-			<dependency>
-				<groupId>org.openmrs.module</groupId>
-				<artifactId>emrapi-api</artifactId>
-				<version>${emrapiVersion}</version>
-				<type>test-jar</type>
-				<scope>test</scope>
-			</dependency>
-			
 			
 			<dependency>
 				<groupId>org.openmrs.module</groupId>
@@ -128,14 +112,6 @@
 				<version>2.0</version>
 				<type>jar</type>
 				<scope>provided</scope>
-			</dependency>
-			
-			<!-- OpenMRS modules required for testing -->
-			<dependency>
-				<groupId>org.openmrs.module</groupId>
-				<artifactId>metadatasharing-api</artifactId>
-				<version>${metadatasharingVersion}</version>
-				<scope>test</scope>
 			</dependency>
 			
 			 <!-- Depends on uiframework module -->

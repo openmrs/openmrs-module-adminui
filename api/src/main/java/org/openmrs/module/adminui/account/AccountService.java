@@ -21,7 +21,7 @@ public interface AccountService {
     List<AccountDomainWrapper> getAllAccounts();
     
     /**
-     * Gets all Capabilities, i.e roles with the {@link org.openmrs.module.emrapi.EmrApiConstants#ROLE_PREFIX_CAPABILITY} prefix
+     * Gets all Capabilities, i.e roles with the {@link org.openmrs.module.adminui.AdminUiConstants#ROLE_PREFIX_CAPABILITY} prefix
      *
      * @return a list of Roles
      * @should return all roles with the capability prefix
@@ -30,7 +30,6 @@ public interface AccountService {
 
     /**
      * Gets all Privilege Levels, i.e roles with the
-     * {@link org.openmrs.module.emrapi.EmrApiConstants#ROLE_PREFIX_PRIVILEGE_LEVEL} prefix
      *
      * @return a list of Roles
      * @should return all roles with the privilege level prefix

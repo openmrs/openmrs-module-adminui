@@ -16,14 +16,10 @@
 	<!-- / Module Properties -->
 
 	<require_modules>
-        <require_module version="${emrapiVersion}">org.openmrs.module.emrapi</require_module>
         <require_module version="${uiframeworkVersion}">org.openmrs.module.uiframework</require_module>
         <require_module version="${appframeworkVersion}">org.openmrs.module.appframework</require_module>
-        <require_module version="${htmlformentryVersion}">org.openmrs.module.htmlformentry</require_module>
         <require_module version="${providerManagementVersion}">org.openmrs.module.providermanagement</require_module>
-        <require_module version="${reportingVersion}">org.openmrs.module.reporting</require_module>
         <require_module version="${uicommonsVersion}">org.openmrs.module.uicommons</require_module>
-        <require_module version="${metadatasharingVersion}">org.openmrs.module.metadatasharing</require_module>
 	</require_modules>
 	
 	<!-- Module Activator -->
