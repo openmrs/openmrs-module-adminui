@@ -30,8 +30,8 @@
 				${ ui.format(it.person.personName)}
 			</td>
 			<td>
-				<% it.usernames.each{ %>
-					${ ui.format(it)}
+				<% it.users.each{ %>
+					${ ui.format(it.username)}
 				<% } %>
 			</td>
 			<td>
