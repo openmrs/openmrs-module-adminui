@@ -71,9 +71,9 @@ public class AccountDomainWrapper{
         return person;
     }
 
-    public Boolean getUser() {
-        return !userSet.isEmpty();
-    }
+    /*public List<User> getUsers() {
+        return userService.getUsersByPerson(person,true);
+    }*/
 
     public Boolean getProvider() {
         return !providerSet.isEmpty();
