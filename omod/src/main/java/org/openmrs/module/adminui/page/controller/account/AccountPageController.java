@@ -35,7 +35,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.ArrayList;
 import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 public class AccountPageController {
@@ -44,6 +46,7 @@ public class AccountPageController {
 
     String suserEnabled;
 	String sproviderEnabled;
+	int countUsers;
 
     public AccountDomainWrapper getAccount(@RequestParam(value = "personId", required = false) Person person,
                                            @SpringBean("accountService") AccountService accountService) {
@@ -76,6 +79,7 @@ public class AccountPageController {
     public String post(@MethodParam("getAccount") @BindParams AccountDomainWrapper account, BindingResult errors,
                        @RequestParam(value = "userEnabled", defaultValue = "false") boolean userEnabled,
                        @RequestParam(value = "providerEnabled", defaultValue = "false") boolean providerEnabled,
+                       @RequestParam(value = "countTabs", defaultValue = "1") String countTabs,
                        @SpringBean("messageSource") MessageSource messageSource,
                        @SpringBean("messageSourceService") MessageSourceService messageSourceService,
                        @SpringBean("accountService") AccountService accountService,
@@ -89,15 +93,37 @@ public class AccountPageController {
     		suserEnabled = "true";
     	if(providerEnabled)
     		sproviderEnabled = "true";
+    		
+    	countUsers = Integer.parseInt(countTabs);
     	
- 
-        // manually bind userEnabled (since checkboxes don't submit anything if unchecked));
-        account.setUserEnabled(userEnabled);
-        account.setProviderEnabled(providerEnabled);
-
-        if(userEnabled)
-        	accountValidator.validate(account, errors);
-
+    	ArrayList<String> username = new ArrayList<String>();
+    	ArrayList<String> password = new ArrayList<String>();
+    	ArrayList<String> confirmPassword = new ArrayList<String>();
+    	ArrayList<String> privilegeLevel = new ArrayList<String>();
+    	ArrayList<String[]> roles = new ArrayList<String[]>();
+    	
+    	if(userEnabled) {
+    	
+    		for(int i=1 ; i<=countUsers ; i++) {
+    			username.add(request.getParameter("user"+i+"_username"));
+    			password.add(request.getParameter("user"+i+"_password"));
+    			confirmPassword.add(request.getParameter("user"+i+"_confirmPassword"));
+    			privilegeLevel.add(request.getParameter("user"+i+"_privilegeLevel"));
+    			roles.add(request.getParameterValues("user"+i+"_capabilities"));
+    		}
+    	
+    		account.createRequiredUsers(countUsers);
+    		account.setUsernames(username);
+    		account.setPasswords(password);
+    		account.setConfirmPasswords(confirmPassword);
+    		account.setPrivilegeLevels(privilegeLevel);
+    		account.setCapabilities(roles);
+    		
+    		//accountValidator.validate(account, errors);
+    	}
+    	//request.getSession().setAttribute(EmrConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE, ""+account.getPassword(1));
+    	
+    	
         if (!errors.hasErrors()) {
 
             try {
@@ -115,6 +141,8 @@ public class AccountPageController {
         } else {
             sendErrorMessage(errors, messageSource, request);
         }
+        
+        
 
         // reload page on error
         // TODO: show password fields toggle should work better
@@ -128,7 +156,7 @@ public class AccountPageController {
         model.addAttribute("providerRoles", providerManagementService.getAllProviderRoles(false));
 
         return "account/account";
-
+	
     }
 
     private void sendErrorMessage(BindingResult errors, MessageSource messageSource, HttpServletRequest request) {
