@@ -38,6 +38,7 @@ var tabs = 1;
 function addTab() {
 
     ++tabs;
+    jq('#countTabs').val(parseInt(jq('#countTabs').val(),10)+1);
     
     // hide other tabs
     jq("#tabs li").removeClass("current ui-tabs-active ui-state-active");
@@ -51,15 +52,17 @@ function addTab() {
             "<p><label>Username</label> <input type='text' id='user"+tabs+"_username' name='user"+tabs+"_username'></p>" +
             "<p><label>Password</label> <input type='password' id='user"+tabs+"_password' name='user"+tabs+"_password'></p>" +
             "<p><label>Confirm Password</label> <input type='password' id='user"+tabs+"_confirmPassword' name='user"+tabs+"_confirmPassword'></p>" +
-            "<p><label>Privilege Level</label> <select name='user"+tabs+"_privilegeLevel'>" + <% privilegeLevels.each{ %> "<option value=$it>$it</option>" + <% } %> "</select></p>" +
-            "<p><label>Roles</label>" + <% capabilities.each{ %> "<p><input type='checkbox' name='user"+tabs+"_capabilities'>$it</p>" + <% } %> "</p>" +
+            "<p><label>Privilege Level</label> <select name='user"+tabs+"_privilegeLevel'>" + <% privilegeLevels.each{ %> "<option value='$it'>$it</option>" + <% } %> "</select></p>" +
+            "<p><label>Roles</label>" + <% capabilities.each{ %> "<p><input type='checkbox' name='user"+tabs+"_capabilities' value='$it'>$it</p>" + <% } %> "</p>" +
                
             "</div>");
     
     // set the newly added tab as current
     jq("#user"+tabs+"_tabContent").show();
 
+    // focus on new tabs's username field
     jq("#user"+tabs+"_username").focus();
+    
 }
 
 jq(document).ready(function() {
@@ -81,6 +84,9 @@ jq(document).ready(function() {
 
     jq('#tabs a.remove').live('click', function() {
     
+        --tabs;
+        jq("#countTabs").val(tabs);
+
         // Get the tab name
         var tabid = \$(this).parent().find(".tab").attr("id");
     
@@ -101,6 +107,15 @@ jq(document).ready(function() {
             \$("#" + firsttabid + "_tabContent").show();
         } 
     });
+
+
+    // change the tab's name to its corresponding username
+    jq('[id\$=_username]').live('change', function(){     
+        var fieldID = this.id;
+        var tabID = fieldID.replace(/_username/,'');
+        jq("#"+tabID).text(\$("#"+fieldID).val());
+    });
+
 });
 
 </script>
@@ -114,7 +129,6 @@ jq(document).ready(function() {
 </style>
 
 
-
 <h3>${ (createAccount) ? ui.message("adminui.createAccount") : ui.message("adminui.editAccount") }</h3>
 
 <form method="post" id="accountForm">
@@ -126,6 +140,7 @@ jq(document).ready(function() {
             formFieldName: "familyName", 
             initialValue: (account.familyName ?: '')
         ])}
+
 
         ${ ui.includeFragment("uicommons", "field/text", [
                 label: ui.message("adminui.person.givenName"),
@@ -164,6 +179,8 @@ jq(document).ready(function() {
 
                 <br><br>
 
+                <input type="hidden" id="countTabs" name="countTabs" value="1">
+
                 <div class="ui-tabs">
                     <ul id="tabs" class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all" role="tablist">
             
@@ -179,21 +196,21 @@ jq(document).ready(function() {
                         <div id="user1_tabContent">
 
                             <p><label>Username</label> 
-                                <input type='text' id='user1_username' id='user1_username'>
+                                <input type='text' id='user1_username' name='user1_username'>
                             </p> 
                             
                             <p><label>Password</label> 
-                                <input type='password' id='user"1_password' id='user1_password'>
+                                <input type='password' id='user"1_password' name='user1_password'>
                             </p>
 
                             <p><label>Confirm Password</label> 
-                                <input type='password' id='user1_confirmPassword' id='user1_confirmPassword'>
+                                <input type='password' id='user1_confirmPassword' name='user1_confirmPassword'>
                             </p>
 
                             <p><label>Privilege Level</label>
                                 <select name='user1_privilegeLevel'>
                                 <% privilegeLevels.each{ %>
-                                    <option value=$it>$it</option>
+                                    <option value="$it">$it</option>
                                 <% } %>
                                 </select>
                             </p>
@@ -201,7 +218,7 @@ jq(document).ready(function() {
                             <p><label>Roles</label>
                                 <% capabilities.each{ %>
                                     <p>
-                                        <input type='checkbox' name='user1_capabilities'>$it
+                                        <input type='checkbox' name='user1_capabilities' value="$it">$it
                                     </p>
                                 <% } %>
                             </p>

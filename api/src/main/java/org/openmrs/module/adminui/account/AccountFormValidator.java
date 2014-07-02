@@ -70,7 +70,7 @@ public class AccountFormValidator implements Validator {
 	**/
     
     @Override
-    public void validate(Object obj, Errors errors) {
+    public void validate(Object obj, Errors errors) { /*
         if (obj == null || !(obj instanceof AccountDomainWrapper))
             throw new IllegalArgumentException("The parameter obj should not be null and must be of type" + AccountDomainWrapper.class);
 
@@ -98,7 +98,11 @@ public class AccountFormValidator implements Validator {
         if(ProviderEnabled==true) {
     		checkIfProviderRolesAreNull(errors, account);
     	}
+    	
+    	*/
     }
+    
+    /*
     
     private void checkIfGivenAndFamilyNameAreNotNull(Errors errors, AccountDomainWrapper account) {
         if (StringUtils.isBlank(account.getGivenName())) {
@@ -152,12 +156,12 @@ public class AccountFormValidator implements Validator {
         }
     }
     
-    /*private void checkIfNoCapabilities(Errors errors, AccountDomainWrapper account) {
+    private void checkIfNoCapabilities(Errors errors, AccountDomainWrapper account) {
         if (account.getCapabilities() == null || account.getCapabilities().size() == 0) {
             errors.rejectValue("capabilities", "adminui.user.Capabilities.required",
                     new Object[]{messageSourceService.getMessage("adminui.user.Capabilities.required")}, null);
         }
-    }*/
+    }
     
     private boolean checkIfUserWasCreated(User user) {
         return (user != null && user.getUserId() == null);
@@ -206,4 +210,6 @@ public class AccountFormValidator implements Validator {
                     new Object[]{messageSourceService.getMessage("adminui.account.providerRole.label")}, null);
         }
     }
+    
+    */
 }

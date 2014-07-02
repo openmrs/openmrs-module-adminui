@@ -35,7 +35,7 @@ public class AccountFragmentController {
 
         try {
             AccountDomainWrapper account = accountService.getAccountByPerson(person);
-            account.unlock();
+            //account.unlock();
             return new SuccessResult(ui.message("emr.account.unlocked.successMessage"));
         } catch (Exception e) {
             return new FailureResult(ui.message("emr.account.unlock.failedMessage"));
