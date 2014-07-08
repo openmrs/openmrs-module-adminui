@@ -1,7 +1,5 @@
 package org.openmrs.module.adminui.account;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -27,17 +25,15 @@ public class AccountDomainWrapper{
 
     private Person person;
 
+    private User user;
+
     private Set<Provider> providerSet;
     
     private boolean providerChecked = false;
-    
-    private boolean userChecked = false;
 
-    private ArrayList<String> usernames;
-    
-    private ArrayList<String> passwords;
+    private String password;
 
-    private HashMap<User,String> confirmPasswords;
+    private String confirmPassword;
 
     private AccountService accountService;
 
@@ -65,18 +61,12 @@ public class AccountDomainWrapper{
         this.person = person;
         }
     
-    private ArrayList<User> userSet = new ArrayList<User>();
-    
     public Person getPerson() {
         return person;
     }
 
-    /*public List<User> getUsers() {
-        return userService.getUsersByPerson(person,true);
-    }*/
-
-    public Boolean getProvider() {
-        return !providerSet.isEmpty();
+    public User getUser() {
+        return user;
     }
     
     private void initializePersonNameIfNecessary() {
@@ -85,11 +75,11 @@ public class AccountDomainWrapper{
         }
     }
 
-    private User generateNewUser() 
-    {
-    	User user = new User();
-    	user.setPerson(person);
-        return user;
+    private void initializeUserIfNecessary() {
+        if (user == null) {
+            user = new User();
+            user.setPerson(person);
+        }
     }
 
     private Provider generateNewProvider()
@@ -98,6 +88,23 @@ public class AccountDomainWrapper{
     	newProvider.setPerson(person);
     	return newProvider;
     }
+    
+    /*public void setProviderRole(ProviderRole providerRole) {
+
+        if (providerRole != null) {
+            initializeProviderIfNecessary();
+            this.provider.setProviderRole(providerRole);
+        } else {
+            // this prevents us from creating a new provider if we are only setting the provider role to null
+            if (this.provider != null) {
+                provider.setProviderRole(null);
+            }
+        }
+    }*/
+
+    /*public ProviderRole getProviderRole() {
+        return this.provider != null ? this.provider.getProviderRole() : null;
+    }*/
 
     public void setGivenName(String givenName) {
         initializePersonNameIfNecessary();
@@ -124,14 +131,49 @@ public class AccountDomainWrapper{
     public String getGender() {
         return person.getGender();
     }
-    
-    public void setUserEnabled(boolean userEnabled) {
-        if(userEnabled) 
-        	this.userChecked = true;
+
+    public void setUsername(String username) {
+        if (StringUtils.isNotBlank(username)) {
+            initializeUserIfNecessary();
+            user.setUsername(username);
+        }
+    }
+
+    public String getUsername() {
+        return user != null ? user.getUsername() : null;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getConfirmPassword() {
+        return confirmPassword;
+    }
+
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
     }
     
-    public boolean getUserEnabled() {
-    	return userChecked;
+    public void setUserEnabled(Boolean userEnabled) {
+        if(userEnabled) {
+        	initializeUserIfNecessary();
+        }
+        else
+        	user = null;
+    }
+
+
+    public Boolean getUserEnabled() {
+        if (user == null) {
+            return null;
+        } else {
+            return !user.isRetired();
+        }
     }
     
     public void setProviderEnabled(boolean providerEnabled) {
@@ -143,80 +185,29 @@ public class AccountDomainWrapper{
     	return providerChecked;
     }
     
-    public void createRequiredUsers(int countUsers) {
-    	if(userChecked) {
-    		for(int i=1 ; i<=countUsers ; i++) {
-    			User user = generateNewUser();
-    			userSet.add(user);
-    		}
-    	}
-    }
-    
-    public void setUsernames(ArrayList<String> username) {
-    	usernames = new ArrayList<String>(username);
-    	for(int i=0 ; i<userSet.size() ; i++) {
-    		User user = userSet.get(i);
-    		user.setUsername(username.get(i));
-    	}
-    }
-    
-    public String getUsername(int i) {
-    	User user = userSet.get(i);
-        return user != null ? user.getUsername() : null;
-    }
-    
-    public void setPasswords(ArrayList<String> password) {
-    	this.passwords = new ArrayList<String>(password);
-    }
-
-    public String getPassword(int i) {
-    	User user = userSet.get(i);
-        return user != null ? passwords.get(i) : null;
-    }
-    
-    public void setConfirmPasswords(ArrayList<String> confirmPassword) {
-    	confirmPasswords = new HashMap<User,String>();
-    	for(int i=0 ; i<userSet.size() ; i++) {
-    		User user = userSet.get(i);
-    		confirmPasswords.put(user, confirmPassword.get(i));
-    	}
-    }
-
-    public String getConfirmPassword(int i) {
-    	User user = userSet.get(i);
-        return user != null ? confirmPasswords.get(i) : null;
-    }    
-    
-    public void setPrivilegeLevels(ArrayList<String> privilegeLevel) {
-    	for(int i=0 ; i<userSet.size() ; i++) {
-    		User user = userSet.get(i);
-    		Role role = userService.getRole(privilegeLevel.get(i));
-    		user.addRole(role);
-    	}
-    }
-    
-    public Role getPrivilegeLevel(int i) {
-    	User user = userSet.get(i);
-    	if (user != null && user.getRoles() != null) {
-            for (Role role : user.getRoles()) {
-                if (role.getRole().startsWith(EmrApiConstants.ROLE_PREFIX_PRIVILEGE_LEVEL)) {
-                    return role;
-                }
-            }
-        }
-        return null;
-    }
-
-    /*public void unlock() {
+    public void unlock() {
         if (user == null) {
             throw new IllegalStateException("Cannot unlock an account that doesn't have a user");
         }
         user.removeUserProperty(OpenmrsConstants.USER_PROPERTY_LOCKOUT_TIMESTAMP);
         user.removeUserProperty(OpenmrsConstants.USER_PROPERTY_LOGIN_ATTEMPTS);
         userService.saveUser(user, null);
-    }*/
+    }
     
-    /*public void setPrivilegeLevel(Role privilegeLevel) {
+    public Role getPrivilegeLevel() {
+        // use getRoles instead of getAllRoles since privilege-level should be explicitly set
+        if (user != null && user.getRoles() != null) {
+            for (Role role : user.getRoles()) {
+                if (role.getRole().startsWith(EmrApiConstants.ROLE_PREFIX_PRIVILEGE_LEVEL)) {
+                    return role;
+                }
+            }
+
+        }
+        return null;
+    }
+    
+    public void setPrivilegeLevel(Role privilegeLevel) {
 
         if (privilegeLevel != null) {
 
@@ -238,9 +229,9 @@ public class AccountDomainWrapper{
                 user.getRoles().removeAll(accountService.getAllPrivilegeLevels());
             }
         }
-    }*/
+    }
     
-    /*public void setCapabilities(Set<Role> capabilities) {
+    public void setCapabilities(Set<Role> capabilities) {
 
         if (capabilities != null && capabilities.size() > 0) {
             if (!accountService.getAllCapabilities().containsAll(capabilities)) {
@@ -259,22 +250,10 @@ public class AccountDomainWrapper{
         } else if (user != null && user.getRoles() != null) {
             user.getRoles().removeAll(accountService.getAllCapabilities());
         }
-    }*/
-    
-    public void setCapabilities(ArrayList<String[]> roles) {
-    	for(int i=0 ; i<userSet.size() ; i++) {
-    		User user = userSet.get(i);
-    		String[] userRoles = roles.get(i); 
-    		for(String roleName : userRoles) {
-    			Role role = userService.getRole(roleName);
-    			user.addRole(role);
-    		}
-    	}
     }
     
-    public Set<Role> getCapabilities(int i) {
+    public Set<Role> getCapabilities() {
 
-    	User user = userSet.get(i);
         if (user == null) {
             return null;
         }
@@ -324,19 +303,14 @@ public class AccountDomainWrapper{
             personService.savePerson(person);
         }
 
-        if(userChecked && userSet.size()>0) {
-        	for(int i=0 ; i<userSet.size() ; i++) {
-        		User user = userSet.get(i);
-        		if (user != null) {
-        			boolean existingUser = (user.getUserId() != null);
-        			userService.saveUser(user, passwords.get(i));
+        if (user != null) {
+            boolean existingUser = (user.getUserId() != null);
+            userService.saveUser(user, password);
 
-        			// the saveUser(user, password) method will *only* set a password for a new user, it won't change an existing one
-        			if (existingUser && StringUtils.isNotBlank(passwords.get(i)) && StringUtils.isNotBlank(confirmPasswords.get(i))) {
-        				userService.changePassword(user, passwords.get(i));
-        			}
-        		}
-        	}
+            // the saveUser(user, password) method will *only* set a password for a new user, it won't change an existing one
+            if (existingUser && StringUtils.isNotBlank(password) && StringUtils.isNotBlank(confirmPassword)) {
+                userService.changePassword(user, password);
+            }
         }
         
         if(providerChecked && !providerSet.isEmpty()) {
