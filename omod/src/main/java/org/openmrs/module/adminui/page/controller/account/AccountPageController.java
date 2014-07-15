@@ -43,8 +43,6 @@ public class AccountPageController {
 
     protected final Log log = LogFactory.getLog(getClass());
 
-    String suserEnabled;
-	String sproviderEnabled;
 	int countUsers;
 
     public AccountDomainWrapper getAccount(@RequestParam(value = "personId", required = false) Person person,
@@ -63,6 +61,13 @@ public class AccountPageController {
         return account;
     }
 
+    /**
+	 * @param model
+	 * @param account
+	 * @param accountService
+	 * @param adminService
+	 * @param providerManagementService
+	 */
     public void get(PageModel model, @MethodParam("getAccount") AccountDomainWrapper account,
                     @SpringBean("accountService") AccountService accountService,
                     @SpringBean("adminService") AdministrationService administrationService,
@@ -75,6 +80,23 @@ public class AccountPageController {
         model.addAttribute("providerRoles", providerManagementService.getAllProviderRoles(false));
     }
 
+    /**
+     * 
+     * @param account
+     * @param errors
+     * @param userEnabled
+     * @param providerEnabled
+     * @param countTabs
+     * @param messageSource
+     * @param messageSourceService
+     * @param accountService
+     * @param administrationService
+     * @param providerManagementService
+     * @param accountValidator
+     * @param model
+     * @param request
+     * @return
+     */
     public String post(@MethodParam("getAccount") @BindParams AccountDomainWrapper account, BindingResult errors,
                        @RequestParam(value = "userEnabled", defaultValue = "false") boolean userEnabled,
                        @RequestParam(value = "providerEnabled", defaultValue = "false") boolean providerEnabled,
@@ -130,7 +152,7 @@ public class AccountPageController {
             } catch (Exception e) {
                 log.warn("Some error occurred while saving account details:", e);
                 request.getSession().setAttribute(AdminUiConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE,
-                        messageSourceService.getMessage("adminui.account.error.save.fail "+e.getMessage()+suserEnabled+" "+sproviderEnabled, new Object[]{e.getMessage()}, Context.getLocale()));
+                        messageSourceService.getMessage("adminui.account.error.save.fail "+e.getMessage(), new Object[]{e.getMessage()}, Context.getLocale()));
             }
         } else {
             sendErrorMessage(errors, messageSource, request);

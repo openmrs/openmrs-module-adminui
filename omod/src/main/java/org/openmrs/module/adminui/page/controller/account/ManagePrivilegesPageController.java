@@ -6,6 +6,10 @@ import org.openmrs.ui.framework.page.PageModel;
 
 public class ManagePrivilegesPageController {
 	
+	/**
+	 * @param model
+	 * @param accountService
+	 */
 	public void get(PageModel model, @SpringBean("accountService") AccountService accountService) {
 		model.addAttribute("privilegeLevels", accountService.getAllPrivilegeLevels());
     }

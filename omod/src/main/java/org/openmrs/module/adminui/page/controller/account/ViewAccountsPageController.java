@@ -6,6 +6,10 @@ import org.openmrs.ui.framework.page.PageModel;
 
 public class ViewAccountsPageController {
 
+	/**
+	 * @param model
+	 * @param accountService
+	 */
     public void get(PageModel model, @SpringBean("accountService") AccountService accountService) {
     	model.addAttribute("accounts", accountService.getAllAccounts());
     }

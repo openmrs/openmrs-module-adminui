@@ -273,7 +273,6 @@ jq(document).ready(function() {
                 emptyOptionLabel: ui.message("adminui.chooseOne"), 
                 formFieldName: "providerRoles", 
                 options: providerRolesOptions,
-                multiple: "true";
             ])}
 
             
