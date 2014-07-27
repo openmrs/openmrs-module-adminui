@@ -1,17 +1,18 @@
 package org.openmrs.module.adminui.page.controller.location;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Location;
+import org.openmrs.LocationTag;
 import org.openmrs.api.LocationService;
 import org.openmrs.api.context.Context;
-import org.openmrs.messagesource.MessageSourceService;
 import org.openmrs.module.adminui.AdminUiConstants;
-import org.openmrs.module.adminui.location.LocationValidator;
 import org.openmrs.ui.framework.annotation.BindParams;
 import org.openmrs.ui.framework.annotation.SpringBean;
 import org.openmrs.ui.framework.page.PageModel;
@@ -21,26 +22,13 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-public class CreateLocationPageController {
+public class LocationPageController {
 	
 	protected final Log log = LogFactory.getLog(getClass());
-	
-	 /*public Location getLocation(@RequestParam(value = "locationId", required = false) Integer locationId,
-             					@SpringBean("locationService") LocationService locationService) {
-		 
-		 Location location = null;
-			
-		 if (locationId != null)
-			 location = locationService.getLocation(Integer.valueOf(locationId));
-			
-		 if (location == null)
-			 location = new Location();
-			
-		 return location;
-
-	 }	*/
 	
 	/**
 	 * @param model
@@ -51,9 +39,9 @@ public class CreateLocationPageController {
 					@SpringBean ("locationService") LocationService locationService) {
 		
 		Location location = new Location();
-		/*if (locationId != null) {
+		if (locationId != null) {
 			location =  locationService.getLocation(Integer.valueOf(locationId));
-		}*/
+		}
 		
 		model.addAttribute("location", location);
 		model.addAttribute("existingLocations", locationService.getAllLocations());
@@ -73,30 +61,50 @@ public class CreateLocationPageController {
 	 * @param request
 	 * @return
 	 */
+	@RequestMapping(value="/save", method = RequestMethod.POST)
 	public String post(PageModel model, @ModelAttribute("location") @BindParams Location location,
 						BindingResult errors, 
 						@SpringBean("locationService") LocationService locationService,
-						@SpringBean("locationValidator") LocationValidator locationValidator,
+						/*@SpringBean("locationValidator") AdminUiLocationValidator locationValidator,*/ 
 						@SpringBean("messageSource") MessageSource messageSource,
-	                    @SpringBean("messageSourceService") MessageSourceService messageSourceService,
+						@RequestParam(required=false , value = "save") String saveFlag,
+						@RequestParam(required=false , value = "retire") String retireFlag,
 						HttpServletRequest request ) {
 		
+		System.err.println(saveFlag+" "+retireFlag);
 		if (!errors.hasErrors()) {
 			System.err.println("HAS NO ERRORS");
 		}
 
-		//locationValidator.validate(procedure, newErrors);
-		
 		Errors newErrors = new BindException(location, "location");
+		//locationValidator.validate(location, newErrors);
+		
+		String[] locationTags = request.getParameterValues("locTags");
+		Set<LocationTag> tags = new HashSet<LocationTag>();
+		
+		if(locationTags.length>0) {
+			for (String x : locationTags) {
+				LocationTag tag = locationService.getLocationTagByName(x);
+				tags.add(tag);
+			}
+			location.setTags(tags);
+		}
 		
 		if (!newErrors.hasErrors()) {
 			System.err.println("HAS NO ERRORS");
 			try {
-				locationService.saveLocation(location);
-				System.err.println("saved successfully: redirecting");
-				request.getSession().setAttribute(AdminUiConstants.SESSION_ATTRIBUTE_INFO_MESSAGE,
-                        messageSourceService.getMessage("adminui.location.saved"));
-				return "redirect:/referenceapplication/home.page";
+				if(saveFlag.length() > 3) {
+					locationService.saveLocation(location);
+					System.err.println("saved successfully: redirecting");
+					request.getSession().setAttribute(AdminUiConstants.SESSION_ATTRIBUTE_INFO_MESSAGE, "adminui.location.saved");
+				}
+				else if(retireFlag.length() > 3) {
+					String reason = request.getParameter("retireReason");
+					locationService.retireLocation(location, reason);
+					System.err.println("retired successfully: redirecting");
+					request.getSession().setAttribute(AdminUiConstants.SESSION_ATTRIBUTE_INFO_MESSAGE, "adminui.location.retired");
+					}
+				return "redirect:/adminui/location/manageLocations.page";
 			}
 			catch (Exception e) {
 				log.warn("Some error occurred while saving location details:", e);
@@ -108,7 +116,7 @@ public class CreateLocationPageController {
 		else {
             sendErrorMessage(errors, messageSource, request);
         }
-
+	
 		model.addAttribute("errors", newErrors);
 		model.addAttribute("location", location);
 		

@@ -25,6 +25,20 @@
         "extensionParams": {
             "featureToggle": "myAccountFeature"
         }
+    },
+    
+    {
+        "id": "adminui.locationManager",
+        "extensionPointId": "org.openmrs.referenceapplication.homepageLink",
+        "type": "link",
+        "label": "adminui.app.locationManager.label",
+        "url": "adminui/location/manageLocations.page",
+        "icon": "icon-map-marker",
+        "order": 13,
+        "requiredPrivilege": "Allowed for everyone",
+        "extensionParams": {
+            "featureToggle": "myAccountFeature"
+        }
     }
   
 ]
