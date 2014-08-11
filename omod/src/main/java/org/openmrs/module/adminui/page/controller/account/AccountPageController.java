@@ -106,7 +106,6 @@ public class AccountPageController {
                        @SpringBean("accountService") AccountService accountService,
                        @SpringBean("adminService") AdministrationService administrationService,
                        @SpringBean("providerManagementService") ProviderManagementService providerManagementService,
-                       @SpringBean("accountFormValidator") AdminUiAccountValidator accountValidator, 
                        PageModel model,
                        HttpServletRequest request) {
 

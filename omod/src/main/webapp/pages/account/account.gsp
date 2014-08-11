@@ -6,7 +6,8 @@
     def createAccount = (account.person.personId == null ? true : false);
 
     def genderOptions = [ [label: ui.message("adminui.gender.M"), value: 'M'],
-                          [label: ui.message("adminui.gender.F"), value: 'F'] ]
+                          [label: ui.message("adminui.gender.F"), value: 'F'],
+                          [label: ui.message("adminui.gender.O"), value: 'O'] ]
 
     def privilegeLevelOptions = []
     privilegeLevels.each {
@@ -132,8 +133,8 @@ jq(document).ready(function() {
 <h3>${ (createAccount) ? ui.message("adminui.createAccount") : ui.message("adminui.editAccount") }</h3>
 
 <form method="post" id="accountForm">
-	<fieldset>
-		<legend><b>${ ui.message("adminui.person.details") }</b></legend>
+    <fieldset>
+        <legend><b>${ ui.message("adminui.person.details") }</b></legend>
 
         ${ ui.includeFragment("uicommons", "field/text", [
             label: ui.message("adminui.person.familyName"),
@@ -154,24 +155,23 @@ jq(document).ready(function() {
             initialValue: (account.gender ?: 'M'), 
             options: genderOptions 
         ])}
-	</fieldset>
-	
-	<fieldset>
-		<legend><b>${ ui.message("adminui.user.account.details") }</b></legend>
-		
-		${ ui.includeFragment("adminui", "field/checkbox", [ 
+    </fieldset>
+    
+    <fieldset>
+        <legend><b>${ ui.message("adminui.user.account.details") }</b></legend>
+        
+        ${ ui.includeFragment("adminui", "field/checkbox", [ 
                 label: ui.message("adminui.user.enabled"), 
                 id: "userEnabled", 
                 formFieldName: "userEnabled",
-                value: "true", 
-                checked: (account.user ?: '') 
+                value: "true" 
             ])}
-		
-		<div class="emr_userDetails" <% if (!account.user) { %> style="display: none" <% } %>>
-		<br>
-			
-			
-			<div>
+        
+        <div class="emr_userDetails" <% if (1) { %> style="display: none" <% } %>>
+        <br>
+            
+            
+            <div>
                 <a class="button task" href="#ui-tabs" onclick="addTab()">
                 <i class="icon-plus"></i>
                     Add User
@@ -230,21 +230,21 @@ jq(document).ready(function() {
 
             </div>
 
-		</div>
+        </div>
 
 
 
-		<div class="emr_userDetails">
-			<% if(!account.user) { %>
-				<button id="createUserAccountButton" type="button" onclick="javascript:emr_createUserAccount()"> ${ ui.message("adminui.user.createUserAccount") }</button>
-			<% } %>
-		</div>
-	</fieldset>
-	
-	<fieldset>
-		<legend><b>${ ui.message("adminui.provider.details") }</b></legend>
-		
-		${ ui.includeFragment("adminui", "field/checkbox", [ 
+        <div class="emr_userDetails">
+            <% if(1) { %>
+                <button id="createUserAccountButton" type="button" onclick="javascript:emr_createUserAccount()"> ${ ui.message("adminui.user.createUserAccount") }</button>
+            <% } %>
+        </div>
+    </fieldset>
+    
+    <fieldset>
+        <legend><b>${ ui.message("adminui.provider.details") }</b></legend>
+        
+        ${ ui.includeFragment("adminui", "field/checkbox", [ 
                 label: ui.message("adminui.provider.enabled"), 
                 id: "providerEnabled", 
                 formFieldName: "providerEnabled", 
@@ -252,7 +252,7 @@ jq(document).ready(function() {
                  
             ])}
             
-		<div class="emr_providerDetails" <% if (1) { %> style="display: none" <% } %> >
+        <div class="emr_providerDetails" <% if (1) { %> style="display: none" <% } %> >
             <br>
             <p>
                 ${ ui.message("Provider Role (You can choose more than one)") }
@@ -267,25 +267,17 @@ jq(document).ready(function() {
                 ])}
 
             <% } %>
-
-            ${ ui.includeFragment("uicommons", "field/dropDown", [
-                label: ui.message("adminui.user.providerRoles"), 
-                emptyOptionLabel: ui.message("adminui.chooseOne"), 
-                formFieldName: "providerRoles", 
-                options: providerRolesOptions,
-            ])}
-
             
         </div>
 
-		<div class="emr_providerDetails">
-			<% if(1) { %>
-				<button id="createProviderAccountButton" type="button" onclick="javascript:emr_createProviderAccount()">${ ui.message("adminui.provider.createProviderAccount") }</button>
-			<% } %>
-		</div>
-		
+        <div class="emr_providerDetails">
+            <% if(1) { %>
+                <button id="createProviderAccountButton" type="button" onclick="javascript:emr_createProviderAccount()">${ ui.message("adminui.provider.createProviderAccount") }</button>
+            <% } %>
+        </div>
+        
 
-	</fieldset>
+    </fieldset>
 
     <div id>
         <input type="button" class="cancel" value="${ ui.message("adminui.cancel") }" onclick="javascript:window.location='/${ contextPath }/adminui/account/manageAccounts.page'" />

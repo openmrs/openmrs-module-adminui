@@ -20,7 +20,7 @@
     var breadcrumbs = [
         { icon: "icon-home", link: '/' + OPENMRS_CONTEXT_PATH + '/index.htm' },
         { label: "${ ui.message("adminui.app.locationManager.label")}" , link: '${ui.pageLink("adminui", "location/manageLocations")}'},
-        { label: "${ ui.message("adminui.createLocationAttributeType.locationManagement.label")}" }
+        { label: "${ ui.message("adminui.manageLocationAttributeTypes.locationManagement.label")}" }
 
     ];
 </script>
