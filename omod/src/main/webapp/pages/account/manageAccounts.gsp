@@ -15,13 +15,6 @@
 
 <div id="tasks">
 
-    <a class="button app big" href="${ ui.pageLink("adminui", "account/account") }">
-            <i class="icon-plus"></i>
-            ${ ui.message("adminui.createAccount.accountManagement.label") }
-    </a>
-
-    
-
     <a class="button app big" href="${ ui.pageLink("adminui", "account/viewAccounts") }">
             <i class="icon-list"></i>
             ${ ui.message("adminui.viewAccount.accountManagement.label") }

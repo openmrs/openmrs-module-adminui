@@ -10,7 +10,11 @@
     ];
 </script>
 
-
+    <a class="button" href="${ ui.pageLink("adminui", "location/location") }">
+            <i class="icon-plus"></i>
+            ${ ui.message("adminui.createLocation.locationManagement.label") }
+    </a>
+    
 <hr>
 <table id="list-locations" cellspacing="0" cellpadding="2">
 	<thead>

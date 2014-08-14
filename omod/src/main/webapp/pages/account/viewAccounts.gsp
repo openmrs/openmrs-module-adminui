@@ -10,6 +10,10 @@
     ];
 </script>
 
+<a class="button" href="${ ui.pageLink("adminui", "account/account") }">
+            <i class="icon-plus"></i>
+            ${ ui.message("adminui.createAccount.accountManagement.label") }
+    </a>
 
 <hr>
 <table id="list-accounts" cellspacing="0" cellpadding="2">

@@ -15,10 +15,6 @@
 
 <div id="tasks">
 
-    <a class="button app big" href="${ ui.pageLink("adminui", "location/location") }">
-            <i class="icon-plus"></i>
-            ${ ui.message("adminui.createLocation.locationManagement.label") }
-    </a>
 
     <a class="button app big" href="${ ui.pageLink("adminui", "location/viewLocations") }">
             <i class="icon-list"></i>

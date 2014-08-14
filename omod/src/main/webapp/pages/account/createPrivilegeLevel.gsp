@@ -60,7 +60,7 @@
 <form class="simple-form-ui" method="post" id="privilegeLevelForm" autocomplete="off">
 <fieldset>
     ${ui.includeFragment("uicommons", "field/text", [
-            label        : ui.message("adminui.privilegeLevel.name")+"*",
+            label        : ui.message("adminui.privilege.name")+"*",
             formFieldName: "name",
             id           : "name",
             maxLength    : 101,
@@ -68,7 +68,7 @@
     ])}
 
     ${ui.includeFragment("adminui", "field/textarea", [
-            label        : ui.message("adminui.privilegeLevel.description"),
+            label        : ui.message("adminui.privilege.description"),
             formFieldName: "description",
             id           : "description",
             initialValue : (privilegeLevel.description ?: '')
