@@ -3,6 +3,8 @@
 
     ui.includeJavascript("adminui", "account/account.js")
 
+    ui.includeJavascript("adminui", "jquery.validate.js")
+
     def createAccount = (account.person.personId == null ? true : false);
 
     def genderOptions = [ [label: ui.message("adminui.gender.M"), value: 'M'],
@@ -30,7 +32,47 @@
     ];
 </script>
 
+<script type="text/javascript">
 
+    jq().ready(function () {
+
+        jq("#accountForm").validate({
+            rules: {
+                "familyName": {
+                    required: true,
+                    minlength: 3,
+                    maxlength: 255
+                },
+                "givenName": {
+                    required: true,
+                    minlength: 3,
+                    maxlength: 255
+                },
+                "gender": {
+                    required: true,
+                }
+            },
+            errorClass: "error",
+            validClass: "",
+            onfocusout: function (element) {
+                jq(element).valid();
+            },
+            errorPlacement: function (error, element) {
+                element.next().text(error.text());
+            },
+            highlight: function (element, errorClass, validClass) {
+                jq(element).addClass(errorClass);
+                jq(element).next().addClass(errorClass);
+                jq(element).next().show();
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                jq(element).removeClass(errorClass);
+                jq(element).next().removeClass(errorClass);
+                jq(element).next().hide();
+            }
+        });
+    });
+</script>
 
 <script type="text/javascript">
 
@@ -257,16 +299,14 @@ jq(document).ready(function() {
             <p>
                 ${ ui.message("Provider Role (You can choose more than one)") }
             </p>
-            
-            <% providerRoles.each{ %>
-                ${ ui.includeFragment("adminui", "field/checkbox", [ 
-                    label: ui.format(it),
-                    formFieldName: "providerRoles", 
-                    value: it.id, 
-                    checked: account.providerSet?.contains(it)
-                ])}
 
-            <% } %>
+            <p>
+                <select multiple name='providerRoles' size="10">
+                    <% providerRoles.each{ %>
+                        <option value="$it.id">$it.name</option>
+                    <% } %>
+                </select>
+            </p>
             
         </div>
 

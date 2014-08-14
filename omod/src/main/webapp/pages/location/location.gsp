@@ -6,7 +6,7 @@
     def createLocation = (location.locationId == null ? true : false);
 
     def parentLocationOptions = []
-    existingLocations. each {
+    existingLocations.each {
         parentLocationOptions.push([ label: ui.format(it), value: it.id ])
     }
 %>
