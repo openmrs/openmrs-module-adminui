@@ -48,20 +48,14 @@ public class AccountDomainWrapper{
     private ProviderService providerService;
 
     private ProviderManagementService providerManagementService;
-    
-    //private ProviderIdentifierGenerator providerIdentifierGenerator;
-    
-    //private ProviderRole providerRole;
 
     public AccountDomainWrapper(Person person, AccountService accountService, UserService userService, ProviderService providerService,
-                                ProviderManagementService providerManagementService, PersonService personService
-                                /*ProviderIdentifierGenerator providerIdentifierGenerator*/) {
+                                ProviderManagementService providerManagementService, PersonService personService) {
         this.accountService = accountService;
         this.userService = userService;
         this.providerService = providerService;
         this.providerManagementService = providerManagementService;
         this.personService = personService;
-        //this.providerIdentifierGenerator = providerIdentifierGenerator;
         this.person = person;
         }
     
@@ -71,12 +65,12 @@ public class AccountDomainWrapper{
         return person;
     }
 
-    /*public List<User> getUsers() {
-        return userService.getUsersByPerson(person(),false);
-    }*/
-
-    public Boolean getProvider() {
-        return !providerSet.isEmpty();
+    public boolean isUserLinked() {
+        return userChecked;
+    }
+    
+    public boolean isProviderLinked() {
+        return providerChecked;
     }
     
     private void initializePersonNameIfNecessary() {
@@ -206,60 +200,6 @@ public class AccountDomainWrapper{
         }
         return null;
     }
-
-    /*public void unlock() {
-        if (user == null) {
-            throw new IllegalStateException("Cannot unlock an account that doesn't have a user");
-        }
-        user.removeUserProperty(OpenmrsConstants.USER_PROPERTY_LOCKOUT_TIMESTAMP);
-        user.removeUserProperty(OpenmrsConstants.USER_PROPERTY_LOGIN_ATTEMPTS);
-        userService.saveUser(user, null);
-    }*/
-    
-    /*public void setPrivilegeLevel(Role privilegeLevel) {
-
-        if (privilegeLevel != null) {
-
-            if (!accountService.getAllPrivilegeLevels().contains(privilegeLevel)) {
-                throw new APIException("Attempting to set invalid privilege level");
-            }
-
-            initializeUserIfNecessary();
-
-            if (!user.hasRole(privilegeLevel.getRole(), true)) {
-                if (user.getRoles() != null) {
-                    user.getRoles().removeAll(accountService.getAllPrivilegeLevels());
-                }
-                user.addRole(privilegeLevel);
-            }
-        } else if (user != null) {
-            // privilege level is mandatory, so technically we shouldn't ever get here
-            if (user.getRoles() != null) {
-                user.getRoles().removeAll(accountService.getAllPrivilegeLevels());
-            }
-        }
-    }*/
-    
-    /*public void setCapabilities(Set<Role> capabilities) {
-
-        if (capabilities != null && capabilities.size() > 0) {
-            if (!accountService.getAllCapabilities().containsAll(capabilities)) {
-                throw new APIException("Attempt to set invalid capability");
-            }
-
-            initializeUserIfNecessary();
-
-            if (user.getRoles() != null) {
-                user.getRoles().removeAll(accountService.getAllCapabilities());
-            }
-
-            for (Role role : capabilities) {
-                user.addRole(role);
-            }
-        } else if (user != null && user.getRoles() != null) {
-            user.getRoles().removeAll(accountService.getAllCapabilities());
-        }
-    }*/
     
     public void setCapabilities(ArrayList<String[]> roles) {
     	for(int i=0 ; i<userSet.size() ; i++) {
@@ -291,6 +231,18 @@ public class AccountDomainWrapper{
         return capabilities;
     }
     
+    public User getUser(int userNo) {
+    	return userSet.get(userNo);
+    }
+    
+    public ArrayList<User> getUsers() {
+    	return userSet;
+    }
+    
+    public int getUsersCount() {
+    	return userSet.size();
+    }
+    
     public void setProviderRoles(List<ProviderRole> providerRoles) {
 
     	Provider newProvider;
@@ -309,6 +261,10 @@ public class AccountDomainWrapper{
     
     public int getProvidersCount() {
     	return providerSet.size();
+    }
+    
+    public Set<Provider> getProviders() {
+    	return providerSet;
     }
     
     public String generateIdentifier()

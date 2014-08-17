@@ -135,8 +135,6 @@ public class AccountPageController {
     		
     		//accountValidator.validate(account, errors);
     	}
-    	//request.getSession().setAttribute(EmrConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE, ""+account.getPassword(1));
-    	
     	
         if (!errors.hasErrors()) {
 

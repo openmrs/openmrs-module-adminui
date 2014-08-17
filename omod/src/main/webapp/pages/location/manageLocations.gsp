@@ -21,9 +21,9 @@
             ${ ui.message("adminui.viewLocation.locationManagement.label") }
     </a>
     
-    <a class="button app big" href="${ ui.pageLink("adminui", "location/manageLocationTags") }">
+    <a class="button app big" href="${ ui.pageLink("adminui", "location/viewLocationTags") }">
             <i class="icon-tags"></i>
-            ${ ui.message("adminui.manageLocationTags.locationManagement.label") }
+            ${ ui.message("adminui.viewLocationTags.locationManagement.label") }
     </a>
     
     <a class="button app big" href="${ ui.pageLink("adminui", "location/viewLocationHierarchy") }">
@@ -31,9 +31,9 @@
             ${ ui.message("adminui.viewLocationHierarchy.locationManagement.label") }
     </a>
     
-    <a class="button app big" href="${ ui.pageLink("adminui", "location/manageLocationAttributeTypes") }">
+    <a class="button app big" href="${ ui.pageLink("adminui", "location/viewLocationAttributeTypes") }">
             <i class="icon-quote-right"></i>
-            ${ ui.message("adminui.manageLocationAttributeTypes.locationManagement.label") }
+            ${ ui.message("adminui.viewLocationAttributeTypes.locationManagement.label") }
     </a>
 
 </div>

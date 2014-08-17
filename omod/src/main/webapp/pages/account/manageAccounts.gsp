@@ -20,14 +20,14 @@
             ${ ui.message("adminui.viewAccount.accountManagement.label") }
     </a>
     
-    <a class="button app big" href="${ ui.pageLink("adminui", "account/manageRoles") }">
+    <a class="button app big" href="${ ui.pageLink("adminui", "account/viewRoles") }">
             <i class="icon-user"></i>
-            ${ ui.message("Manage Roles") }
+            ${ ui.message("adminui.viewRoles.accountManagement.label") }
     </a>
     
-    <a class="button app big" href="${ ui.pageLink("adminui", "account/managePrivileges") }">
+    <a class="button app big" href="${ ui.pageLink("adminui", "account/viewPrivileges") }">
             <i class="icon-key"></i>
-            ${ ui.message("Manage Privileges") }
+            ${ ui.message("adminui.viewPrivileges.accountManagement.label") }
     </a>
     
 </div>

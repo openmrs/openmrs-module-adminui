@@ -4,7 +4,7 @@ import org.openmrs.api.LocationService;
 import org.openmrs.ui.framework.annotation.SpringBean;
 import org.openmrs.ui.framework.page.PageModel;
 
-public class ManageLocationAttributeTypesPageController {
+public class ViewLocationAttributeTypesPageController {
 
 	/**
 	 * @param model

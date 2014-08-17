@@ -6,38 +6,46 @@
     var breadcrumbs = [
         { icon: "icon-home", link: '/' + OPENMRS_CONTEXT_PATH + '/index.htm' },
         { label: "${ ui.message("adminui.app.accountManager.label")}", link: '${ui.pageLink("adminui", "account/manageAccounts")}' },
-        { label: "${ ui.message("adminui.managePrivileges.accountManagement.label")}" }
+        { label: "${ ui.message("adminui.viewRoles.accountManagement.label")}" }
     ];
 </script>
 
 <% i=0 %>
 
- <input type="submit" class="button" value="${ui.message("adminui.createPrivilegeLevel")}" onclick="javascript:window.location='/${ contextPath }/adminui/account/createPrivilegeLevel.page'"/>
+ <input type="submit" class="button" value="${ui.message("adminui.createCapability")}" onclick="javascript:window.location='/${ contextPath }/adminui/account/createCapability.page'"/>
 
 <hr>
-<table id="list-levels" cellspacing="0" cellpadding="2">
+<table id="list-roles" cellspacing="0" cellpadding="2">
 	<thead>
 		<tr>
 			<th>${ ui.message("adminui.sno")}</th>
-			<th>${ ui.message("adminui.privilege.name") }</th>
-			<th>${ ui.message("adminui.privilege.children") }</th>
+			<th>${ ui.message("adminui.role.role") }</th>
+			<th>${ ui.message("adminui.role.inheritedRoles") }</th>
+			<th>${ ui.message("adminui.role.privileges") }</th>
 			<th></th>
 		</tr>
 	</thead>
 	<tbody>
-		<% privilegeLevels.each{  %>
+		<% roles.each{  %>
 	 	<tr>
 	 		<td>
 				${ ++i }
 			</td>
+
 			<td>
-				 ${ ui.format(it.name) }
+				 ${ ui.format(it.role) }
 			</td>
+
+            <td>
+				 ${ ui.format(it.inheritedRoles) }
+			</td>
+
 			<td>
-				${ ui.format(it.childRoles) }
-            </td>
+				 ${ ui.format(it.privileges) }
+			</td>
+
 			<td>
-	            <a href="/${ contextPath }/adminui/account/createPrivilegeLevel.page?privilegeLevelName=${ it.name }">
+	            <a href="/${ contextPath }/adminui/account/createCapability.page?capabilityName=${ it.role }">
 	                <button>${ ui.message("adminui.edit") }</button>
 	            </a>
         	</td>
@@ -47,7 +55,7 @@
 </table>
 
 
-<% if ( (privilegeLevels != null) && (privilegeLevels.size() > 0) ) { %>
+<% if ( (roles != null) && (roles.size() > 0) ) { %>
 ${ ui.includeFragment("uicommons", "widget/dataTable", [ object: "#list-levels",
         options: [
                 bFilter: true,
