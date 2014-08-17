@@ -11,6 +11,7 @@
  *
  * Copyright (C) OpenMRS, LLC.  All Rights Reserved.
  */
+
 package org.openmrs.module.adminui.page.controller;
 
 import java.io.IOException;
@@ -26,8 +27,8 @@ import org.openmrs.ui.framework.page.PageRequest;
 import org.springframework.stereotype.Controller;
 
 /**
- * Spring MVC controller that takes over /index.htm and processes requests to show the home page so
- * users don't see the legacy OpenMRS UI
+ * Spring MVC controller that processes requests to show the Admin Tools home page so
+ * users don't see the legacy OpenMRS Administration UI
  */
 @Controller
 public class AdminUiHomePageController {

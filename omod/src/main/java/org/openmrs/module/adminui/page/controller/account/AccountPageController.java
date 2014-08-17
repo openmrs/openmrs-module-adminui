@@ -11,6 +11,7 @@
  *
  * Copyright (C) OpenMRS, LLC.  All Rights Reserved.
  */
+
 package org.openmrs.module.adminui.page.controller.account;
 
 import org.apache.commons.logging.Log;
