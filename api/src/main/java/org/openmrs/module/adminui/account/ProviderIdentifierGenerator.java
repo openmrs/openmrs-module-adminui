@@ -30,6 +30,12 @@ package org.openmrs.module.adminui.account;
  */
 public class ProviderIdentifierGenerator {
 
+	/*	TODO:
+	 * Implementation of following function needs to be discussed
+	 * Its a demo right now, giving ID as (3-digit no.) + "-" + (1-digit no.)
+	 * Example: 155-6
+	 */
+	
     public String generateIdentifier() {
     	long a = Math.round(Math.random()*1000);
     	long b = Math.round(Math.random()*10);

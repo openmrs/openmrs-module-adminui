@@ -128,22 +128,6 @@ public class AdminUiAccountValidatorTest {
         assertTrue(errors.hasFieldErrors("gender"));
     }
 
-    /**
-     * @verifies reject an empty privilegeLevel if user is not null
-     * @see AdminUiAccountValidator#validate(Object, Errors)
-     */
-    @Test
-    public void validate_shouldRejectAnEmptyPrivilegeLevelIfUserIsNotNull() throws Exception {
-        account.setGivenName("give name");
-        account.setFamilyName("family name");
-        account.setGender("M");
-        //account.setUsername("username");
-
-        Errors errors = new BindException(account, "account");
-        validator.validate(account, errors);
-        assertTrue(errors.hasFieldErrors("privilegeLevel"));
-    }
-
 
     @Test
     public void shouldCreateAnErrorMessageWhenUserIsNullAndNoProviderRole() {

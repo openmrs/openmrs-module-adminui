@@ -31,7 +31,6 @@ import org.openmrs.api.ProviderService;
 import org.openmrs.api.UserService;
 import org.openmrs.module.adminui.AdminUiConstants;
 import org.openmrs.module.adminui.account.AccountService;
-//import org.openmrs.module.adminui.account.ProviderIdentifierGenerator;
 import org.openmrs.module.providermanagement.Provider;
 import org.openmrs.module.providermanagement.ProviderRole;
 import org.openmrs.module.providermanagement.api.ProviderManagementService;

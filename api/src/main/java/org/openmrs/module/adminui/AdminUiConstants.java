@@ -14,10 +14,6 @@
 
 package org.openmrs.module.adminui;
 
-
-/**
- *
- */
 public class AdminUiConstants {
 
 	public static final String MODULE_ID = "adminui";

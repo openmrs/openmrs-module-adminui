@@ -24,6 +24,7 @@ import org.openmrs.messagesource.MessageSourceService;
 import org.openmrs.module.adminui.AdminUiConstants;
 import org.openmrs.module.adminui.account.AccountDomainWrapper;
 import org.openmrs.module.adminui.account.AccountService;
+import org.openmrs.module.adminui.account.AdminUiAccountValidator;
 import org.openmrs.module.providermanagement.api.ProviderManagementService;
 import org.openmrs.ui.framework.annotation.BindParams;
 import org.openmrs.ui.framework.annotation.MethodParam;
@@ -105,6 +106,7 @@ public class AccountPageController {
                        @SpringBean("messageSourceService") MessageSourceService messageSourceService,
                        @SpringBean("accountService") AccountService accountService,
                        @SpringBean("adminService") AdministrationService administrationService,
+                       @SpringBean("accountValidator") AdminUiAccountValidator accountValidator,
                        @SpringBean("providerManagementService") ProviderManagementService providerManagementService,
                        PageModel model,
                        HttpServletRequest request) {
@@ -134,7 +136,7 @@ public class AccountPageController {
     		account.setPrivilegeLevels(privilegeLevel);
     		account.setCapabilities(roles);
     		
-    		//accountValidator.validate(account, errors);
+    		accountValidator.validate(account, errors);
     	}
     	
         if (!errors.hasErrors()) {
@@ -156,7 +158,6 @@ public class AccountPageController {
         }
         
         
-
         // reload page on error
         // TODO: show password fields toggle should work better
 

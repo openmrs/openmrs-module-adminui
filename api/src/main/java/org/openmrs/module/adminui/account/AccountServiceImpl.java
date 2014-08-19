@@ -41,10 +41,6 @@ public class AccountServiceImpl extends BaseOpenmrsService implements AccountSer
     private ProviderService providerService;
 
     private ProviderManagementService providerManagementService;
-
-    //private EmrApiProperties emrApiProperties;
-
-    //private ProviderIdentifierGenerator providerIdentifierGenerator = null;
     
     /**
      * @param userService the userService to set
@@ -100,6 +96,10 @@ public class AccountServiceImpl extends BaseOpenmrsService implements AccountSer
             }
         }
 
+        /*	Currently, OpenMRS core API doesn't support to view account associated with multiple providers. 
+         * To implement it, below function will do the task, but supportive functions need to be added.
+         */
+        
         /*for (Provider provider : providerService.getAllProviders()) {
 
             // skip the baked-in unknown provider

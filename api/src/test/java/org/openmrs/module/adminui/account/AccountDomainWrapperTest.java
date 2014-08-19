@@ -255,11 +255,6 @@ public class AccountDomainWrapperTest {
         account.setCapabilities(role);
 
         assertEquals("msmith", account.getUsername(0));
-        //assertTrue(account.getUser(0).getRoles().contains(limitedPrivileges));
-        //assertTrue(account.getUser(0).getRoles().contains(archiveApp));
-        //assertTrue(user.getRoles().contains(adminApp));
-        //assertFalse(user.getRoles().contains(receptionApp));
-        //assertFalse(user.getRoles().contains(fullPrivileges));
     }
     
     @Test

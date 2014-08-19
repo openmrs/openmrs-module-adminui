@@ -31,7 +31,8 @@ public class  adminuiManageController {
 	protected final Log log = LogFactory.getLog(getClass());
 	
 	@RequestMapping(value = "/module/adminui/manage", method = RequestMethod.GET)
-	public void manage(ModelMap model) {
-		model.addAttribute("user", Context.getAuthenticatedUser());
+	public String manage(ModelMap model) {
+		//model.addAttribute("user", Context.getAuthenticatedUser());
+		return "redirect:/adminui/adminUiHome.page";
 	}
 }
