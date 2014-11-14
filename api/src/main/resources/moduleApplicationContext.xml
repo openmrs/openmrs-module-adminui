@@ -21,7 +21,7 @@
 
 	
 	<!-- Services accessible via Context.getService() -->
-	<bean id="accountService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+	<bean id="adminAccountService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
         <property name="transactionManager">
             <ref bean="transactionManager"/>
         </property>
@@ -45,7 +45,7 @@
         <property name="moduleService">
             <list merge="true">
                 <value>${project.parent.groupId}.${project.parent.artifactId}.account.AccountService</value>
-                <ref local="accountService"/>
+                <ref local="adminAccountService"/>
             </list>
         </property>
     </bean>

@@ -28,18 +28,18 @@ import org.springframework.web.bind.annotation.RequestParam;
  *
  */
 public class AccountFragmentController {
-
-    public FragmentActionResult unlock(@RequestParam("personId") Person person,
-                                       @SpringBean("accountService") AccountService accountService,
-                                       UiUtils ui) {
-
-        try {
-            AccountDomainWrapper account = accountService.getAccountByPerson(person);
-            //account.unlock();
-            return new SuccessResult(ui.message("emr.account.unlocked.successMessage"));
-        } catch (Exception e) {
-            return new FailureResult(ui.message("emr.account.unlock.failedMessage"));
-        }
-    }
-
+	
+	public FragmentActionResult unlock(@RequestParam("personId") Person person,
+	                                   @SpringBean("adminAccountService") AccountService accountService, UiUtils ui) {
+		
+		try {
+			AccountDomainWrapper account = accountService.getAccountByPerson(person);
+			//account.unlock();
+			return new SuccessResult(ui.message("emr.account.unlocked.successMessage"));
+		}
+		catch (Exception e) {
+			return new FailureResult(ui.message("emr.account.unlock.failedMessage"));
+		}
+	}
+	
 }

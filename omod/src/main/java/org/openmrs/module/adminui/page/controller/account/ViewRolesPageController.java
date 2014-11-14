@@ -24,7 +24,7 @@ public class ViewRolesPageController {
 	 * @param model
 	 * @param accountService
 	 */
-	public void get(PageModel model, @SpringBean("accountService") AccountService accountService) {
+	public void get(PageModel model, @SpringBean("adminAccountService") AccountService accountService) {
 		model.addAttribute("roles", accountService.getAllCapabilities());
-    }
+	}
 }

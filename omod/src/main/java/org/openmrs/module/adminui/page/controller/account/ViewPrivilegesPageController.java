@@ -24,8 +24,8 @@ public class ViewPrivilegesPageController {
 	 * @param model
 	 * @param accountService
 	 */
-	public void get(PageModel model, @SpringBean("accountService") AccountService accountService) {
+	public void get(PageModel model, @SpringBean("adminAccountService") AccountService accountService) {
 		model.addAttribute("privilegeLevels", accountService.getAllPrivilegeLevels());
-    }
-
+	}
+	
 }
