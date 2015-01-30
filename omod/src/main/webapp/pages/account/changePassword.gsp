@@ -1,13 +1,24 @@
 <%
-    ui.decorateWith("appui", "standardEmrPage", [ title: ui.message("adminui.myaccount") ])
+    ui.decorateWith("appui", "standardEmrPage", [ title: ui.message("adminui.changePassword") ])
 
-    ui.includeCss("adminui", "account.css")
-
+    ui.includeJavascript("uicommons", "navigator/validators.js", Integer.MAX_VALUE - 19)
+    ui.includeJavascript("uicommons", "navigator/navigator.js", Integer.MAX_VALUE - 20)
+    ui.includeJavascript("uicommons", "navigator/navigatorHandlers.js", Integer.MAX_VALUE - 21)
+    ui.includeJavascript("uicommons", "navigator/navigatorModels.js", Integer.MAX_VALUE - 21)
+    ui.includeJavascript("uicommons", "navigator/exitHandlers.js", Integer.MAX_VALUE - 22);
     ui.includeJavascript("adminui", "account/changePassword.js")
 
 %>
 
+${ ui.includeFragment("uicommons", "validationMessages")}
+
 <script type="text/javascript">
+    //This variable is defined in changePassword.js
+    passwordMinLength = ${passwordMinLength};
+    //emrMessages is in uicommons's validationMessages.gsp
+    emrMessages.minLength = '${ui.message("adminui.account.changePassword.password.short", passwordMinLength)}';
+    emrMessages.matchedInput = '${ui.message("adminui.account.changePassword.newAndConfirmPassword.should.match", passwordMinLength)}';
+
     var breadcrumbs = [
         { icon: "icon-home", link: '/' + OPENMRS_CONTEXT_PATH + '/index.htm' },
         { label: "${ ui.message("adminui.app.myAccount.label")}", link: '${ui.pageLink("adminui", "account/myAccount")}' },
@@ -15,43 +26,56 @@
 
     ];
 
-    var errorMessageOldPassword = "${ui.message("adminui.account.changePassword.oldPassword.required")}";
-    var errorMessageNewPassword = "${ui.message("adminui.account.changePassword.newPassword.required")}";
-    var errorMessageConfirmPassword = "${ui.message("adminui.account.changePassword.confirmPassword.required")}";
-    var errorMessageNewAndConfirmPassword = "${ui.message("adminui.account.changePassword.newAndConfirmPassword.DoesNotMatch")}";
+    jQuery(function(){
+        KeyboardController();
+    });
 </script>
 
 <h3>${ui.message("adminui.myAccount.changePassword")}</h3>
 
+<form class="simple-form-ui" method="post">
+    <section id="passwordDetails">
+        <span class="title">${ui.message("adminui.account.password.details")}</span>
+        <fieldset>
+            <legend>${ ui.message("adminui.account.oldAndNewPassword") }</legend>
+            ${ ui.includeFragment("adminui", "field/passwordField", [
+                    id: "oldPassword",
+                    label: ui.message("adminui.account.oldPassword"),
+                    formFieldName: "oldPassword",
+                    classes: ["required"]
+            ]) }
 
-<form method="post" id="accountForm">
-    <fieldset>
-        <legend>${ ui.message("adminui.account.details") }</legend>
+            ${ ui.includeFragment("adminui", "field/passwordField", [
+                    id: "newPassword",
+                    label: ui.message("adminui.account.newPassword"),
+                    formFieldName: "newPassword",
+                    classes: ["required", "min-length", "matched-input"],
+                    regex: /^.{${passwordMinLength},}$/,
+                    "matched-field-id": "confirmPassword"
+            ]) }
 
-        <p id="oldPasswordSection" class="emr_passwordDetails">
-            <label class="form-header" for="oldPassword">${ ui.message("adminui.account.oldPassword") }</label>
-            <input type="password" id="oldPassword" name="oldPassword"  autocomplete="off"/>
-            ${ ui.includeFragment("uicommons", "fieldErrors", [ fieldName: "oldPassword" ])}
-        </p>
+            ${ ui.includeFragment("adminui", "field/passwordField", [
+                    id: "confirmPassword",
+                    label: ui.message("adminui.account.confirmPassword"),
+                    formFieldName: "confirmPassword",
+                    classes: ["required", "matched-input"],
+                    "matched-field-id": "newPassword"
+            ]) }
+        </fieldset>
 
-        <p id="newPasswordSection" class="emr_passwordDetails">
-            <label class="form-header" for="newPassword">${ ui.message("adminui.account.newPassword") }</label>
-            <input type="password" id="newPassword" name="newPassword"  autocomplete="off"/>
-            <label id="format-password">${ ui.message("adminui.account.passwordFormat") }</label>
-            ${ ui.includeFragment("uicommons", "fieldErrors", [ fieldName: "newPassword" ])}
-        </p>
+    </section>
 
-        <p id="confirmPasswordSection" class="emr_passwordDetails">
-            <label class="form-header" for="confirmPassword">${ ui.message("adminui.user.confirmPassword") }</label>
-            <input type="password" id="confirmPassword" name="confirmPassword"  autocomplete="off"/>
-            ${ ui.includeFragment("uicommons", "fieldErrors", [ fieldName: "confirmPassword" ])}
-        </p>
-    </fieldset>
-
-    <div>
-        <input type="button" class="cancel" value="${ ui.message("adminui.cancel") }" onclick="javascript:window.location='/${ contextPath }/adminui/account/myAccount.page'" />
-        <input type="submit" class="confirm" id="save-button" value="${ ui.message("adminui.save") }"  />
+    <div id="confirmation">
+        <span class="title">${ui.message("adminui.confirm")}</span>
+        <div id="confirmationQuestion">
+            Confirm submission?
+            <p style="display: inline">
+                <input type="submit" class="confirm right" value="${ui.message("adminui.confirm")}" />
+            </p>
+            <p style="display: inline">
+                <input id="cancelSubmission" class="cancel" type="button" value="${ui.message("general.cancel")}" />
+            </p>
+        </div>
     </div>
 
 </form>
-

@@ -1,7 +1,6 @@
 <%
-    ui.decorateWith("appui", "standardEmrPage", [ title: ui.message("emr.myAccount") ])
+    ui.decorateWith("appui", "standardEmrPage", [ title: ui.message("adminui.myAccount") ])
 
-    ui.includeCss("mirebalais", "app.css")
 %>
 
 <script type="text/javascript">

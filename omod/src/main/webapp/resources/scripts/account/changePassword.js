@@ -1,68 +1,43 @@
-$(function() {
+var passwordMinLength;
 
-    const PASSWORD_LENGTH = 8;
+function MinimumLengthFieldValidator() {
+    this.messageIdentifier = "minLength";
+}
 
-    disableSubmitButton();
+//FieldValidator is in uicommon module's validators.js
+MinimumLengthFieldValidator.prototype = new FieldValidator();
+MinimumLengthFieldValidator.prototype.constructor = MinimumLengthFieldValidator;
+MinimumLengthFieldValidator.prototype.validate = function(field) {
 
-    var timer;
-
-    $("#oldPassword").blur(function(){
-       var oldPassword = $(this).val();
-
-        if (!isPasswordValid(oldPassword)){
-            $("#oldPasswordSection .field-error").text(errorMessageOldPassword);
-            $("#oldPasswordSection .field-error").show();
-            disableSubmitButton();
-            return false;
-        } else {
-            $("#oldPasswordSection .field-error").hide();
-        }
-    });
-
-    $("#newPassword").blur(function(){
-        var newPassword = $(this).val();
-
-        if (!isPasswordValid(newPassword)){
-            $("#newPasswordSection .field-error").text(errorMessageNewPassword);
-            $("#newPasswordSection .field-error").show();
-            disableSubmitButton();
-            return false;
-        } else {
-            $("#newPasswordSection .field-error").hide();
-        }
-    });
-
-    $("#confirmPassword").keyup(function(){
-        if (timer) {
-            clearTimeout(timer);
-        }
-        timer = setTimeout(confirmPasswordAction, 500);
-    });
-
-    function confirmPasswordAction() {
-        var newPassword = $("#newPassword").val();
-        var confirmPassword = $("#confirmPassword").val();
-
-        if (confirmPassword.length >= 1 && (newPassword != confirmPassword)) {
-            $("#confirmPasswordSection .field-error").text(errorMessageNewAndConfirmPassword);
-            $("#confirmPasswordSection .field-error").show();
-            disableSubmitButton();
-        } else if (isPasswordValid(newPassword) && newPassword == confirmPassword) {
-            $("#confirmPasswordSection .field-error").hide();
-            enableSubmitButton();
-        }
-    }
-    function isPasswordValid(newPassword) {
-        return newPassword && newPassword.length >= PASSWORD_LENGTH;
+    var hasValue = field.value() && field.value().length > 0;
+    //The required field validator already took care of requiring the field
+    if(hasValue && field.value().length < passwordMinLength){
+        //emrMessages is in uicommons's validationMessages.gsp
+        return emrMessages[this.messageIdentifier];
     }
 
-    function disableSubmitButton(){
-        $("#save-button").addClass("disabled");
-        $("#save-button").attr("disabled", "disabled");
+    return null;
+}
+
+function MatchedInputFieldValidator() {
+    this.messageIdentifier = "matchedInput";
+}
+
+MatchedInputFieldValidator.prototype = new FieldValidator();
+MatchedInputFieldValidator.prototype.constructor = MatchedInputFieldValidator;
+MatchedInputFieldValidator.prototype.validate = function(field) {
+
+    var otherField = jQuery('#'+field.element.attr('matched-field-id'));
+    var hasValue = field.value() && field.value().length > 0;
+    var otherFieldHasValue = otherField.val() && otherField.val().length > 0;
+    if(hasValue && otherFieldHasValue && field.value() != otherField.val()){
+        return emrMessages[this.messageIdentifier];
     }
 
-    function enableSubmitButton(){
-        $("#save-button").removeClass("disabled");
-        $("#save-button").removeAttr("disabled");
-    }
-});
+    return null;
+}
+
+
+//Register teh valitors, Validators is defined in uicommons module's validators.js
+Validators["min-length"] = new MinimumLengthFieldValidator();
+Validators["matched-input"] = new MatchedInputFieldValidator();
