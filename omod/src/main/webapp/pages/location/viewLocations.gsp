@@ -5,6 +5,7 @@
 <script type="text/javascript">
     var breadcrumbs = [
         { icon: "icon-home", link: '/' + OPENMRS_CONTEXT_PATH + '/index.htm' },
+        { label: "${ ui.message("adminui.app.administrationTools.label")}" , link: '${ui.pageLink("adminui", "adminUiHome")}'},
         { label: "${ ui.message("adminui.app.locationManager.label")}", link: '${ui.pageLink("adminui", "location/manageLocations")}' },
         { label: "${ ui.message("adminui.viewLocation.locationManagement.label")}" }
     ];
@@ -14,7 +15,7 @@
             <i class="icon-plus"></i>
             ${ ui.message("adminui.createLocation.locationManagement.label") }
     </a>
-    
+
 <hr>
 <table id="list-locations" cellspacing="0" cellpadding="2">
 	<thead>

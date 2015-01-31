@@ -19,8 +19,9 @@
 <script type="text/javascript">
     var breadcrumbs = [
         { icon: "icon-home", link: '/' + OPENMRS_CONTEXT_PATH + '/index.htm' },
+        { label: "${ ui.message("adminui.app.administrationTools.label")}" , link: '${ui.pageLink("adminui", "adminUiHome")}'},
         { label: "${ ui.message("adminui.app.locationManager.label")}" , link: '${ui.pageLink("adminui", "location/manageLocations")}'},
-        { label: "${ ui.message("adminui.manageLocationAttributeTypes.locationManagement.label")}" }
+        { label: "${ ui.message("adminui.createLocationAttributeTypes.locationManagement.label	")}" }
 
     ];
 </script>
@@ -104,9 +105,9 @@
     ])}
 
     ${ ui.includeFragment("uicommons", "field/dropDown", [
-            label: ui.message("adminui.locationAttributeType.datatype"), 
-            emptyOptionLabel: ui.message("adminui.chooseOne"), 
-            formFieldName: "datatypeClassname", 
+            label: ui.message("adminui.locationAttributeType.datatype"),
+            emptyOptionLabel: ui.message("adminui.chooseOne"),
+            formFieldName: "datatypeClassname",
             options: datatypeOptions,
             initialValue : (locationAttributeType.datatypeClassname ?: '')
     ])}
@@ -119,9 +120,9 @@
     ])}
 
     ${ ui.includeFragment("uicommons", "field/dropDown", [
-            label: ui.message("adminui.locationAttributeType.preferredHandler"), 
-            emptyOptionLabel: ui.message("adminui.chooseOne"), 
-            formFieldName: "preferredHandlerClassname", 
+            label: ui.message("adminui.locationAttributeType.preferredHandler"),
+            emptyOptionLabel: ui.message("adminui.chooseOne"),
+            formFieldName: "preferredHandlerClassname",
             options: handlerOptions,
             initialValue : (locationAttributeType.preferredHandlerClassname ?: '')
     ])}
@@ -148,13 +149,13 @@
                         id           : "retireReason",
                         initialValue : (locationAttributeType.retireReason ?: '')
                     ])}
-                    
+
                     <div>
                     <input type="submit" class="button" name="retire" id="retire-button" value="${ui.message("adminui.locationAttributeType.retire")}"/>
                 </fieldset>
 
                 <fieldset>
-                    
+
                     <div>
                     <input type="submit" class="button" name="purge" id="purge-button" value="${ui.message("adminui.locationAttributeType.purge")}"/>
                 </fieldset>

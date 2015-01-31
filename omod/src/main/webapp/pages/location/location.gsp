@@ -14,10 +14,11 @@
 <script type="text/javascript">
     var breadcrumbs = [
         { icon: "icon-home", link: '/' + OPENMRS_CONTEXT_PATH + '/index.htm' },
+        { label: "${ ui.message("adminui.app.administrationTools.label")}" , link: '${ui.pageLink("adminui", "adminUiHome")}'},
         { label: "${ ui.message("adminui.app.locationManager.label")}" , link: '${ui.pageLink("adminui", "location/manageLocations")}'},
-        { label: "${ ui.message("adminui.createLocation.locationManagement.label")}" }
-
+        { label: "${ (createLocation) ? ui.message("adminui.createLocation.locationManagement.label") : ui.message("adminui.editLocation.locationManagement.label")}" }
     ];
+
 </script>
 
 <script type="text/javascript">
@@ -85,7 +86,7 @@
             formFieldName: "address1",
             id           : "address1",
             initialValue : (location.address1 ?: '')
-    ])}    
+    ])}
 
 	${ui.includeFragment("uicommons", "field/text", [
             label        : ui.message("adminui.location.address2"),
@@ -125,18 +126,18 @@
     </p>
 
     ${ ui.includeFragment("uicommons", "field/dropDown", [
-            label: ui.message("adminui.location.parentLocation"), 
-            emptyOptionLabel: ui.message("adminui.chooseOne"), 
-            formFieldName: "parentLocation", 
+            label: ui.message("adminui.location.parentLocation"),
+            emptyOptionLabel: ui.message("adminui.chooseOne"),
+            formFieldName: "parentLocation",
             options: parentLocationOptions,
             initialValue : (location.parentLocation?.id  ?: '')
     ])}
 
     <% attributeTypes.each{ %>
-	${ ui.includeFragment("uicommons", "field/text", [ 
+	${ ui.includeFragment("uicommons", "field/text", [
 	       	label: ui.format(it),
-	        formFieldName: "attribute."+it.id+"", 
-		    value: it.id, 
+	        formFieldName: "attribute."+it.id+"",
+		    value: it.id,
 		    checked: false
     ])}
     <% } %>
@@ -144,8 +145,8 @@
     <% locationTags.each{ %>
         ${ ui.includeFragment("uicommons", "field/checkbox", [
             label: ui.format(it),
-            formFieldName: "locTags", 
-            value: it, 
+            formFieldName: "locTags",
+            value: it,
             checked: location.tags?.contains(it)
         ])}
 
@@ -166,11 +167,11 @@
                         id           : "retireReason",
                         initialValue : (location.retireReason ?: '')
                     ])}
-                    
+
                     <div>
                     <input type="submit" class="button" name="retire" id="retire-button" value="${ui.message("adminui.location.retire")}"/>
                 </fieldset>
             </div>
     <% } %>
 
-</form> 
+</form>

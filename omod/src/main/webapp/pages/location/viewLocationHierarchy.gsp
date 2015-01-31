@@ -6,7 +6,7 @@
     ui.includeJavascript("adminui", "jsTree/infragistics.core.js")
     ui.includeJavascript("adminui", "jsTree/infragistics.lob.js")
     ui.includeCss("adminui", "jsTree/infragistics.theme.css")
-    ui.includeCss("adminui", "jsTree/infragistics.css")   
+    ui.includeCss("adminui", "jsTree/infragistics.css")
 
     def no = "hiu";
 %>
@@ -14,6 +14,7 @@
 <script type="text/javascript">
     var breadcrumbs = [
         { icon: "icon-home", link: '/' + OPENMRS_CONTEXT_PATH + '/index.htm' },
+        { label: "${ ui.message("adminui.app.administrationTools.label")}" , link: '${ui.pageLink("adminui", "adminUiHome")}'},
         { label: "${ ui.message("adminui.app.locationManager.label")}", link: '${ui.pageLink("adminui", "location/manageLocations")}' },
         { label: "${ ui.message("adminui.viewLocationHierarchy.locationManagement.label")}" }
     ];
@@ -39,7 +40,7 @@
                 autoGenerateLayouts: true
             });
 
-            \$(".selector").igHierarchicalGrid("dataBind");   
+            \$(".selector").igHierarchicalGrid("dataBind");
 
         });
     </script>
