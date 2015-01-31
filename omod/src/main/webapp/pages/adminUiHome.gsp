@@ -6,6 +6,13 @@
     }
 %>
 
+<script type="text/javascript">
+    var breadcrumbs = [
+        { icon: "icon-home", link: '/' + OPENMRS_CONTEXT_PATH + '/index.htm' },
+        { label: "${ ui.message("adminui.app.administrationTools.label")}" },
+    ];
+</script>
+
 <div id="home-container">
 
 	<h1>${ui.message("adminui.home.heading")}</h1>

@@ -21,6 +21,7 @@ ${ ui.includeFragment("uicommons", "validationMessages")}
 
     var breadcrumbs = [
         { icon: "icon-home", link: '/' + OPENMRS_CONTEXT_PATH + '/index.htm' },
+        { label: "${ ui.message("adminui.app.administrationTools.label")}" , link: '${ui.pageLink("adminui", "adminUiHome")}'},
         { label: "${ ui.message("adminui.app.myAccount.label")}", link: '${ui.pageLink("adminui", "account/myAccount")}' },
         { label: "${ ui.message("adminui.myAccount.changePassword.label")}" }
 
