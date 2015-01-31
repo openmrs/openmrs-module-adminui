@@ -39,7 +39,7 @@ public class ChangePasswordPageController {
 	public String get(PageModel model) {
 		model.addAttribute("passwordMinLength",
 		    Context.getAdministrationService().getGlobalProperty(OpenmrsConstants.GP_PASSWORD_MINIMUM_LENGTH, "8"));
-
+		
 		return "account/changePassword";
 	}
 	
@@ -63,7 +63,6 @@ public class ChangePasswordPageController {
 		} else {
 			return changePasswords(changePassword, userService, messageSourceService, request);
 		}
-        return "account/myAccount";
 	}
 	
 	private String changePasswords(ChangePassword changePassword, UserService userService,
