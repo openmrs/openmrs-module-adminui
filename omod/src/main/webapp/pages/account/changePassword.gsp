@@ -21,6 +21,7 @@ ${ ui.includeFragment("uicommons", "validationMessages")}
 
     var breadcrumbs = [
         { icon: "icon-home", link: '/' + OPENMRS_CONTEXT_PATH + '/index.htm' },
+        { label: "${ ui.message("adminui.app.administrationTools.label")}" , link: '${ui.pageLink("adminui", "adminUiHome")}'},
         { label: "${ ui.message("adminui.app.myAccount.label")}", link: '${ui.pageLink("adminui", "account/myAccount")}' },
         { label: "${ ui.message("adminui.myAccount.changePassword.label")}" }
 
@@ -38,14 +39,14 @@ ${ ui.includeFragment("uicommons", "validationMessages")}
         <span class="title">${ui.message("adminui.account.password.details")}</span>
         <fieldset>
             <legend>${ ui.message("adminui.account.oldAndNewPassword") }</legend>
-            ${ ui.includeFragment("adminui", "field/passwordField", [
+            ${ ui.includeFragment("uicommons", "field/passwordField", [
                     id: "oldPassword",
                     label: ui.message("adminui.account.oldPassword"),
                     formFieldName: "oldPassword",
                     classes: ["required"]
             ]) }
 
-            ${ ui.includeFragment("adminui", "field/passwordField", [
+            ${ ui.includeFragment("uicommons", "field/passwordField", [
                     id: "newPassword",
                     label: ui.message("adminui.account.newPassword"),
                     formFieldName: "newPassword",
@@ -54,7 +55,7 @@ ${ ui.includeFragment("uicommons", "validationMessages")}
                     regex: /^.{${passwordMinLength},}$/
             ]) }
 
-            ${ ui.includeFragment("adminui", "field/passwordField", [
+            ${ ui.includeFragment("uicommons", "field/passwordField", [
                     id: "confirmPassword",
                     label: ui.message("adminui.account.confirmPassword"),
                     formFieldName: "confirmPassword",

@@ -5,14 +5,15 @@
 <script type="text/javascript">
     var breadcrumbs = [
         { icon: "icon-home", link: '/' + OPENMRS_CONTEXT_PATH + '/index.htm' },
+        { label: "${ ui.message("adminui.app.administrationTools.label")}" , link: '${ui.pageLink("adminui", "adminUiHome")}'},
         { label: "${ ui.message("adminui.app.locationManager.label")}" , link: '${ui.pageLink("adminui", "location/manageLocations")}'},
-        { label: "${ ui.message("adminui.manageLocationTag.locationManagement.label")}" }
+        { label: "${ ui.message("adminui.viewLocationTags.locationManagement.label")}" }
 
     ];
 </script>
 
 <h1>
-    <h3>${ ui.message("adminui.manageLocationTag.locationManagement.label") }</h3>
+    <h3>${ ui.message("adminui.viewLocationTag") }</h3>
 </h1>
 
  <input type="submit" class="button" value="${ui.message("adminui.createLocationTag")}" onclick="javascript:window.location='/${ contextPath }/adminui/location/createLocationTag.page'"/>

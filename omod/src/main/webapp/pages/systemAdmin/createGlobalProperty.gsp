@@ -21,6 +21,7 @@
 <script type="text/javascript">
     var breadcrumbs = [
         { icon: "icon-home", link: '/' + OPENMRS_CONTEXT_PATH + '/index.htm' },
+        { label: "${ ui.message("adminui.app.administrationTools.label")}" , link: '${ui.pageLink("adminui", "adminUiHome")}'},
         { label: "${ ui.message("adminui.app.systemAdministration.label")}" , link: '${ui.pageLink("adminui", "systemAdmin/home")}'},
         { label: "${ ui.message("adminui.createGlobalProperty.systemAdministration.label")}" }
 
@@ -76,14 +77,14 @@
 
 <form class="simple-form-ui" method="post" id="GlobalPropertyForm" autocomplete="off">
 <fieldset>
-    
+
     ${ui.includeFragment("uicommons", "field/text", [
             label        : ui.message("adminui.globalProp.name")+"*",
             formFieldName: "property",
             id           : "property",
             maxLength    : 101,
             initialValue : initialProperty
-    ])} 
+    ])}
 
     ${ui.includeFragment("uicommons", "field/text", [
             label        : ui.message("adminui.globalProp.value")+"*",
