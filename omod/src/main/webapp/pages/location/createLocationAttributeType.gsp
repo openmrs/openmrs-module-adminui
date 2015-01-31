@@ -80,7 +80,7 @@
             initialValue : (locationAttributeType.name ?: '')
     ])}
 
-    ${ui.includeFragment("adminui", "field/textarea", [
+    ${ui.includeFragment("uicommons", "field/textarea", [
             label        : ui.message("adminui.locationAttributeType.description"),
             formFieldName: "description",
             id           : "description",
@@ -111,7 +111,7 @@
             initialValue : (locationAttributeType.datatypeClassname ?: '')
     ])}
 
-    ${ui.includeFragment("adminui", "field/textarea", [
+    ${ui.includeFragment("uicommons", "field/textarea", [
             label        : ui.message("adminui.locationAttributeType.datatypeConfig"),
             formFieldName: "datatypeConfig",
             id           : "datatypeConfig",
@@ -126,7 +126,7 @@
             initialValue : (locationAttributeType.preferredHandlerClassname ?: '')
     ])}
 
-    ${ui.includeFragment("adminui", "field/textarea", [
+    ${ui.includeFragment("uicommons", "field/textarea", [
             label        : ui.message("adminui.locationAttributeType.handlerConfig"),
             formFieldName: "handlerConfig",
             id           : "handlerConfig",

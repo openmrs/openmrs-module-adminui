@@ -202,7 +202,7 @@ jq(document).ready(function() {
     <fieldset>
         <legend><b>${ ui.message("adminui.user.account.details") }</b></legend>
         
-        ${ ui.includeFragment("adminui", "field/checkbox", [ 
+        ${ ui.includeFragment("uicommons", "field/checkbox", [
                 label: ui.message("adminui.user.enabled"), 
                 id: "userEnabled", 
                 formFieldName: "userEnabled",
@@ -286,7 +286,7 @@ jq(document).ready(function() {
     <fieldset>
         <legend><b>${ ui.message("adminui.provider.details") }</b></legend>
         
-        ${ ui.includeFragment("adminui", "field/checkbox", [ 
+        ${ ui.includeFragment("uicommons", "field/checkbox", [
                 label: ui.message("adminui.provider.enabled"), 
                 id: "providerEnabled", 
                 formFieldName: "providerEnabled", 
