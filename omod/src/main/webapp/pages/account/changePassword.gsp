@@ -50,8 +50,8 @@ ${ ui.includeFragment("uicommons", "validationMessages")}
                     label: ui.message("adminui.account.newPassword"),
                     formFieldName: "newPassword",
                     classes: ["required", "min-length", "matched-input"],
-                    regex: /^.{${passwordMinLength},}$/,
-                    "matched-field-id": "confirmPassword"
+                    "matched-field-id": "confirmPassword",
+                    regex: /^.{${passwordMinLength},}$/
             ]) }
 
             ${ ui.includeFragment("adminui", "field/passwordField", [
