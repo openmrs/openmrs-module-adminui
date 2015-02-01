@@ -12,7 +12,7 @@
 
 <% i=0 %>
 
- <input type="submit" class="button" value="${ui.message("adminui.createPrivilegeLevel")}" onclick="javascript:window.location='/${ contextPath }/adminui/account/createPrivilegeLevel.page'"/>
+ <input type="submit" class="button" value="${ui.message("adminui.createPrivilege")}" onclick="javascript:window.location='/${ contextPath }/adminui/account/privilege.page'"/>
 
 <hr>
 <table id="list-levels" cellspacing="0" cellpadding="2">
@@ -37,7 +37,7 @@
 				${ ui.format(it.childRoles) }
             </td>
 			<td>
-	            <a href="/${ contextPath }/adminui/account/createPrivilegeLevel.page?privilegeLevelName=${ it.name }">
+	            <a href="/${ contextPath }/adminui/account/createPrivilege.page?privilegeName=${ it.name }">
 	                <button>${ ui.message("adminui.edit") }</button>
 	            </a>
         	</td>
@@ -47,7 +47,7 @@
 </table>
 
 
-<% if ( (privilegeLevels != null) && (privilegeLevels.size() > 0) ) { %>
+<% if ( (privileges != null) && (privileges.size() > 0) ) { %>
 ${ ui.includeFragment("uicommons", "widget/dataTable", [ object: "#list-levels",
         options: [
                 bFilter: true,
