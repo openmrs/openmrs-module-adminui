@@ -14,7 +14,8 @@ ${ ui.includeFragment("uicommons", "validationMessages")}
 
 <script type="text/javascript">
     //This variable is defined in changePassword.js
-    passwordMinLength = ${passwordMinLength};
+    passwordMinLength = ${ passwordMinLength };
+
     //emrMessages is in uicommons's validationMessages.gsp
     emrMessages.minLength = '${ui.message("adminui.account.changePassword.password.short", passwordMinLength)}';
     emrMessages.matchedInput = '${ui.message("adminui.account.changePassword.newAndConfirmPassword.should.match", passwordMinLength)}';
@@ -30,9 +31,10 @@ ${ ui.includeFragment("uicommons", "validationMessages")}
     jQuery(function(){
         KeyboardController();
     });
+
 </script>
 
-<h3>${ui.message("adminui.myAccount.changePassword")}</h3>
+<h3>${ui.message("adminui.myAccount.changePassword.label")}</h3>
 
 <form class="simple-form-ui" method="post">
     <section id="passwordDetails">

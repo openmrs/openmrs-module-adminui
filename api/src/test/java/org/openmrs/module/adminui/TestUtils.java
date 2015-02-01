@@ -166,12 +166,12 @@ public class TestUtils {
 		string = string.replaceAll("\\s", "");
 		return string;
 	}
-
-    //use DateMatchers.within(2, SECONDS, date)
-    @Deprecated
+	
+	//use DateMatchers.within(2, SECONDS, date)
+	@Deprecated
 	public static Matcher<Date> isJustNow() {
 		return new ArgumentMatcher<Date>() {
-
+			
 			@Override
 			public boolean matches(Object o) {
 				// within the last two seconds should be safe enough... (needs to be more than a second to account for rounding issues)
