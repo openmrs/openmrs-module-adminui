@@ -67,7 +67,7 @@
             initialValue : (locationTag.name ?: '')
     ])}
 
-    ${ui.includeFragment("adminui", "field/textarea", [
+    ${ui.includeFragment("uicommons", "field/textarea", [
             label        : ui.message("adminui.locationTag.description"),
             formFieldName: "description",
             id           : "description",

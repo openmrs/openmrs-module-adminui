@@ -72,7 +72,7 @@
             initialValue : (location.name ?: '')
     ])}
 
-    ${ui.includeFragment("adminui", "field/textarea", [
+    ${ui.includeFragment("uicommons", "field/textarea", [
             label        : ui.message("adminui.location.description"),
             formFieldName: "description",
             id           : "description",
@@ -142,7 +142,7 @@
     <% } %>
 
     <% locationTags.each{ %>
-        ${ ui.includeFragment("adminui", "field/checkbox", [ 
+        ${ ui.includeFragment("uicommons", "field/checkbox", [
             label: ui.format(it),
             formFieldName: "locTags", 
             value: it, 

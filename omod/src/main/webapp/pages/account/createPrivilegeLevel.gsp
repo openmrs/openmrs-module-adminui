@@ -67,7 +67,7 @@
             initialValue : (privilegeLevel.name ?: '')
     ])}
 
-    ${ui.includeFragment("adminui", "field/textarea", [
+    ${ui.includeFragment("uicommons", "field/textarea", [
             label        : ui.message("adminui.privilege.description"),
             formFieldName: "description",
             id           : "description",
