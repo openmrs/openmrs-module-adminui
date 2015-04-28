@@ -55,35 +55,27 @@ public class ChangeDefaultsPageController {
 	                   HttpServletRequest request,
 	                   PageModel model) {
 		if (errors.hasErrors()) {
-			sendErrorMessage(errors, messageSource, request);
+			sendErrorMessage(errors, messageSource, request, model);
 			model.addAttribute("errors", errors);
 			return "account/changePassword";
 		}
 		return saveDefaults(defaults, userService, messageSourceService, request);
 	}
 
-	private void sendErrorMessage(BindingResult errors, MessageSource messageSource, HttpServletRequest request) {
-		List<ObjectError> allErrors = errors.getAllErrors();
-		String message = getMessageErrors(messageSource, allErrors);
-		request.getSession().setAttribute(AdminUiConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE, message);
+	private void sendErrorMessage(BindingResult errors, MessageSource messageSource, HttpServletRequest request, PageModel model) {
+		if (errors.hasErrors()) {
+			List<ObjectError> allErrors = errors.getAllErrors();
+			String message = getMessageErrors(messageSource, allErrors);
+			request.getSession().setAttribute(AdminUiConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE, message);
+		}
 	}
 
 	private String getMessageErrors(MessageSource messageSource, List<ObjectError> allErrors) {
 		String message = "";
-		for (ObjectError error : allErrors) {
+		if (allErrors != null && allErrors.isEmpty()) {
+			ObjectError error = allErrors.get(0);
 			Object[] arguments = error.getArguments();
-			String errorMessage = messageSource.getMessage(error.getCode(), arguments, Context.getLocale());
-			message = message.concat(replaceArguments(errorMessage, arguments).concat("<br>"));
-		}
-		return message;
-	}
-
-	private String replaceArguments(String message, Object[] arguments) {
-		if (arguments != null) {
-			for (int i = 0; i < arguments.length; i++) {
-				String argument = (String) arguments[i];
-				message = message.replaceAll("\\{" + i + "\\}", argument);
-			}
+			message = messageSource.getMessage(error.getCode(), arguments, Context.getLocale());
 		}
 		return message;
 	}
@@ -103,8 +95,7 @@ public class ChangeDefaultsPageController {
 		} catch (Exception ex) {
 			request.getSession().setAttribute(
 					AdminUiConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE,
-					messageSourceService.getMessage("adminui.account.defaults.fail", new Object[]{ex.getMessage()},
-							Context.getLocale()));
+					messageSourceService.getMessage("adminui.account.defaults.fail", null, Context.getLocale()));
 			return "account/changeDefaults";
 		}
 		return "account/myAccount";

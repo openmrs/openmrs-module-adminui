@@ -91,20 +91,10 @@ public class ChangeSecretQuestionPageController {
 
 	private String getMessageErrors(MessageSource messageSource, List<ObjectError> allErrors) {
 		String message = "";
-		for (ObjectError error : allErrors) {
+		if (allErrors != null && allErrors.isEmpty()) {
+			ObjectError error = allErrors.get(0);
 			Object[] arguments = error.getArguments();
-			String errorMessage = messageSource.getMessage(error.getCode(), arguments, Context.getLocale());
-			message = message.concat(replaceArguments(errorMessage, arguments).concat("<br>"));
-		}
-		return message;
-	}
-
-	private String replaceArguments(String message, Object[] arguments) {
-		if (arguments != null) {
-			for (int i = 0; i < arguments.length; i++) {
-				String argument = (String) arguments[i];
-				message = message.replaceAll("\\{" + i + "\\}", argument);
-			}
+			message = messageSource.getMessage(error.getCode(), arguments, Context.getLocale());
 		}
 		return message;
 	}
