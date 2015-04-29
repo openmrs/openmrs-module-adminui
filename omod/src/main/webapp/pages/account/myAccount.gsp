@@ -18,4 +18,16 @@
             ${ ui.message("adminui.myAccount.changePassword.label") }
         </div>
     </a>
+    <a class="button app big" href="${ ui.pageLink("adminui", "account/changeSecretQuestion") }">
+        <div class="task">
+            <i class="icon-unlock"></i>
+            ${ ui.message("adminui.myAccount.changeSecretQuestion.label") }
+        </div>
+    </a>
+    <a class="button app big" href="${ ui.pageLink("adminui", "account/changeDefaults") }">
+        <div class="task">
+            <i class="icon-unlock"></i>
+            ${ ui.message("adminui.myAccount.changeDefaults.label") }
+        </div>
+    </a>
 </div>
