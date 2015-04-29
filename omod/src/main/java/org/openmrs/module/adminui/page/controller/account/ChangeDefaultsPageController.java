@@ -56,8 +56,7 @@ public class ChangeDefaultsPageController {
 	                   PageModel model) {
 		if (errors.hasErrors()) {
 			sendErrorMessage(errors, messageSource, request, model);
-			model.addAttribute("errors", errors);
-			return "account/changePassword";
+			return "account/changeDefaults";
 		}
 		return saveDefaults(defaults, userService, messageSourceService, request);
 	}
@@ -67,6 +66,7 @@ public class ChangeDefaultsPageController {
 			List<ObjectError> allErrors = errors.getAllErrors();
 			String message = getMessageErrors(messageSource, allErrors);
 			request.getSession().setAttribute(AdminUiConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE, message);
+			model.addAttribute("errors", errors);
 		}
 	}
 

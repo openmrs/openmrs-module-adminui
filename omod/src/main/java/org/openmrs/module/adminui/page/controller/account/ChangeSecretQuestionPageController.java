@@ -42,12 +42,9 @@ public class ChangeSecretQuestionPageController {
 	                   @SpringBean("messageSource") MessageSource messageSource,
 	                   HttpServletRequest request,
 	                   PageModel model) {
-
 		validateSecretQuestion(secretQuestion, errors, messageSourceService);
-
 		if (errors.hasErrors()) {
-			sendErrorMessage(errors, messageSource, request);
-			model.addAttribute("errors", errors);
+			sendErrorMessage(errors, messageSource, request, model);
 			return "account/changeSecretQuestion";
 		}
 		return changeSecretQuestion(secretQuestion, userService, messageSourceService, request);
@@ -83,10 +80,11 @@ public class ChangeSecretQuestionPageController {
 		}
 	}
 
-	private void sendErrorMessage(BindingResult errors, MessageSource messageSource, HttpServletRequest request) {
+	private void sendErrorMessage(BindingResult errors, MessageSource messageSource, HttpServletRequest request, PageModel model) {
 		List<ObjectError> allErrors = errors.getAllErrors();
 		String message = getMessageErrors(messageSource, allErrors);
 		request.getSession().setAttribute(AdminUiConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE, message);
+		model.addAttribute("errors", errors);
 	}
 
 	private String getMessageErrors(MessageSource messageSource, List<ObjectError> allErrors) {
