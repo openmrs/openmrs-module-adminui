@@ -210,7 +210,7 @@ jq(document).ready(function() {
                 value: "true"
             ])}
 
-        <div class="emr_userDetails" <% if (1) { %> style="display: none" <% } %>>
+        <div class="emr_userDetails" <% if (account.usernames && account.usernames.size > 0) { %> style="display: none" <% } %>>
         <br>
 
 
@@ -295,7 +295,7 @@ jq(document).ready(function() {
                  
             ])}
 
-        <div class="emr_providerDetails" <% if (1) { %> style="display: none" <% } %> >
+        <div class="emr_providerDetails" <% if (account.providers && account.providers.size > 0) { %> style="display: none" <% } %> >
             <br>
             <p>
                 ${ ui.message("Provider Role (You can choose more than one)") }

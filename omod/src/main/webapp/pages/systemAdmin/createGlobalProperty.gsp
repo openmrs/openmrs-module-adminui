@@ -94,7 +94,7 @@
             initialValue : initialPropertyValue
     ])}
 
-    ${ui.includeFragment("adminui", "field/textarea", [
+    ${ui.includeFragment("uicommons", "field/textarea", [
             label        : ui.message("adminui.globalProp.description"),
             formFieldName: "description",
             id           : "description",

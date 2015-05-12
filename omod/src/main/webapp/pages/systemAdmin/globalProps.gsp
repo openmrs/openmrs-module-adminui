@@ -20,34 +20,27 @@
 
 <br><br>
 
- <table id="list-props" cellspacing="0" cellpadding="20">
-	<thead>
+ <table style="table-layout: fixed; width: 100%">
+    <thead>
 		<tr>
 			<th>${ ui.message("adminui.globalProp.name")}</th>
-			<th>${ ui.message("adminui.globalProp.value") }</th>
-			<th>${ ui.message("adminui.globalProp.description") }</th>
-            <th></th>
+			<th style="width: 38%">${ ui.message("adminui.globalProp.value") }</th>
+            <th style="width: 15px"></th>
 		</tr>
 	</thead>
 	<tbody>
 		<% globalProperties.each{  %>
 	 	<tr>
 	 		<td>
-				${ ui.format(it.property)}
+				<b>${ ui.format(it.property)}</b><br />
+                <i style="font-size: 0.7em;">${ ui.format(it.description) }</i>
 			</td>
-
 			<td>
-				${ ui.format(it.propertyValue) }
+                ${ ui.format(it.propertyValue) }
 			</td>
-
 			<td>
-				${ ui.format(it.description) }
-			</div></td>
-
-			<td>
-	            <a href="/${ contextPath }/adminui/systemAdmin/createGlobalProperty.page?globalProperty=${ it.property }">
-	                <button>${ ui.message("adminui.edit") }</button>
-	            </a>
+                <i class="icon-pencil edit-action" title="${ ui.message("general.edit") }"
+                   onclick="location.href='${ui.pageLink("adminui","systemAdmin/createGlobalProperty",[globalProperty:it.property ])}'"></i>
         	</td>
 		</tr>
 		<% } %>

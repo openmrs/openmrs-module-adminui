@@ -44,8 +44,6 @@ public class AccountPageController {
 	
 	protected final Log log = LogFactory.getLog(getClass());
 	
-	int countUsers;
-	
 	public AccountDomainWrapper getAccount(@RequestParam(value = "personId", required = false) Person person,
 	                                       @SpringBean("adminAccountService") AccountService accountService) {
 		
@@ -66,7 +64,7 @@ public class AccountPageController {
 	 * @param model
 	 * @param account
 	 * @param accountService
-	 * @param adminService
+	 * @param administrationService
 	 * @param providerManagementService
 	 */
 	public void get(PageModel model, @MethodParam("getAccount") AccountDomainWrapper account,
@@ -109,7 +107,7 @@ public class AccountPageController {
 	                   @SpringBean("providerManagementService") ProviderManagementService providerManagementService,
 	                   PageModel model, HttpServletRequest request) {
 		
-		countUsers = Integer.parseInt(countTabs);
+		int countUsers = Integer.parseInt(countTabs);
 		
 		ArrayList<String> username = new ArrayList<String>();
 		ArrayList<String> password = new ArrayList<String>();
