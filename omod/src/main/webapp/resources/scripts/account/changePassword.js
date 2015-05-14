@@ -27,12 +27,21 @@ MatchedInputFieldValidator.prototype = new FieldValidator();
 MatchedInputFieldValidator.prototype.constructor = MatchedInputFieldValidator;
 MatchedInputFieldValidator.prototype.validate = function(field) {
 
-    var otherField = jQuery('#'+field.element.attr('matched-field-id'));
+
+    var newPassword = jQuery("#newPassword").val();
+    var matchPassword = jQuery("confirmPassword").val();
+
+    if(newPassword != matchPassword){
+        return emrMessages[this.messageIdentifier];
+    }
+
+
+   /* var otherField = jQuery('#'+field.element.attr('matched-field-id'));
     var hasValue = field.value() && field.value().length > 0;
     var otherFieldHasValue = otherField.val() && otherField.val().length > 0;
     if(hasValue && otherFieldHasValue && field.value() != otherField.val()){
         return emrMessages[this.messageIdentifier];
-    }
+    }*/
 
     return null;
 }
