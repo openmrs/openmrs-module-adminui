@@ -49,7 +49,7 @@
             </list>
         </property>
     </bean>
-	
+	<!--
 	<bean id="locationService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
         <property name="transactionManager">
             <ref bean="transactionManager"/>
@@ -65,7 +65,6 @@
             <ref bean="transactionAttributeSource"/>
         </property>
     </bean>
-	
     <bean parent="serviceContext">
         <property name="moduleService">
             <list merge="true">
@@ -74,5 +73,6 @@
             </list>
         </property>
 	</bean>
+	-->
 	
 </beans>

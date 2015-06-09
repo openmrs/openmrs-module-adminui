@@ -111,7 +111,8 @@
             <div>
                 <fieldset>
                     <div>
-                    <input type="submit" class="button" name="purge" id="purge-button" value="${ui.message("adminui.purgeGlobalProperty")}"/>
+                        <input type="submit" class="button" name="purge" id="purge-button" value="${ui.message("adminui.purgeGlobalProperty")}"/>
+                    </div>
                 </fieldset>
             </div>
     <% } %>

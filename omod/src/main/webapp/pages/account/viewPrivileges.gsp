@@ -1,6 +1,5 @@
 <%
     ui.decorateWith("appui", "standardEmrPage")
-    ui.includeCss("adminui", "account.css")
 %>
 <script type="text/javascript">
     var breadcrumbs = [
@@ -11,36 +10,29 @@
     ];
 </script>
 
-<% i=0 %>
-
- <input type="submit" class="button" value="${ui.message("adminui.createPrivilege")}" onclick="javascript:window.location='/${ contextPath }/adminui/account/privilege.page'"/>
-
-<hr>
-<table id="list-levels" cellspacing="0" cellpadding="2">
+<input type="submit" class="button" value="${ui.message("adminui.addNewPrivilege")}" onclick="javascript:window.location='${ui.pageLink("adminui","account/privilege")}'"/>
+<br />
+<br />
+<table>
 	<thead>
 		<tr>
-			<th>${ ui.message("adminui.sno")}</th>
-			<th>${ ui.message("adminui.privilege.name") }</th>
-			<th>${ ui.message("adminui.privilege.children") }</th>
+			<th>${ ui.message("general.name") }</th>
+			<th>${ ui.message("general.description") }</th>
 			<th></th>
 		</tr>
 	</thead>
 	<tbody>
-		<% privilegeLevels.each{  %>
+		<% privileges.each{  %>
 	 	<tr>
 	 		<td>
-				${ ++i }
-			</td>
-			<td>
 				 ${ ui.format(it.name) }
 			</td>
 			<td>
-				${ ui.format(it.childRoles) }
+                ${ ui.format(it.description) }
             </td>
 			<td>
-	            <a href="/${ contextPath }/adminui/account/createPrivilege.page?privilegeName=${ it.name }">
-	                <button>${ ui.message("adminui.edit") }</button>
-	            </a>
+	            <i class="icon-pencil edit-action" title="${ ui.message("general.edit") }"
+                   onclick="location.href='${ui.pageLink("adminui","account/privilege",[privilegeName: it.name ])}'"></i>
         	</td>
 		</tr>
 		<% } %>

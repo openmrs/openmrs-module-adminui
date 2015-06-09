@@ -16,59 +16,66 @@ package org.openmrs.module.adminui.page.controller.account;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.StringUtils;
 import org.openmrs.Privilege;
-import org.openmrs.api.LocationService;
-import org.openmrs.api.context.Context;
-import org.openmrs.module.adminui.AdminUiConstants;
-import org.openmrs.module.adminui.account.AccountService;
+import org.openmrs.api.APIException;
+import org.openmrs.api.UserService;
+import org.openmrs.module.uicommons.util.InfoErrorMessageUtil;
 import org.openmrs.ui.framework.annotation.BindParams;
 import org.openmrs.ui.framework.annotation.SpringBean;
 import org.openmrs.ui.framework.page.PageModel;
-import org.springframework.validation.BindException;
-import org.springframework.validation.BindingResult;
+import org.openmrs.validator.PrivilegeValidator;
+import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
 
 public class PrivilegePageController {
 	
 	public void get(PageModel model, @RequestParam(value = "privilegeName", required = false) String privilegeName,
-	                @SpringBean("adminAccountService") AccountService accountService) {
+	                @SpringBean("userService") UserService userService) {
 		
-		Privilege privilege = new Privilege();
-		if (privilegeName != null) {
-			
+		Privilege privilege;
+		if (StringUtils.isBlank(privilegeName)) {
+			privilege = new Privilege();
+		} else {
+			privilege = userService.getPrivilege(privilegeName);
+			if (privilege == null) {
+				throw new APIException("No privilege found with name '" + privilegeName + "'");
+			}
 		}
+		
 		model.addAttribute("privilege", privilege);
 	}
 	
-	public String post(PageModel model, @ModelAttribute("privilege") @BindParams Privilege privilege, BindingResult errors,
-	                   @SpringBean("locationService") LocationService locationService,
-	                   @RequestParam(required = false, value = "save") String saveFlag, HttpServletRequest request) {
+	/**
+	 * @param model
+	 * @param privilege
+	 * @param userService
+	 * @param request @return the url to redirect or forward to
+	 * @should update an existing privilege if isNew is set to false and name has not changed
+	 * @should fail if there is a privilege with a matching name and isNew is set to true
+	 * @should fail if the name is changed to a duplicate and isNew is set to false
+	 */
+	public String post(PageModel model, @BindParams Privilege privilege, @SpringBean("userService") UserService userService,
+	                   HttpServletRequest request) {
 		
-		Errors newErrors = new BindException(privilege, "privilege");
+		Errors errors = new BeanPropertyBindingResult(privilege, "privilege");
+		new PrivilegeValidator().validate(privilege, errors);
 		
-		if (!newErrors.hasErrors()) {
+		if (!errors.hasErrors()) {
 			try {
-				if (saveFlag.length() > 3) {
-					Context.getUserService().savePrivilege(privilege);
-					request.getSession().setAttribute(AdminUiConstants.SESSION_ATTRIBUTE_INFO_MESSAGE,
-					    "adminui.privilege.saved");
-				}
-				return "redirect:/adminui/account/managePrivileges.page";
+				userService.savePrivilege(privilege);
+				InfoErrorMessageUtil.flashInfoMessage(request.getSession(), "adminui.privilege.saved");
+				return "redirect:/adminui/account/viewPrivileges.page";
 			}
 			catch (Exception e) {
-				request.getSession().setAttribute(AdminUiConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE, "adminui.save.fail");
+				InfoErrorMessageUtil.flashErrorMessage(request.getSession(), "adminui.error.privilege.save.fail");
 			}
 		}
-		
-		else {
-			
-		}
-		
-		model.addAttribute("errors", newErrors);
+		model.addAttribute("errors", errors);
 		model.addAttribute("privilege", privilege);
 		
-		return "account/managePrivileges";
+		return "account/privilege";
+		
 	}
 }

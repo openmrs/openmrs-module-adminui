@@ -14,7 +14,7 @@
 
 package org.openmrs.module.adminui.page.controller.account;
 
-import org.openmrs.module.adminui.account.AccountService;
+import org.openmrs.api.UserService;
 import org.openmrs.ui.framework.annotation.SpringBean;
 import org.openmrs.ui.framework.page.PageModel;
 
@@ -22,10 +22,10 @@ public class ViewPrivilegesPageController {
 	
 	/**
 	 * @param model
-	 * @param accountService
+	 * @param userService
 	 */
-	public void get(PageModel model, @SpringBean("adminAccountService") AccountService accountService) {
-		model.addAttribute("privilegeLevels", accountService.getAllPrivilegeLevels());
+	public void get(PageModel model, @SpringBean("userService") UserService userService) {
+		model.addAttribute("privileges", userService.getAllPrivileges());
 	}
 	
 }

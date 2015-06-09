@@ -86,6 +86,14 @@
 			<artifactId>providermanagement-api</artifactId>
 			<type>jar</type>
 		</dependency>
+
+        <dependency>
+            <groupId>org.openmrs.module</groupId>
+            <artifactId>uicommons-omod</artifactId>
+            <type>jar</type>
+            <version>${uicommonsVersion}</version>
+            <scope>provided</scope>
+        </dependency>
 		
 		<!-- End OpenMRS core -->
 		
