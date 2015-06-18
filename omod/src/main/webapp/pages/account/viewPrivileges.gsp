@@ -10,7 +10,7 @@
     ];
 </script>
 
-<input type="submit" class="button" value="${ui.message("adminui.addNewPrivilege")}" onclick="javascript:window.location='${ui.pageLink("adminui","account/privilege")}'"/>
+<input type="submit" class="button" value="${ui.message("adminui.addNewPrivilege")}" onclick="javascript:window.location='${ui.pageLink("adminui","account/privilege", [action: 'add'])}'"/>
 <br />
 <br />
 <table>
@@ -18,12 +18,12 @@
 		<tr>
 			<th>${ ui.message("general.name") }</th>
 			<th>${ ui.message("general.description") }</th>
-			<th></th>
+			<th>${ ui.message("general.action") }</th>
 		</tr>
 	</thead>
 	<tbody>
 		<% privileges.each{  %>
-	 	<tr>
+	 	<tr ng-class="{ retired: privilege.retired }">
 	 		<td>
 				 ${ ui.format(it.name) }
 			</td>
@@ -32,8 +32,8 @@
             </td>
 			<td>
 	            <i class="icon-pencil edit-action" title="${ ui.message("general.edit") }"
-                   onclick="location.href='${ui.pageLink("adminui","account/privilege",[privilegeName: it.name ])}'"></i>
-        	</td>
+                   onclick="location.href='${ui.pageLink("adminui","account/privilege",[privilegeName: it.name, action: 'edit'])}'"></i>
+            </td>
 		</tr>
 		<% } %>
 	</tbody>

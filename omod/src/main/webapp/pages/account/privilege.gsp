@@ -5,7 +5,7 @@
 
     ui.includeCss("adminui", "adminui.css")
 
-    def createPrivilege = (privilege.privilege == null ? true : false);
+    def createPrivilege = ("add" == param.action[0]);
 %>
 
 <script type="text/javascript">
@@ -13,7 +13,8 @@
         { icon: "icon-home", link: '/' + OPENMRS_CONTEXT_PATH + '/index.htm' },
         { label: "${ ui.message("adminui.app.administrationTools.label")}" , link: '${ui.pageLink("adminui", "adminUiHome")}'},
         { label: "${ ui.message("adminui.app.accountManager.label")}" , link: '${ui.pageLink("adminui", "account/manageAccounts")}'},
-        { label: "${ ui.message("adminui.addNewPrivilege")}" }
+        { label: "${ ui.message("adminui.viewPrivileges.accountManagement.label")}" , link: '${ui.pageLink("adminui", "account/viewPrivileges")}'},
+        { label: "${ ui.message((createPrivilege) ? "adminui.addNewPrivilege" : "adminui.editPrivilege")}" }
 
     ];
 </script>
@@ -57,24 +58,29 @@
 </script>
 
 <h1>
-    <h3>${ (createPrivilege) ? ui.message("adminui.addNewPrivilege") : ui.message("adminui.editPrivilege") }</h3>
+    <h3>${ ui.message((createPrivilege) ? "adminui.addNewPrivilege" : "adminui.editPrivilege")}</h3>
 </h1>
-
+${param.action[0]}
 <form class="simple-form-ui" method="post" id="privilegeForm" autocomplete="off">
+
 <fieldset>
-    ${ui.includeFragment("uicommons", "field/text", [
+    <% if(createPrivilege){ %>
+        ${ui.includeFragment("uicommons", "field/text", [
             label        : ui.message("general.name")+"*",
             formFieldName: "privilege",
             id           : "privilege",
             maxLength    : 101,
-            initialValue : (privilege.privilege)
-    ])}
-
+            initialValue : privilege.privilege
+        ])}
+    <% } else{ %>
+        <b>${ui.message("general.name")}:</b> ${privilege.privilege}
+        <input type="hidden" name="privilegeName" value="${privilege.privilege}" />
+    <% } %>
     ${ui.includeFragment("uicommons", "field/textarea", [
             label        : ui.message("general.description"),
             formFieldName: "description",
             id           : "description",
-            initialValue : (privilege.description)
+            initialValue : (privilege.description) ? privilege.description.trim() : ""
     ])}
 
     <div>
