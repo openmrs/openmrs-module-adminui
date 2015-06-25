@@ -1,69 +1,46 @@
 [
-	{
-        "id": "adminui.main",
-        "extensionPointId": "org.openmrs.referenceapplication.homepageLink",
-        "type": "link",
-        "label": "adminui.tools",
-        "url": "adminui/adminUiHome.page",
-        "icon": "icon-cogs",
-        "order": 13,
-        "requiredPrivilege": "Allowed for everyone",
-        "extensionParams": {
-            "featureToggle": "accountManagerFeature"
-        }
-    },
-    
-	{
-        "id": "adminui.accountManager",
-        "extensionPointId": "org.openmrs.module.adminui.homepageLink",
-        "type": "link",
-        "label": "adminui.app.accountManager.label",
-        "url": "adminui/account/manageAccounts.page",
-        "icon": "icon-edit",
-        "order": 13,
-        "requiredPrivilege": "Allowed for everyone",
-        "extensionParams": {
-            "featureToggle": "accountManagerFeature"
-        }
-    },
-    
     {
         "id": "adminui.myAccount",
         "extensionPointId": "org.openmrs.referenceapplication.homepageLink",
         "type": "link",
         "label": "adminui.app.myAccount.label",
-        "url": "adminui/account/myAccount.page",
+        "url": "adminui/myaccount/myAccount.page",
+        "icon": "icon-cog"
+    },
+    {
+        "id": "adminui.accounts",
+        "extensionPointId": "systemAdministration.apps",
+        "type": "link",
+        "label": "adminui.manageAccounts.label",
+        "url": "adminui/systemadmin/accounts/manageAccounts.page",
         "icon": "icon-cog",
-        "order": 13,
-        "requiredPrivilege": "Allowed for everyone",
-        "extensionParams": {
-            "featureToggle": "myAccountFeature"
-        }
+        "order": 20
     },
-    
     {
-        "id": "adminui.locationManager",
-        "extensionPointId": "org.openmrs.module.adminui.homepageLink",
+        "id": "adminui.globalProperties",
+        "extensionPointId": "systemAdministration.apps",
         "type": "link",
-        "label": "adminui.app.locationManager.label",
-        "url": "adminui/location/manageLocations.page",
-        "icon": "icon-map-marker",
-        "order": 13,
-        "extensionParams": {
-            "featureToggle": "locationManagerFeature"
-        }
+        "label": "adminui.manageGlobalProperties.label",
+        "url": "adminui/systemadmin/globalproperties/manageGlobalProperties.page",
+        "icon": "icon-cog",
+        "order": 19
     },
-    
+
     {
-        "id": "adminui.systemAdministration",
-        "extensionPointId": "org.openmrs.module.adminui.homepageLink",
+        "id": "adminui.locations",
+        "extensionPointId": "org.openmrs.referenceapplication.configuremetadataLink",
         "type": "link",
-        "label": "adminui.app.systemAdministration.label",
-        "url": "adminui/systemAdmin/home.page",
-        "icon": "icon-check",
-        "order": 13,
-        "extensionParams": {
-            "featureToggle": "systemAdministrationFeature"
-        }
+        "label": "adminui.locations.label",
+        "url": "adminui/metadata/locations/locationsHome.page",
+        "icon": "icon-map-marker"
+    },
+
+    {
+        "id": "adminui.encounters",
+        "extensionPointId": "org.openmrs.referenceapplication.configuremetadataLink",
+        "type": "link",
+        "label": "adminui.encounters.title",
+        "url": "adminui/metadata/encounters/encountersHome.page",
+        "icon": "icon-map-marker"
     }
 ]

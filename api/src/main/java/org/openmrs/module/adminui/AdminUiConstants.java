@@ -18,8 +18,6 @@ public class AdminUiConstants {
 
 	public static final String MODULE_ID = "adminui";
 	
-	public static final String HOME_PAGE_EXTENSION_POINT_ID = "org.openmrs.module.adminui.homepageLink";
-	
 	//from EmrApi
 	
 	public static final String ROLE_PREFIX_CAPABILITY = "Application Role: ";
