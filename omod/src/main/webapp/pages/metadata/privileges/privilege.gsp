@@ -11,11 +11,10 @@
 <script type="text/javascript">
     var breadcrumbs = [
         { icon: "icon-home", link: '/' + OPENMRS_CONTEXT_PATH + '/index.htm' },
-        { label: "${ ui.message("adminui.app.administrationTools.label")}" , link: '${ui.pageLink("adminui", "adminUiHome")}'},
-        { label: "${ ui.message("adminui.app.accountManager.label")}" , link: '${ui.pageLink("adminui", "account/manageAccounts")}'},
-        { label: "${ ui.message("adminui.viewPrivileges.accountManagement.label")}" , link: '${ui.pageLink("adminui", "account/viewPrivileges")}'},
-        { label: "${ ui.message((createPrivilege) ? "adminui.addNewPrivilege" : "adminui.editPrivilege")}" }
-
+        { label: "${ ui.message('coreapps.app.configureMetadata.label')}" , link: '${ui.pageLink("coreapps", "configuremetadata/configureMetadata")}'},
+        { label: "${ ui.message("adminui.rolesAndPrivileges.title")}", link: '${ ui.pageLink("adminui", "metadata/rolesAndPrivilegesHome") }' },
+        { label: "${ ui.message("adminui.managePrivileges.title")}", link: '${ ui.pageLink("adminui", "metadata/privileges/managePrivileges") }' },
+        { label: "${ ui.message((createPrivilege) ? "adminui.addNewPrivilege.label" : "adminui.editPrivilege.label")}" }
     ];
 </script>
 
@@ -58,9 +57,9 @@
 </script>
 
 <h1>
-    <h3>${ ui.message((createPrivilege) ? "adminui.addNewPrivilege" : "adminui.editPrivilege")}</h3>
+    <h3>${ ui.message((createPrivilege) ? "adminui.addNewPrivilege.label" : "adminui.editPrivilege.label")}</h3>
 </h1>
-${param.action[0]}
+
 <form class="simple-form-ui" method="post" id="privilegeForm" autocomplete="off">
 
 <fieldset>
@@ -84,8 +83,8 @@ ${param.action[0]}
     ])}
 
     <div>
-        <input type="button" class="cancel" value="${ui.message("adminui.cancel")}" onclick="javascript:window.location='/${ contextPath }/adminui/account/viewPrivileges.page'"/>
-        <input type="submit" class="confirm" id="save-button" value="${ui.message("adminui.save")}"/>
+        <input type="button" class="cancel" value="${ui.message("general.cancel")}" onclick="javascript:window.location='/${ contextPath }/adminui/metadata/privileges/managePrivileges.page'"/>
+        <input type="submit" class="confirm" id="save-button" value="${ui.message("general.save")}"/>
     </div>
     </fieldset>
 </form>

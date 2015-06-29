@@ -3,12 +3,12 @@
  * Version 1.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
  * http://license.openmrs.org
- *
+ * <p/>
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
- *
+ * <p/>
  * Copyright (C) OpenMRS, LLC.  All Rights Reserved.
  */
 
@@ -31,121 +31,121 @@ import java.util.List;
 
 public class ChangeSecretQuestionPageController {
 
-	public String get(PageModel model) {
-		return "account/changeSecretQuestion";
-	}
+    public String get(PageModel model) {
+        return "myaccount/changeSecretQuestion";
+    }
 
-	public String post(@MethodParam("createSecretQuestion") @BindParams SecretQuestion secretQuestion,
-	                   BindingResult errors,
-	                   @SpringBean("userService") UserService userService,
-	                   @SpringBean("messageSourceService") MessageSourceService messageSourceService,
-	                   @SpringBean("messageSource") MessageSource messageSource,
-	                   HttpServletRequest request,
-	                   PageModel model) {
-		validateSecretQuestion(secretQuestion, errors, messageSourceService);
-		if (errors.hasErrors()) {
-			sendErrorMessage(errors, messageSource, request, model);
-			return "account/changeSecretQuestion";
-		}
-		return changeSecretQuestion(secretQuestion, userService, messageSourceService, request);
-	}
+    public String post(@MethodParam("createSecretQuestion") @BindParams SecretQuestion secretQuestion,
+                       BindingResult errors,
+                       @SpringBean("userService") UserService userService,
+                       @SpringBean("messageSourceService") MessageSourceService messageSourceService,
+                       @SpringBean("messageSource") MessageSource messageSource,
+                       HttpServletRequest request,
+                       PageModel model) {
+        validateSecretQuestion(secretQuestion, errors, messageSourceService);
+        if (errors.hasErrors()) {
+            sendErrorMessage(errors, messageSource, request, model);
+            return "myaccount/changeSecretQuestion";
+        }
+        return changeSecretQuestion(secretQuestion, userService, messageSourceService, request);
+    }
 
-	public SecretQuestion createSecretQuestion(String password, String question, String answer, String confirmAnswer) {
-		return new SecretQuestion(password, question, answer, confirmAnswer);
-	}
+    public SecretQuestion createSecretQuestion(String password, String question, String answer, String confirmAnswer) {
+        return new SecretQuestion(password, question, answer, confirmAnswer);
+    }
 
-	private String changeSecretQuestion(SecretQuestion secretQuestion, UserService userService,
-	                                    MessageSourceService messageSourceService, HttpServletRequest request) {
-		try {
-			userService.changeQuestionAnswer(secretQuestion.getPassword(), secretQuestion.getQuestion(), secretQuestion.getAnswer());
-			request.getSession().setAttribute(AdminUiConstants.SESSION_ATTRIBUTE_INFO_MESSAGE,
-					messageSourceService.getMessage("adminui.account.secretQuestion.success", null, Context.getLocale()));
-			request.getSession().setAttribute(AdminUiConstants.SESSION_ATTRIBUTE_TOAST_MESSAGE, "true");
-		} catch (Exception ex) {
-			request.getSession().setAttribute(
-					AdminUiConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE,
-					messageSourceService.getMessage("adminui.account.secretQuestion.fail", new Object[]{ex.getMessage()},
-							Context.getLocale()));
-			return "account/changeSecretQuestion";
-		}
-		return "account/myAccount";
-	}
+    private String changeSecretQuestion(SecretQuestion secretQuestion, UserService userService,
+                                        MessageSourceService messageSourceService, HttpServletRequest request) {
+        try {
+            userService.changeQuestionAnswer(secretQuestion.getPassword(), secretQuestion.getQuestion(), secretQuestion.getAnswer());
+            request.getSession().setAttribute(AdminUiConstants.SESSION_ATTRIBUTE_INFO_MESSAGE,
+                    messageSourceService.getMessage("adminui.account.secretQuestion.success", null, Context.getLocale()));
+            request.getSession().setAttribute(AdminUiConstants.SESSION_ATTRIBUTE_TOAST_MESSAGE, "true");
+        } catch (Exception ex) {
+            request.getSession().setAttribute(
+                    AdminUiConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE,
+                    messageSourceService.getMessage("adminui.account.secretQuestion.fail", new Object[]{ex.getMessage()},
+                            Context.getLocale()));
+            return "myaccount/changeSecretQuestion";
+        }
+        return "myaccount/myAccount";
+    }
 
-	private void validateSecretQuestion(SecretQuestion secretQuestion, BindingResult errors,
-	                                    MessageSourceService messageSourceService) {
-		if (!secretQuestion.getAnswer().equals(secretQuestion.getConfirmAnswer())) {
-			errors.rejectValue("confirmAnswer", "adminui.account.answerAndConfirmAnswer.doesNotMatch",
-					new Object[]{messageSourceService
-							.getMessage("adminui.account.answerAndConfirmAnswer.doesNotMatch")}, null);
-		}
-	}
+    private void validateSecretQuestion(SecretQuestion secretQuestion, BindingResult errors,
+                                        MessageSourceService messageSourceService) {
+        if (!secretQuestion.getAnswer().equals(secretQuestion.getConfirmAnswer())) {
+            errors.rejectValue("confirmAnswer", "adminui.account.answerAndConfirmAnswer.doesNotMatch",
+                    new Object[]{messageSourceService
+                            .getMessage("adminui.account.answerAndConfirmAnswer.doesNotMatch")}, null);
+        }
+    }
 
-	private void sendErrorMessage(BindingResult errors, MessageSource messageSource, HttpServletRequest request, PageModel model) {
-		List<ObjectError> allErrors = errors.getAllErrors();
-		String message = getMessageErrors(messageSource, allErrors);
-		request.getSession().setAttribute(AdminUiConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE, message);
-		model.addAttribute("errors", errors);
-	}
+    private void sendErrorMessage(BindingResult errors, MessageSource messageSource, HttpServletRequest request, PageModel model) {
+        List<ObjectError> allErrors = errors.getAllErrors();
+        String message = getMessageErrors(messageSource, allErrors);
+        request.getSession().setAttribute(AdminUiConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE, message);
+        model.addAttribute("errors", errors);
+    }
 
-	private String getMessageErrors(MessageSource messageSource, List<ObjectError> allErrors) {
-		String message = "";
-		if (allErrors != null && allErrors.isEmpty()) {
-			ObjectError error = allErrors.get(0);
-			Object[] arguments = error.getArguments();
-			message = messageSource.getMessage(error.getCode(), arguments, Context.getLocale());
-		}
-		return message;
-	}
+    private String getMessageErrors(MessageSource messageSource, List<ObjectError> allErrors) {
+        String message = "";
+        if (allErrors != null && allErrors.isEmpty()) {
+            ObjectError error = allErrors.get(0);
+            Object[] arguments = error.getArguments();
+            message = messageSource.getMessage(error.getCode(), arguments, Context.getLocale());
+        }
+        return message;
+    }
 
-	public class SecretQuestion {
+    public class SecretQuestion {
 
-		private String password;
-		private String question;
-		private String answer;
-		private String confirmAnswer;
+        private String password;
+        private String question;
+        private String answer;
+        private String confirmAnswer;
 
-		public SecretQuestion(String password, String question, String answer, String confirmAnswer) {
-			this.password = password;
-			this.question = question;
-			this.answer = answer;
-			this.confirmAnswer = confirmAnswer;
-		}
+        public SecretQuestion(String password, String question, String answer, String confirmAnswer) {
+            this.password = password;
+            this.question = question;
+            this.answer = answer;
+            this.confirmAnswer = confirmAnswer;
+        }
 
-		public String getPassword() {
-			return password;
-		}
+        public String getPassword() {
+            return password;
+        }
 
-		public void setPassword(String password) {
-			this.password = password;
-		}
+        public void setPassword(String password) {
+            this.password = password;
+        }
 
-		public String getQuestion() {
-			return question;
-		}
+        public String getQuestion() {
+            return question;
+        }
 
-		public void setQuestion(String question) {
-			this.question = question;
-		}
+        public void setQuestion(String question) {
+            this.question = question;
+        }
 
-		public String getAnswer() {
-			return answer;
-		}
+        public String getAnswer() {
+            return answer;
+        }
 
-		public void setAnswer(String answer) {
-			this.answer = answer;
-		}
+        public void setAnswer(String answer) {
+            this.answer = answer;
+        }
 
-		public String getConfirmAnswer() {
-			return confirmAnswer;
-		}
+        public String getConfirmAnswer() {
+            return confirmAnswer;
+        }
 
-		public void setConfirmAnswer(String confirmAnswer) {
-			this.confirmAnswer = confirmAnswer;
-		}
+        public void setConfirmAnswer(String confirmAnswer) {
+            this.confirmAnswer = confirmAnswer;
+        }
 
-		@Override
-		public String toString() {
-			return "Secret Question:Question=" + question + ", Answer=" + answer;
-		}
-	}
+        @Override
+        public String toString() {
+            return "Secret Question:Question=" + question + ", Answer=" + answer;
+        }
+    }
 }

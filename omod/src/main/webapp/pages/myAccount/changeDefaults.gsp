@@ -19,7 +19,7 @@ ${ui.includeFragment("uicommons", "validationMessages")}
         {icon: "icon-home", link: '/' + OPENMRS_CONTEXT_PATH + '/index.htm'},
         {
             label: "${ ui.message("adminui.app.myAccount.label")}",
-            link: '${ui.pageLink("adminui", "account/myAccount")}'
+            link: '${ui.pageLink("adminui", "myaccount/myAccount")}'
         },
         {label: "${ ui.message("adminui.myAccount.defaults.label")}"}
 

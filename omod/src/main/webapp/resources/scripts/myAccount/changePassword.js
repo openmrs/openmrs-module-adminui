@@ -38,6 +38,6 @@ MatchedInputFieldValidator.prototype.validate = function(field) {
 }
 
 
-//Register teh valitors, Validators is defined in uicommons module's validators.js
+//Register the valitors, Validators is defined in uicommons module's validators.js
 Validators["min-length"] = new MinimumLengthFieldValidator();
 Validators["matched-input"] = new MatchedInputFieldValidator();

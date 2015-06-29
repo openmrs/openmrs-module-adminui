@@ -1,0 +1,28 @@
+[
+    {
+        "id": "adminui.locations",
+        "extensionPointId": "org.openmrs.referenceapplication.configuremetadataLink",
+        "type": "link",
+        "label": "adminui.locations.label",
+        "url": "adminui/metadata/locations/locationsHome.page",
+        "icon": "icon-map-marker"
+    },
+
+    {
+        "id": "adminui.encounters",
+        "extensionPointId": "org.openmrs.referenceapplication.configuremetadataLink",
+        "type": "link",
+        "label": "adminui.encounters.title",
+        "url": "adminui/metadata/encounters/encountersHome.page",
+        "icon": "icon-map-marker"
+    },
+
+    {
+        "id": "adminui.rolesAndPrivileges",
+        "extensionPointId": "org.openmrs.referenceapplication.configuremetadataLink",
+        "type": "link",
+        "label": "adminui.rolesAndPrivileges.title",
+        "url": "adminui/metadata/rolesAndPrivilegesHome.page",
+        "icon": "icon-map-marker"
+    }
+]

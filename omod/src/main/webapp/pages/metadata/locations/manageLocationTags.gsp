@@ -12,9 +12,7 @@
     ];
 </script>
 
-<h1>
-    <h3>${ ui.message("adminui.manageLocationTags.label") }</h3>
-</h1>
+<h3>${ ui.message("adminui.manageLocationTags.label") }</h3>
 
  <input type="submit" class="button" value="${ui.message("adminui.addLocationTag.label")}" onclick="javascript:window.location='/${ contextPath }/adminui/metadata/locations/createLocationTag.page'"/>
 

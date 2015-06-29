@@ -17,7 +17,7 @@
 <div id="tasks">
 
 
-    <a class="button app big" href="${ ui.pageLink("adminui", "metadata/encounterTypes/manageEncounterTypes") }">
+    <a class="button app big" href="${ ui.pageLink("adminui", "metadata/encounters/encounterTypes/manageEncounterTypes") }">
             <i class="icon-list"></i>
             ${ ui.message("adminui.manageEncounterTypes.title") }
     </a>

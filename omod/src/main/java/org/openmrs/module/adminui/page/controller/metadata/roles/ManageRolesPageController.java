@@ -12,20 +12,19 @@
  * Copyright (C) OpenMRS, LLC.  All Rights Reserved.
  */
 
-package org.openmrs.module.adminui.page.controller.myaccount;
+package org.openmrs.module.adminui.page.controller.metadata.roles;
 
-import org.openmrs.api.UserService;
+import org.openmrs.module.adminui.account.AccountService;
 import org.openmrs.ui.framework.annotation.SpringBean;
 import org.openmrs.ui.framework.page.PageModel;
 
-public class ViewPrivilegesPageController {
+public class ManageRolesPageController {
 	
 	/**
 	 * @param model
-	 * @param userService
+	 * @param accountService
 	 */
-	public void get(PageModel model, @SpringBean("userService") UserService userService) {
-		model.addAttribute("privileges", userService.getAllPrivileges());
+	public void get(PageModel model, @SpringBean("adminAccountService") AccountService accountService) {
+		model.addAttribute("roles", accountService.getAllCapabilities());
 	}
-	
 }

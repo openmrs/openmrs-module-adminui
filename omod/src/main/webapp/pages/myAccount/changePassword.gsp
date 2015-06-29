@@ -6,7 +6,7 @@
     ui.includeJavascript("uicommons", "navigator/navigatorHandlers.js", Integer.MAX_VALUE - 21)
     ui.includeJavascript("uicommons", "navigator/navigatorModels.js", Integer.MAX_VALUE - 21)
     ui.includeJavascript("uicommons", "navigator/exitHandlers.js", Integer.MAX_VALUE - 22);
-    ui.includeJavascript("adminui", "account/changePassword.js")
+    ui.includeJavascript("adminui", "myaccount/changePassword.js")
 
 %>
 
@@ -22,8 +22,7 @@ ${ ui.includeFragment("uicommons", "validationMessages")}
 
     var breadcrumbs = [
         { icon: "icon-home", link: '/' + OPENMRS_CONTEXT_PATH + '/index.htm' },
-        { label: "${ ui.message("adminui.app.administrationTools.label")}" , link: '${ui.pageLink("adminui", "adminUiHome")}'},
-        { label: "${ ui.message("adminui.app.myAccount.label")}", link: '${ui.pageLink("adminui", "account/myAccount")}' },
+        { label: "${ ui.message("adminui.app.myAccount.label")}", link: '${ui.pageLink("adminui", "myaccount/myAccount")}' },
         { label: "${ ui.message("adminui.myAccount.changePassword.label")}" }
 
     ];

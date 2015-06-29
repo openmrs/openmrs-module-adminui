@@ -6,25 +6,24 @@
 <script type="text/javascript">
     var breadcrumbs = [
         { icon: "icon-home", link: '/' + OPENMRS_CONTEXT_PATH + '/index.htm' },
-        { label: "${ ui.message("adminui.app.administrationTools.label")}" , link: '${ui.pageLink("adminui", "adminUiHome")}'},
         { label: "${ ui.message("adminui.app.myAccount.label")}" }
     ];
 </script>
 
 <div id="tasks">
-    <a class="button app big" href="${ ui.pageLink("adminui", "myAccount/changePassword") }">
+    <a class="button app big" href="${ ui.pageLink("adminui", "myaccount/changePassword") }">
         <div class="task">
             <i class="icon-unlock"></i>
             ${ ui.message("adminui.myAccount.changePassword.label") }
         </div>
     </a>
-    <a class="button app big" href="${ ui.pageLink("adminui", "myAccount/changeSecretQuestion") }">
+    <a class="button app big" href="${ ui.pageLink("adminui", "myaccount/changeSecretQuestion") }">
         <div class="task">
             <i class="icon-unlock"></i>
             ${ ui.message("adminui.myAccount.changeSecretQuestion.label") }
         </div>
     </a>
-    <a class="button app big" href="${ ui.pageLink("adminui", "myAccount/changeDefaults") }">
+    <a class="button app big" href="${ ui.pageLink("adminui", "myaccount/changeDefaults") }">
         <div class="task">
             <i class="icon-unlock"></i>
             ${ ui.message("adminui.myAccount.changeDefaults.label") }

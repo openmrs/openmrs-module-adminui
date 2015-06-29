@@ -13,7 +13,7 @@
 
     <a class="button" href="${ ui.pageLink("adminui", "metadata/locations/location") }">
             <i class="icon-plus"></i>
-            ${ ui.message("adminui.createLocation.locationManagement.label") }
+            ${ ui.message("adminui.addLocation.label") }
     </a>
 
 <hr>

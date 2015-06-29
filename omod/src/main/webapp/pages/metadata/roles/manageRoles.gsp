@@ -4,16 +4,18 @@
 %>
 <script type="text/javascript">
     var breadcrumbs = [
-        { icon: "icon-home", link: '/' + OPENMRS_CONTEXT_PATH + '/index.htm' },
-        { label: "${ ui.message("adminui.app.administrationTools.label")}" , link: '${ui.pageLink("adminui", "adminUiHome")}'},
-        { label: "${ ui.message("adminui.app.accountManager.label")}", link: '${ui.pageLink("adminui", "account/manageAccounts")}' },
-        { label: "${ ui.message("adminui.viewRoles.accountManagement.label")}" }
+		{ icon: "icon-home", link: '/' + OPENMRS_CONTEXT_PATH + '/index.htm' },
+		{ label: "${ ui.message('coreapps.app.configureMetadata.label')}" , link: '${ui.pageLink("coreapps", "configuremetadata/configureMetadata")}'},
+		{ label: "${ ui.message("adminui.rolesAndPrivileges.title")}", link: '${ ui.pageLink("adminui", "metadata/rolesAndPrivilegesHome") }'  },
+        { label: "${ ui.message("adminui.manageRoles.title")}" }
     ];
 </script>
 
 <% i=0 %>
 
- <input type="submit" class="button" value="${ui.message("adminui.createCapability")}" onclick="javascript:window.location='/${ contextPath }/adminui/account/createCapability.page'"/>
+<h3>${ ui.message("adminui.manageRoles.title") }</h3>
+
+<input type="submit" class="button" value="${ui.message("adminui.addNewRole.label ")}" onclick="javascript:window.location='/${ contextPath }/adminui/metadata/roles/role.page'"/>
 
 <hr>
 <table id="list-roles" cellspacing="0" cellpadding="2">
@@ -47,7 +49,7 @@
 
 			<td>
 	            <a href="/${ contextPath }/adminui/account/createCapability.page?capabilityName=${ it.role }">
-	                <button>${ ui.message("adminui.edit") }</button>
+	                <button>${ ui.message("general.edit") }</button>
 	            </a>
         	</td>
 		</tr>

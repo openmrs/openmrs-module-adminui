@@ -1,7 +1,7 @@
 <%
     ui.decorateWith("appui", "standardEmrPage")
 
-    ui.includeJavascript("adminui", "account/account.js")
+    ui.includeJavascript("adminui", "systemadmin/account.js")
 
     ui.includeJavascript("adminui", "jquery.validate.js")
 

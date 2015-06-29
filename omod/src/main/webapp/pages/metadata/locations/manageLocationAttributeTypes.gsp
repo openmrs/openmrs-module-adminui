@@ -12,9 +12,7 @@
     ];
 </script>
 
-<h1>
-    <h3>${ ui.message("adminui.manageLocationAttributeTypes.label") }</h3>
-</h1>
+ <h3>${ ui.message("adminui.manageLocationAttributeTypes.label") }</h3>
 
  <input type="submit" class="button" value="${ui.message("adminui.addLocationAttributeType.label")}" onclick="javascript:window.location='/${ contextPath }/adminui/metadata/locations/createLocationAttributeType.page'"/>
 

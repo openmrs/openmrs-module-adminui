@@ -4,13 +4,15 @@
 <script type="text/javascript">
     var breadcrumbs = [
         { icon: "icon-home", link: '/' + OPENMRS_CONTEXT_PATH + '/index.htm' },
-        { label: "${ ui.message("adminui.app.administrationTools.label")}" , link: '${ui.pageLink("adminui", "adminUiHome")}'},
-        { label: "${ ui.message("adminui.app.accountManager.label")}", link: '${ui.pageLink("adminui", "account/manageAccounts")}' },
-        { label: "${ ui.message("adminui.viewPrivileges.accountManagement.label")}" }
+        { label: "${ ui.message('coreapps.app.configureMetadata.label')}" , link: '${ui.pageLink("coreapps", "configuremetadata/configureMetadata")}'},
+        { label: "${ ui.message("adminui.rolesAndPrivileges.title")}", link: '${ ui.pageLink("adminui", "metadata/rolesAndPrivilegesHome") }' },
+        { label: "${ ui.message("adminui.managePrivileges.title")}" }
     ];
 </script>
 
-<input type="submit" class="button" value="${ui.message("adminui.addNewPrivilege")}" onclick="javascript:window.location='${ui.pageLink("adminui","account/privilege", [action: 'add'])}'"/>
+<h3>${ ui.message("adminui.managePrivileges.title") }</h3>
+
+<input type="submit" class="button" value="${ui.message("adminui.addNewPrivilege.label")}" onclick="javascript:window.location='${ui.pageLink("adminui","metadata/privileges/privilege", [action: 'add'])}'"/>
 <br />
 <br />
 <table>
@@ -32,7 +34,7 @@
             </td>
 			<td>
 	            <i class="icon-pencil edit-action" title="${ ui.message("general.edit") }"
-                   onclick="location.href='${ui.pageLink("adminui","account/privilege",[privilegeName: it.name, action: 'edit'])}'"></i>
+                   onclick="location.href='${ui.pageLink("adminui","metadata/privileges/privilege",[privilegeName: it.name, action: 'edit'])}'"></i>
             </td>
 		</tr>
 		<% } %>
