@@ -49,30 +49,5 @@
             </list>
         </property>
     </bean>
-	<!--
-	<bean id="locationService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
-        <property name="transactionManager">
-            <ref bean="transactionManager"/>
-        </property>
-        <property name="target">
-            <bean class="${project.parent.groupId}.${project.parent.artifactId}.location.LocationServiceImpl">
-            </bean>
-        </property>
-        <property name="preInterceptors">
-            <ref bean="serviceInterceptors"/>
-        </property>
-        <property name="transactionAttributeSource">
-            <ref bean="transactionAttributeSource"/>
-        </property>
-    </bean>
-    <bean parent="serviceContext">
-        <property name="moduleService">
-            <list merge="true">
-                <value>${project.parent.groupId}.${project.parent.artifactId}.location.LocationService</value>
-                <ref local="locationService"/>
-            </list>
-        </property>
-	</bean>
-	-->
 	
 </beans>
