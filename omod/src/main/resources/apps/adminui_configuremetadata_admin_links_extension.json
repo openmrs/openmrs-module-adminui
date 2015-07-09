@@ -5,6 +5,7 @@
         "type": "link",
         "label": "adminui.manageLocations.label",
         "url": "adminui/metadata/locations/manageLocations.page",
+        "requiredPrivilege": "Manage Locations",
         "extensionParams":{
             "group": "org.openmrs.module.adminui.locations.group"
         }
@@ -16,6 +17,7 @@
         "type": "link",
         "label": "adminui.manageLocationTags.label",
         "url": "adminui/metadata/locations/manageLocationTags.page",
+        "requiredPrivilege": "Manage Location Tags",
         "extensionParams":{
             "group": "org.openmrs.module.adminui.locations.group"
         }
@@ -27,6 +29,7 @@
         "type": "link",
         "label": "adminui.manageLocationAttributeTypes.label",
         "url": "adminui/metadata/locations/manageLocationAttributeTypes.page",
+        "requiredPrivilege": "Manage Location Attribute Types",
         "extensionParams":{
             "group": "org.openmrs.module.adminui.locations.group"
         }
@@ -38,6 +41,7 @@
         "type": "link",
         "label": "adminui.locationHierarchy.label",
         "url": "adminui/metadata/locations/locationHierarchy.page",
+        "requiredPrivilege": "Get Locations",
         "extensionParams":{
             "group": "org.openmrs.module.adminui.locations.group"
         }
@@ -49,6 +53,7 @@
         "type": "link",
         "label": "adminui.manageEncounterTypes.title",
         "url": "adminui/metadata/encounters/encountertypes/manageEncounterTypes.page",
+        "requiredPrivilege": "Manage Encounter Types",
         "extensionParams":{
             "group": "org.openmrs.module.adminui.encounters.group"
         }
@@ -60,6 +65,7 @@
         "type": "link",
         "label": "adminui.manageRoles.title",
         "url": "adminui/metadata/roles/manageRoles.page",
+        "requiredPrivilege": "Manage Roles",
         "extensionParams":{
             "group": "org.openmrs.module.adminui.rolesAndPrivileges.group"
         }
@@ -71,6 +77,7 @@
         "type": "link",
         "label": "adminui.managePrivileges.title",
         "url": "adminui/metadata/privileges/managePrivileges.page",
+        "requiredPrivilege": "Manage Privileges",
         "extensionParams":{
             "group": "org.openmrs.module.adminui.rolesAndPrivileges.group"
         }
