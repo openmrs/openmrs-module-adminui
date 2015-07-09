@@ -15,7 +15,6 @@
     var breadcrumbs = [
         { icon: "icon-home", link: '/' + OPENMRS_CONTEXT_PATH + '/index.htm' },
         { label: "${ ui.message('coreapps.app.configureMetadata.label')}" , link: '${ui.pageLink("coreapps", "configuremetadata/configureMetadata")}'},
-        { label: "${ ui.message("adminui.app.locations.label")}", link: '${ui.pageLink("adminui","metadata/locations/locationsHome")}'},
         { label: "${ ui.message("adminui.manageLocations.label")}", link: '${ui.pageLink("adminui","metadata/locations/manageLocations")}' },
         { label: "${ (createLocation) ? ui.message("adminui.createLocation.locationManagement.label") : ui.message("adminui.editLocation.locationManagement.label")}" }
     ];

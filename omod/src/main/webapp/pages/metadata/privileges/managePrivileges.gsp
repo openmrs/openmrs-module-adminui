@@ -5,7 +5,6 @@
     var breadcrumbs = [
         { icon: "icon-home", link: '/' + OPENMRS_CONTEXT_PATH + '/index.htm' },
         { label: "${ ui.message('coreapps.app.configureMetadata.label')}" , link: '${ui.pageLink("coreapps", "configuremetadata/configureMetadata")}'},
-        { label: "${ ui.message("adminui.rolesAndPrivileges.title")}", link: '${ ui.pageLink("adminui", "metadata/rolesAndPrivilegesHome") }' },
         { label: "${ ui.message("adminui.managePrivileges.title")}" }
     ];
 </script>

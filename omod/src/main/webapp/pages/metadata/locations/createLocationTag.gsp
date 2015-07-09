@@ -10,7 +10,6 @@
     var breadcrumbs = [
         { icon: "icon-home", link: '/' + OPENMRS_CONTEXT_PATH + '/index.htm' },
         { label: "${ ui.message('coreapps.app.configureMetadata.label')}" , link: '${ui.pageLink("coreapps", "configuremetadata/configureMetadata")}'},
-        { label: "${ ui.message("adminui.locations.label")}", link: '${ui.pageLink("adminui","metadata/locations/locationsHome")}'},
         { label: "${ ui.message("adminui.manageLocationTags.label")}", link: '${ui.pageLink("adminui","metadata/locations/manageLocationTags")}'},
         { label: "${ ui.message((createLocationTag) ? "adminui.addLocationTag.label" : "adminui.editLocationTag.label")}" }
 

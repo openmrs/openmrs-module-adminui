@@ -6,8 +6,7 @@
     var breadcrumbs = [
 		{ icon: "icon-home", link: '/' + OPENMRS_CONTEXT_PATH + '/index.htm' },
 		{ label: "${ ui.message('coreapps.app.configureMetadata.label')}" , link: '${ui.pageLink("coreapps", "configuremetadata/configureMetadata")}'},
-		{ label: "${ ui.message("adminui.rolesAndPrivileges.title")}", link: '${ ui.pageLink("adminui", "metadata/rolesAndPrivilegesHome") }'  },
-        { label: "${ ui.message("adminui.manageRoles.title")}" }
+		{ label: "${ ui.message("adminui.manageRoles.title")}" }
     ];
 </script>
 
@@ -15,13 +14,12 @@
 
 <h3>${ ui.message("adminui.manageRoles.title") }</h3>
 
-<input type="submit" class="button" value="${ui.message("adminui.addNewRole.label ")}" onclick="javascript:window.location='/${ contextPath }/adminui/metadata/roles/role.page'"/>
+<input type="submit" class="button" value="${ui.message("adminui.addNewRole.label")}" onclick="javascript:window.location='/${ contextPath }/adminui/metadata/roles/role.page'"/>
 
 <hr>
 <table id="list-roles" cellspacing="0" cellpadding="2">
 	<thead>
 		<tr>
-			<th>${ ui.message("adminui.sno")}</th>
 			<th>${ ui.message("adminui.role.role") }</th>
 			<th>${ ui.message("adminui.role.inheritedRoles") }</th>
 			<th>${ ui.message("adminui.role.privileges") }</th>
@@ -32,10 +30,6 @@
 		<% roles.each{  %>
 	 	<tr>
 	 		<td>
-				${ ++i }
-			</td>
-
-			<td>
 				 ${ ui.format(it.role) }
 			</td>
 

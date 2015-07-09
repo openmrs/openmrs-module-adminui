@@ -1,0 +1,78 @@
+[
+    {
+        "id": "org.openmrs.module.adminui.manageLocations.link",
+        "extensionPointId": "org.openmrs.module.coreapps.adminLinks",
+        "type": "link",
+        "label": "adminui.manageLocations.label",
+        "url": "adminui/metadata/locations/manageLocations.page",
+        "extensionParams":{
+            "group": "org.openmrs.module.adminui.locations.group"
+        }
+    },
+
+    {
+        "id": "org.openmrs.module.adminui.manageLocationTags.link",
+        "extensionPointId": "org.openmrs.module.coreapps.adminLinks",
+        "type": "link",
+        "label": "adminui.manageLocationTags.label",
+        "url": "adminui/metadata/locations/manageLocationTags.page",
+        "extensionParams":{
+            "group": "org.openmrs.module.adminui.locations.group"
+        }
+    },
+
+    {
+        "id": "org.openmrs.module.adminui.manageLocationAttributeTypes.link",
+        "extensionPointId": "org.openmrs.module.coreapps.adminLinks",
+        "type": "link",
+        "label": "adminui.manageLocationAttributeTypes.label",
+        "url": "adminui/metadata/locations/manageLocationAttributeTypes.page",
+        "extensionParams":{
+            "group": "org.openmrs.module.adminui.locations.group"
+        }
+    },
+
+    {
+        "id": "org.openmrs.module.adminui.locationHierarchy.link",
+        "extensionPointId": "org.openmrs.module.coreapps.adminLinks",
+        "type": "link",
+        "label": "adminui.locationHierarchy.label",
+        "url": "adminui/metadata/locations/locationHierarchy.page",
+        "extensionParams":{
+            "group": "org.openmrs.module.adminui.locations.group"
+        }
+    },
+
+    {
+        "id": "org.openmrs.module.adminui.encounters",
+        "extensionPointId": "org.openmrs.module.coreapps.adminLinks",
+        "type": "link",
+        "label": "adminui.manageEncounterTypes.title",
+        "url": "adminui/metadata/encounters/encountertypes/manageEncounterTypes.page",
+        "extensionParams":{
+            "group": "org.openmrs.module.adminui.encounters.group"
+        }
+    },
+
+    {
+        "id": "org.openmrs.module.adminui.roles",
+        "extensionPointId": "org.openmrs.module.coreapps.adminLinks",
+        "type": "link",
+        "label": "adminui.manageRoles.title",
+        "url": "adminui/metadata/roles/manageRoles.page",
+        "extensionParams":{
+            "group": "org.openmrs.module.adminui.rolesAndPrivileges.group"
+        }
+    },
+
+    {
+        "id": "org.openmrs.module.adminui.Privileges",
+        "extensionPointId": "org.openmrs.module.coreapps.adminLinks",
+        "type": "link",
+        "label": "adminui.managePrivileges.title",
+        "url": "adminui/metadata/privileges/managePrivileges.page",
+        "extensionParams":{
+            "group": "org.openmrs.module.adminui.rolesAndPrivileges.group"
+        }
+    }
+]
