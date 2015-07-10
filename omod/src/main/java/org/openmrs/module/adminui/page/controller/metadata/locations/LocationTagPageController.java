@@ -21,15 +21,13 @@ import org.openmrs.ui.framework.annotation.BindParams;
 import org.openmrs.ui.framework.annotation.SpringBean;
 import org.openmrs.ui.framework.page.PageModel;
 import org.openmrs.validator.LocationTagValidator;
-import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 
-public class CreateLocationTagPageController {
+public class LocationTagPageController {
 
     public void get(PageModel model, @RequestParam(value = "locationTagId", required = false) Integer locationTagId,
                     @SpringBean("locationService") LocationService locationService) {
@@ -50,10 +48,9 @@ public class CreateLocationTagPageController {
                        @RequestParam(required = false, value = "retire") String retireFlag,
                        HttpServletRequest request) {
 
-        Errors newErrors = new BindException(locationTag, "locationTag");
-        locationTagValidator.validate(locationTag, newErrors);
+        locationTagValidator.validate(locationTag, errors);
 
-        if (!newErrors.hasErrors()) {
+        if (!errors.hasErrors()) {
             try {
                 if (saveFlag.length() > 3) {
                     locationService.saveLocationTag(locationTag);
@@ -71,9 +68,9 @@ public class CreateLocationTagPageController {
 
         }
 
-        model.addAttribute("errors", newErrors);
+        model.addAttribute("errors", errors);
         model.addAttribute("locationTag", locationTag);
 
-        return "metadata/location/locationTag";
+        return "metadata/locations/locationTag";
     }
 }

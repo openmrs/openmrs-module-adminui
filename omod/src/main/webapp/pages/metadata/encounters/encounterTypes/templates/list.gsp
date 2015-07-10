@@ -1,13 +1,13 @@
-<button ui-sref="edit">${ ui.message("uicommons.add") }</button>
+<button ui-sref="edit">${ ui.message("adminui.addNewEncounterType.title") }</button>
 <br/>
 <br/>
 
 <table>
     <thead>
     <tr>
-        <th>Name</th>
-        <th>Description</th>
-        <th>Actions</th>
+        <th>${ui.message('general.name')}</th>
+        <th>${ui.message('general.description')}</th>
+        <th>${ui.message('general.action')}</th>
     </tr>
     </thead>
     <tbody>

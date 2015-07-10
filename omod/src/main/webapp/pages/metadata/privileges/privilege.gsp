@@ -82,7 +82,7 @@
     ])}
 
     <div>
-        <input type="button" class="cancel" value="${ui.message("general.cancel")}" onclick="javascript:window.location='/${ contextPath }/adminui/metadata/privileges/managePrivileges.page'"/>
+        <input type="button" class="cancel" value="${ui.message("general.cancel")}" onclick="window.location='/${ contextPath }/adminui/metadata/privileges/managePrivileges.page'"/>
         <input type="submit" class="confirm" id="save-button" value="${ui.message("general.save")}"/>
     </div>
     </fieldset>

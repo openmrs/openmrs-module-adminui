@@ -31,7 +31,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
 
-public class CreateLocationAttributeTypePageController {
+public class LocationAttributeTypePageController {
 
     public void get(PageModel model, @RequestParam(value = "locationAttributeTypeId", required = false) Integer locationAttributeTypeId,
                     @SpringBean("locationService") LocationService locationService) {
@@ -80,8 +80,10 @@ public class CreateLocationAttributeTypePageController {
 
         model.addAttribute("errors", newErrors);
         model.addAttribute("locationAttributeType", locationAttributeType);
+        model.addAttribute("datatypes", getDatatypes());
+        model.addAttribute("handlers", getHandlers());
 
-        return "metadata/locations/createLocationAttributeType";
+        return "metadata/locations/locationAttributeType";
     }
 
     public Collection<String> getDatatypes() {

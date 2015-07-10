@@ -12,7 +12,7 @@
 
     <a class="button" href="${ ui.pageLink("adminui", "metadata/locations/location") }">
             <i class="icon-plus"></i>
-            ${ ui.message("adminui.addLocation.label") }
+            ${ ui.message("adminui.addNewLocation.label") }
     </a>
 
 <hr>
@@ -43,9 +43,8 @@
             </td>
 
 			<td>
-	            <a href="/${ contextPath }/adminui/metadata/locations/location.page?locationId=${ it.locationId }">
-	                <button>${ ui.message("general.edit") }</button>
-	            </a>
+	            <i class="icon-pencil edit-action" title="${ ui.message("general.edit") }"
+				   onclick="location.href='${ui.pageLink("adminui", "metadata/locations/location",[locationId: it.id])}'"></i>
         	</td>
 		</tr>
 		<% } %>

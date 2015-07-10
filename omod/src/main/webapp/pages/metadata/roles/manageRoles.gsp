@@ -14,7 +14,7 @@
 
 <h3>${ ui.message("adminui.manageRoles.title") }</h3>
 
-<input type="submit" class="button" value="${ui.message("adminui.addNewRole.label")}" onclick="javascript:window.location='/${ contextPath }/adminui/metadata/roles/role.page'"/>
+<input type="submit" class="button" value="${ui.message("adminui.addNewRole.label")}" onclick="window.location='/${ contextPath }/adminui/metadata/roles/role.page'"/>
 
 <hr>
 <table id="list-roles" cellspacing="0" cellpadding="2">

@@ -11,7 +11,7 @@
 
 <h3>${ ui.message("adminui.managePrivileges.title") }</h3>
 
-<input type="submit" class="button" value="${ui.message("adminui.addNewPrivilege.label")}" onclick="javascript:window.location='${ui.pageLink("adminui","metadata/privileges/privilege", [action: 'add'])}'"/>
+<input type="submit" class="button" value="${ui.message("adminui.addNewPrivilege.label")}" onclick="window.location='${ui.pageLink("adminui","metadata/privileges/privilege", [action: 'add'])}'"/>
 <br />
 <br />
 <table>

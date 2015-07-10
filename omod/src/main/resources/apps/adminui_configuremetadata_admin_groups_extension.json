@@ -2,6 +2,7 @@
     {
         "id": "org.openmrs.module.adminui.locations.group",
         "extensionPointId": "org.openmrs.module.coreapps.adminGroups",
+        "type": "group",
         "label": "adminui.locations.label",
         "icon": "icon-map-marker"
     },
@@ -9,6 +10,7 @@
     {
         "id": "org.openmrs.module.adminui.encounters.group",
         "extensionPointId": "org.openmrs.module.coreapps.adminGroups",
+        "type": "group",
         "label": "adminui.encounters.title",
         "icon": "icon-list"
     },
@@ -16,6 +18,7 @@
     {
         "id": "org.openmrs.module.adminui.rolesAndPrivileges.group",
         "extensionPointId": "org.openmrs.module.coreapps.adminGroups",
+        "type": "group",
         "label": "adminui.rolesAndPrivileges.title",
         "icon": "icon-cog"
     }

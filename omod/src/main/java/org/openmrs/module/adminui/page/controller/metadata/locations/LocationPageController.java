@@ -14,6 +14,7 @@
 
 package org.openmrs.module.adminui.page.controller.metadata.locations;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Location;
@@ -28,11 +29,8 @@ import org.openmrs.ui.framework.annotation.SpringBean;
 import org.openmrs.ui.framework.page.PageModel;
 import org.openmrs.validator.LocationValidator;
 import org.springframework.context.MessageSource;
-import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -66,19 +64,17 @@ public class LocationPageController {
     }
 
     /**
-     *
      * @param model
      * @param location
      * @param errors
      * @param locationService
      * @param locationValidator
      * @param messageSource
-     * @param messageSourceService
      * @param request
      * @return
      */
     @RequestMapping(value = "/save", method = RequestMethod.POST)
-    public String post(PageModel model, @ModelAttribute("location") @BindParams Location location,
+    public String post(PageModel model, @RequestParam(value = "locationId", required = false) @BindParams Location location,
                        BindingResult errors,
                        @SpringBean("locationService") LocationService locationService,
                        @SpringBean("locationValidator") LocationValidator locationValidator,
@@ -87,19 +83,21 @@ public class LocationPageController {
                        @RequestParam(required = false, value = "retire") String retireFlag,
                        HttpServletRequest request) {
 
-        Errors newErrors = new BindException(location, "location");
-        locationValidator.validate(location, newErrors);
-
+        locationValidator.validate(location, errors);
         String[] locationTags = request.getParameterValues("locTags");
         Set<LocationTag> tags = new HashSet<LocationTag>();
-
-        if (locationTags != null && locationTags.length > 0) {
+        if (!ArrayUtils.isEmpty(locationTags)) {
             for (String x : locationTags) {
-                LocationTag tag = locationService.getLocationTagByName(x);
-                tags.add(tag);
+                LocationTag tag = locationService.getLocationTag(Integer.valueOf(x));
+                if (tag != null) {
+                    tags.add(tag);
+                }
             }
             location.setTags(tags);
+        } else {
+            tags = null;
         }
+        location.setTags(tags);
 
         LocationAttribute attr = new LocationAttribute();
         List<LocationAttributeType> locationAttributeList = locationService.getAllLocationAttributeTypes();
@@ -109,7 +107,7 @@ public class LocationPageController {
             attr.setLocation(location);
         }
 
-        if (!newErrors.hasErrors()) {
+        if (!errors.hasErrors()) {
             try {
                 if (saveFlag.length() > 3) {
                     locationService.saveLocation(location);
@@ -129,8 +127,11 @@ public class LocationPageController {
             sendErrorMessage(errors, messageSource, request);
         }
 
-        model.addAttribute("errors", newErrors);
+        model.addAttribute("errors", errors);
         model.addAttribute("location", location);
+        model.addAttribute("existingLocations", locationService.getAllLocations());
+        model.addAttribute("locationTags", locationService.getAllLocationTags());
+        model.addAttribute("attributeTypes", locationService.getAllLocationAttributeTypes());
 
         return "metadata/locations/location";
 

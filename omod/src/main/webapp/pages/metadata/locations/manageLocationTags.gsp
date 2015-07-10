@@ -11,9 +11,7 @@
     ];
 </script>
 
-<h3>${ ui.message("adminui.manageLocationTags.label") }</h3>
-
- <input type="submit" class="button" value="${ui.message("adminui.addLocationTag.label")}" onclick="javascript:window.location='/${ contextPath }/adminui/metadata/locations/createLocationTag.page'"/>
+<input type="submit" class="button" value="${ui.message("adminui.addLocationTag.label")}" onclick="window.location='/${ contextPath }/adminui/metadata/locations/locationTag.page'"/>
 
 <br><br>
 
@@ -47,9 +45,8 @@
 			</td>
 
 			<td>
-	            <a href="/${ contextPath }/adminui/metadata/locations/createLocationTag.page?locationTagId=${ it.id }">
-	                <button>${ ui.message("general.edit") }</button>
-	            </a>
+	            <i class="icon-pencil edit-action" title="${ ui.message("general.edit") }"
+				   onclick="location.href='${ui.pageLink("adminui", "metadata/locations/locationTag",[locationTagId: it.id])}'"></i>
         	</td>
 		</tr>
 		<% } %>

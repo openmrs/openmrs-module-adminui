@@ -59,14 +59,13 @@
     });
 </script>
 
-<h1>
-    <h3>${ (createLocation) ? ui.message("adminui.createLocation") : ui.message("adminui.editLocation") }</h3>
-</h1>
+<h2>${ (createLocation) ? ui.message("adminui.addNewLocation.label") : ui.message("adminui.editLocation.label") }</h2>
+
 
 <form class="simple-form-ui" method="post" id="locationForm" autocomplete="off">
 <fieldset>
     ${ui.includeFragment("uicommons", "field/text", [
-            label        : ui.message("adminui.location.name")+"*",
+            label        : ui.message("general.name")+"*",
             formFieldName: "name",
             id           : "name",
             maxLength    : 101,
@@ -74,7 +73,7 @@
     ])}
 
     ${ui.includeFragment("uicommons", "field/textarea", [
-            label        : ui.message("adminui.location.description"),
+            label        : ui.message("general.description"),
             formFieldName: "description",
             id           : "description",
             initialValue : (location.description ?: '')
@@ -146,14 +145,14 @@
         ${ ui.includeFragment("uicommons", "field/checkbox", [
             label: ui.format(it),
             formFieldName: "locTags",
-            value: it,
-            checked: location.tags?.contains(it)
+            value: it.id,
+            checked: location.tags.contains(it)
         ])}
 
     <% } %>
 
     <div>
-        <input type="button" class="cancel" value='${ui.message("general.cancel")}' onclick='javascript:window.location="/${ contextPath }/adminui/metadata/locations/manageLocations.page"' />
+        <input type="button" class="cancel" value='${ui.message("general.cancel")}' onclick='window.location="/${ contextPath }/adminui/metadata/locations/manageLocations.page"' />
         <input type="submit" class="confirm" name="save" id="save-button" value="${ui.message("general.save")}"/>
     </div>
     </fieldset>
@@ -162,13 +161,11 @@
             <div>
                 <fieldset>
                     ${ui.includeFragment("uicommons", "field/text", [
-                        label        : ui.message("adminui.location.retireReason"),
+                        label        : ui.message("general.retireReason"),
                         formFieldName: "retireReason",
                         id           : "retireReason",
                         initialValue : (location.retireReason ?: '')
                     ])}
-
-                    <div>
                     <input type="submit" class="button" name="retire" id="retire-button" value="${ui.message("adminui.location.retire")}"/>
                 </fieldset>
             </div>

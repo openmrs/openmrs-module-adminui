@@ -11,17 +11,15 @@
     ];
 </script>
 
- <h3>${ ui.message("adminui.manageLocationAttributeTypes.label") }</h3>
-
- <input type="submit" class="button" value="${ui.message("adminui.addLocationAttributeType.label")}" onclick="javascript:window.location='/${ contextPath }/adminui/metadata/locations/createLocationAttributeType.page'"/>
+<input type="submit" class="button" value="${ui.message("adminui.addNewLocationAttributeType.label")}" onclick="window.location='/${ contextPath }/adminui/metadata/locations/locationAttributeType.page'"/>
 
 <br><br>
 
  <table id="list-attributeTypes" cellspacing="0" cellpadding="2">
 	<thead>
 		<tr>
-			<th>${ ui.message("adminui.locationAttributeType.name")}</th>
-			<th>${ ui.message("adminui.locationAttributeType.description") }</th>
+			<th>${ ui.message("general.name")}</th>
+			<th>${ ui.message("general.description") }</th>
 			<th>${ ui.message("adminui.locationAttributeType.datatypeConfig") }</th>
 			<th>${ ui.message("adminui.locationAttributeType.dateCreated") }</th>
             <th></th>
@@ -47,9 +45,8 @@
 			</td>
 
 			<td>
-	            <a href="/${ contextPath }/adminui/metadata/locations/createLocationAttributeType.page?locationAttributeTypeId=${ it.id }">
-	                <button>${ ui.message("general.edit") }</button>
-	            </a>
+	            <i class="icon-pencil edit-action" title="${ ui.message("general.edit") }"
+				   onclick="location.href='${ui.pageLink("adminui", "metadata/locations/locationAttributeType",[locationAttributeTypeId: it.id])}'"></i>
         	</td>
 		</tr>
 		<% } %>
