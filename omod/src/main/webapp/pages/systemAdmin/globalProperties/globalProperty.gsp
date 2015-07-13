@@ -101,7 +101,7 @@
     ])}
 
     <div>
-        <input type="button" class="cancel" value="${ui.message("general.cancel")}" onclick="javascript:window.location='/${ contextPath }/adminui/systemadmin/globalproperties/manageGlobalProperties.page'"/>
+        <input type="button" class="cancel" value="${ui.message("general.cancel")}" onclick="window.location='/${ contextPath }/adminui/systemadmin/globalproperties/manageGlobalProperties.page'"/>
         <input type="submit" class="confirm" name="save" id="save-button" value="${ui.message("general.save")}"/>
     </div>
     </fieldset>

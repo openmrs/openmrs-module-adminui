@@ -14,7 +14,7 @@
 <script type="text/javascript">
     var breadcrumbs = [
         { icon: "icon-home", link: '/' + OPENMRS_CONTEXT_PATH + '/index.htm' },
-        { label: "${ ui.message('coreapps.app.configureMetadata.label')}" , link: '${ui.pageLink("coreapps", "configuremetadata/configureMetadata")}'},
+        { label: "${ ui.message('adminui.app.configureMetadata.label')}" , link: '${ui.pageLink("adminui", "metadata/configureMetadata")}'},
         { label: "${ ui.message("adminui.manageLocations.label")}", link: '${ui.pageLink("adminui","metadata/locations/manageLocations")}' },
         { label: "${ (createLocation) ? ui.message("adminui.createLocation.locationManagement.label") : ui.message("adminui.editLocation.locationManagement.label")}" }
     ];
@@ -146,7 +146,7 @@
             label: ui.format(it),
             formFieldName: "locTags",
             value: it.id,
-            checked: location.tags.contains(it)
+            checked: location.tags && location.tags.contains(it)
         ])}
 
     <% } %>

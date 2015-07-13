@@ -1,7 +1,7 @@
 [
     {
-        "id": "org.openmrs.module.adminui.manageLocations.link",
-        "extensionPointId": "org.openmrs.module.coreapps.adminLinks",
+        "id": "${project.parent.groupId}.${project.parent.artifactId}.manageLocations.link",
+        "extensionPointId": "${project.parent.groupId}.${project.parent.artifactId}.adminLinks",
         "type": "link",
         "label": "adminui.manageLocations.label",
         "url": "adminui/metadata/locations/manageLocations.page",
@@ -12,8 +12,8 @@
     },
 
     {
-        "id": "org.openmrs.module.adminui.manageLocationTags.link",
-        "extensionPointId": "org.openmrs.module.coreapps.adminLinks",
+        "id": "${project.parent.groupId}.${project.parent.artifactId}.manageLocationTags.link",
+        "extensionPointId": "${project.parent.groupId}.${project.parent.artifactId}.adminLinks",
         "type": "link",
         "label": "adminui.manageLocationTags.label",
         "url": "adminui/metadata/locations/manageLocationTags.page",
@@ -24,8 +24,8 @@
     },
 
     {
-        "id": "org.openmrs.module.adminui.manageLocationAttributeTypes.link",
-        "extensionPointId": "org.openmrs.module.coreapps.adminLinks",
+        "id": "${project.parent.groupId}.${project.parent.artifactId}.manageLocationAttributeTypes.link",
+        "extensionPointId": "${project.parent.groupId}.${project.parent.artifactId}.adminLinks",
         "type": "link",
         "label": "adminui.manageLocationAttributeTypes.label",
         "url": "adminui/metadata/locations/manageLocationAttributeTypes.page",
@@ -36,8 +36,8 @@
     },
 
     {
-        "id": "org.openmrs.module.adminui.locationHierarchy.link",
-        "extensionPointId": "org.openmrs.module.coreapps.adminLinks",
+        "id": "${project.parent.groupId}.${project.parent.artifactId}.locationHierarchy.link",
+        "extensionPointId": "${project.parent.groupId}.${project.parent.artifactId}.adminLinks",
         "type": "link",
         "label": "adminui.locationHierarchy.label",
         "url": "adminui/metadata/locations/locationHierarchy.page",
@@ -48,8 +48,8 @@
     },
 
     {
-        "id": "org.openmrs.module.adminui.encounters",
-        "extensionPointId": "org.openmrs.module.coreapps.adminLinks",
+        "id": "${project.parent.groupId}.${project.parent.artifactId}.encounters",
+        "extensionPointId": "${project.parent.groupId}.${project.parent.artifactId}.adminLinks",
         "type": "link",
         "label": "adminui.manageEncounterTypes.title",
         "url": "adminui/metadata/encounters/encountertypes/manageEncounterTypes.page",
@@ -60,26 +60,26 @@
     },
 
     {
-        "id": "org.openmrs.module.adminui.roles",
-        "extensionPointId": "org.openmrs.module.coreapps.adminLinks",
+        "id": "${project.parent.groupId}.${project.parent.artifactId}.roles",
+        "extensionPointId": "${project.parent.groupId}.${project.parent.artifactId}.adminLinks",
         "type": "link",
         "label": "adminui.manageRoles.title",
         "url": "adminui/metadata/roles/manageRoles.page",
         "requiredPrivilege": "Manage Roles",
         "extensionParams":{
-            "group": "org.openmrs.module.adminui.rolesAndPrivileges.group"
+            "group": "${project.parent.groupId}.${project.parent.artifactId}.rolesAndPrivileges.group"
         }
     },
 
     {
-        "id": "org.openmrs.module.adminui.Privileges",
-        "extensionPointId": "org.openmrs.module.coreapps.adminLinks",
+        "id": "${project.parent.groupId}.${project.parent.artifactId}.Privileges",
+        "extensionPointId": "${project.parent.groupId}.${project.parent.artifactId}.adminLinks",
         "type": "link",
         "label": "adminui.managePrivileges.title",
         "url": "adminui/metadata/privileges/managePrivileges.page",
         "requiredPrivilege": "Manage Privileges",
         "extensionParams":{
-            "group": "org.openmrs.module.adminui.rolesAndPrivileges.group"
+            "group": "${project.parent.groupId}.${project.parent.artifactId}.rolesAndPrivileges.group"
         }
     }
 ]

@@ -173,7 +173,7 @@ jq(document).ready(function() {
 </style>
 
 
-<h3>${ ui.message((createAccount) ? 'adminui.addAccount.label' : 'adminui.editAccount.label')}</h3>
+<h2>${ ui.message((createAccount) ? 'adminui.addAccount.label' : 'adminui.editAccount.label')}</h2>
 
 <form method="post" id="accountForm">
     <fieldset>
@@ -321,7 +321,7 @@ jq(document).ready(function() {
     </fieldset>
 
     <div id>
-        <input type="button" class="cancel" value="${ ui.message("general.cancel") }" onclick="javascript:window.location='/${ contextPath }/adminui/systemadmin/accounts/manageAccounts.page'" />
+        <input type="button" class="cancel" value="${ ui.message("general.cancel") }" onclick="window.location='/${ contextPath }/adminui/systemadmin/accounts/manageAccounts.page'" />
         <input type="submit" class="confirm" id="save-button" value="${ ui.message("general.save") }"  />
     </div>
 

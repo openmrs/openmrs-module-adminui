@@ -14,7 +14,7 @@
     <h3>${ ui.message("adminui.globalProperties.label") }</h3>
 </h1>
 
- <input type="submit" class="button" value="${ui.message("adminui.addGlobalProperty.label")}" onclick="javascript:window.location='/${ contextPath }/adminui/systemadmin/globalproperties/globalProperty.page'"/>
+ <input type="submit" class="button" value="${ui.message("adminui.addGlobalProperty.label")}" onclick="window.location='/${ contextPath }/adminui/systemadmin/globalproperties/globalProperty.page'"/>
 
 <br><br>
 

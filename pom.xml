@@ -39,6 +39,7 @@
 		<openMRSVersion>1.9.7</openMRSVersion>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <uicommonsVersion>1.6</uicommonsVersion>
+		<appuiVersion>1.4-SNAPSHOT</appuiVersion>
 	</properties>
 
 	<dependencyManagement>

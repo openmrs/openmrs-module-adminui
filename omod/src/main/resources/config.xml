@@ -20,6 +20,7 @@
         <require_module version="${appframeworkVersion}">org.openmrs.module.appframework</require_module>
         <require_module version="${providerManagementVersion}">org.openmrs.module.providermanagement</require_module>
         <require_module version="${uicommonsVersion}">org.openmrs.module.uicommons</require_module>
+		<require_module version="${appuiVersion}">org.openmrs.module.appui</require_module>
 	</require_modules>
 	
 	<!-- Module Activator -->
@@ -41,6 +42,11 @@
 		<file>messages_es.properties</file>
 	</messages>
 	<!-- /Internationalization -->
+
+	<privilege>
+		<name>App: ${project.parent.artifactId}.configuremetadata</name>
+		<description>Able to access configure metadata app</description>
+	</privilege>
 
 </module>
 

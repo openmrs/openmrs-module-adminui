@@ -1,0 +1,27 @@
+[
+    {
+        "id": "${project.parent.groupId}.${project.parent.artifactId}.configuremetadata",
+        "extensionPoints": [
+            {
+                "id": "${project.parent.groupId}.${project.parent.artifactId}.adminGroups",
+                "description": "${project.parent.artifactId}.configuremetadata.adminGroups.description"
+            },
+            {
+                "id": "${project.parent.groupId}.${project.parent.artifactId}.adminLinks",
+                "description": "${project.parent.artifactId}.configuremetadata.adminLinks.description"
+            }
+        ],
+        "extensions": [
+            {
+                "id": "${project.parent.groupId}.${project.parent.artifactId}.configuremetadata.homepageLink",
+                "extensionPointId": "org.openmrs.referenceapplication.homepageLink",
+                "type": "link",
+                "label": "adminui.app.configureMetadata.label",
+                "url": "adminui/metadata/configureMetadata.page",
+                "icon": "icon-tasks",
+                "order": 90,
+                "requiredPrivilege": "App: adminui.configuremetadata"
+            }
+        ]
+    }
+]

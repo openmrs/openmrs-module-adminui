@@ -1,6 +1,6 @@
 [
     {
-        "id": "org.openmrs.module.adminui.myAccount",
+        "id": "${project.parent.groupId}.${project.parent.artifactId}.myAccount",
         "extensionPointId": "org.openmrs.referenceapplication.homepageLink",
         "type": "link",
         "label": "adminui.app.myAccount.label",
@@ -8,7 +8,7 @@
         "icon": "icon-cog"
     },
     {
-        "id": "org.openmrs.module.adminui.accounts",
+        "id": "${project.parent.groupId}.${project.parent.artifactId}.accounts",
         "extensionPointId": "systemAdministration.apps",
         "type": "link",
         "label": "adminui.manageAccounts.label",
@@ -17,7 +17,7 @@
         "order": 20
     },
     {
-        "id": "org.openmrs.module.adminui.globalProperties",
+        "id": "${project.parent.groupId}.${project.parent.artifactId}.globalProperties",
         "extensionPointId": "systemAdministration.apps",
         "type": "link",
         "label": "adminui.manageGlobalProperties.label",

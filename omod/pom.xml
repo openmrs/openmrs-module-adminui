@@ -94,6 +94,14 @@
             <version>${uicommonsVersion}</version>
             <scope>provided</scope>
         </dependency>
+
+		<dependency>
+			<groupId>org.openmrs.module</groupId>
+			<artifactId>appui-omod</artifactId>
+			<type>jar</type>
+			<version>${appuiVersion}</version>
+			<scope>provided</scope>
+		</dependency>
 		
 		<!-- End OpenMRS core -->
 		
