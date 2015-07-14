@@ -65,7 +65,6 @@
 			<groupId>org.openmrs.module</groupId>
 			<artifactId>providermanagement-api</artifactId>
 			<type>jar</type>
-			<scope>provided</scope>
 		</dependency>
 				
 		<!-- End OpenMRS core -->
