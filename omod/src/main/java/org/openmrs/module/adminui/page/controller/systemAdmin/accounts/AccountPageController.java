@@ -3,196 +3,176 @@
  * Version 1.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
  * http://license.openmrs.org
- *
+ * <p/>
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
- *
+ * <p/>
  * Copyright (C) OpenMRS, LLC.  All Rights Reserved.
  */
 
 package org.openmrs.module.adminui.page.controller.systemadmin.accounts;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Person;
 import org.openmrs.api.APIException;
 import org.openmrs.api.AdministrationService;
-import org.openmrs.api.context.Context;
 import org.openmrs.messagesource.MessageSourceService;
 import org.openmrs.module.adminui.AdminUiConstants;
 import org.openmrs.module.adminui.account.AccountDomainWrapper;
 import org.openmrs.module.adminui.account.AccountService;
 import org.openmrs.module.adminui.account.AdminUiAccountValidator;
 import org.openmrs.module.providermanagement.api.ProviderManagementService;
+import org.openmrs.module.uicommons.UiCommonsConstants;
 import org.openmrs.module.uicommons.util.InfoErrorMessageUtil;
 import org.openmrs.ui.framework.annotation.BindParams;
 import org.openmrs.ui.framework.annotation.MethodParam;
 import org.openmrs.ui.framework.annotation.SpringBean;
 import org.openmrs.ui.framework.page.PageModel;
-import org.springframework.context.MessageSource;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+
 public class AccountPageController {
-	
-	protected final Log log = LogFactory.getLog(getClass());
-	
-	public AccountDomainWrapper getAccount(@RequestParam(value = "personId", required = false) Person person,
-	                                       @SpringBean("adminAccountService") AccountService accountService) {
-		
-		AccountDomainWrapper account;
-		
-		if (person == null) {
-			account = accountService.getAccountByPerson(new Person());
-		} else {
-			account = accountService.getAccountByPerson(person);
-			if (account == null)
-				throw new APIException("Failed to find user account matching person with id:" + person.getPersonId());
-		}
-		
-		return account;
-	}
-	
-	/**
-	 * @param model
-	 * @param account
-	 * @param accountService
-	 * @param administrationService
-	 * @param providerManagementService
-	 */
-	public void get(PageModel model, @MethodParam("getAccount") AccountDomainWrapper account,
-	                @SpringBean("adminAccountService") AccountService accountService,
-	                @SpringBean("adminService") AdministrationService administrationService,
-	                @SpringBean("providerManagementService") ProviderManagementService providerManagementService) {
-		
-		model.addAttribute("account", account);
-		model.addAttribute("capabilities", accountService.getAllCapabilities());
-		model.addAttribute("privilegeLevels", accountService.getAllPrivilegeLevels());
-		model.addAttribute("rolePrefix", AdminUiConstants.ROLE_PREFIX_CAPABILITY);
-		model.addAttribute("providerRoles", providerManagementService.getAllProviderRoles(false));
-	}
-	
-	/**
-	 * @param account
-	 * @param errors
-	 * @param userEnabled
-	 * @param providerEnabled
-	 * @param countTabs
-	 * @param messageSource
-	 * @param messageSourceService
-	 * @param accountService
-	 * @param administrationService
-	 * @param providerManagementService
-	 * @param accountValidator
-	 * @param model
-	 * @param request
-	 * @return
-	 */
-	public String post(@MethodParam("getAccount") @BindParams AccountDomainWrapper account, BindingResult errors,
-	                   @RequestParam(value = "userEnabled", defaultValue = "false") boolean userEnabled,
-	                   @RequestParam(value = "providerEnabled", defaultValue = "false") boolean providerEnabled,
-	                   @RequestParam(value = "countTabs", defaultValue = "1") String countTabs,
-	                   @SpringBean("messageSource") MessageSource messageSource,
-	                   @SpringBean("messageSourceService") MessageSourceService messageSourceService,
-	                   @SpringBean("adminAccountService") AccountService accountService,
-	                   @SpringBean("adminService") AdministrationService administrationService,
-	                   @SpringBean("accountValidator") AdminUiAccountValidator accountValidator,
-	                   @SpringBean("providerManagementService") ProviderManagementService providerManagementService,
-	                   PageModel model, HttpServletRequest request) {
-		
-		int countUsers = Integer.parseInt(countTabs);
-		
-		ArrayList<String> username = new ArrayList<String>();
-		ArrayList<String> password = new ArrayList<String>();
-		ArrayList<String> confirmPassword = new ArrayList<String>();
-		ArrayList<String> privilegeLevel = new ArrayList<String>();
-		ArrayList<String[]> roles = new ArrayList<String[]>();
-		
-		if (userEnabled) {
-			
-			for (int i = 1; i <= countUsers; i++) {
-				username.add(request.getParameter("user" + i + "_username"));
-				password.add(request.getParameter("user" + i + "_password"));
-				confirmPassword.add(request.getParameter("user" + i + "_confirmPassword"));
-				privilegeLevel.add(request.getParameter("user" + i + "_privilegeLevel"));
-				roles.add(request.getParameterValues("user" + i + "_capabilities"));
-			}
-			
-			account.createRequiredUsers(countUsers);
-			account.setUsernames(username);
-			account.setPasswords(password);
-			account.setConfirmPasswords(confirmPassword);
-			account.setPrivilegeLevels(privilegeLevel);
-			account.setCapabilities(roles);
-			
-			accountValidator.validate(account, errors);
-		}
-		
-		if (!errors.hasErrors()) {
-			
-			try {
-				if (true)
-					throw new APIException("oope");
-				accountService.saveAccount(account);
-				InfoErrorMessageUtil.flashInfoMessage(request.getSession(), "adminui.account.saved");
-				
-				return "redirect:/adminui/systemAdmin/accounts/manageAccounts.page";
-			}
-			catch (Exception e) {
-				log.warn("Some error occurred while saving account details:", e);
-				InfoErrorMessageUtil.flashErrorMessage(request.getSession(), "adminui.account.error.save.fail");
-			}
-		} else {
-			sendErrorMessage(errors, messageSource, request);
-		}
-		
-		// reload page on error
-		// TODO: show password fields toggle should work better
-		
-		model.addAttribute("errors", errors);
-		model.addAttribute("account", account);
-		model.addAttribute("capabilities", accountService.getAllCapabilities());
-		model.addAttribute("privilegeLevels", accountService.getAllPrivilegeLevels());
-		model.addAttribute("rolePrefix", AdminUiConstants.ROLE_PREFIX_CAPABILITY);
-		model.addAttribute("allowedLocales", administrationService.getAllowedLocales());
-		model.addAttribute("providerRoles", providerManagementService.getAllProviderRoles(false));
-		
-		return "systemAdmin/accounts/account";
-		
-	}
-	
-	private void sendErrorMessage(BindingResult errors, MessageSource messageSource, HttpServletRequest request) {
-		List<ObjectError> allErrors = errors.getAllErrors();
-		String message = getMessageErrors(messageSource, allErrors);
-		request.getSession().setAttribute(AdminUiConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE, message);
-	}
-	
-	private String getMessageErrors(MessageSource messageSource, List<ObjectError> allErrors) {
-		String message = "";
-		for (ObjectError error : allErrors) {
-			Object[] arguments = error.getArguments();
-			String errorMessage = messageSource.getMessage(error.getCode(), arguments, Context.getLocale());
-			message = message.concat(replaceArguments(errorMessage, arguments).concat("<br>"));
-		}
-		return message;
-	}
-	
-	private String replaceArguments(String message, Object[] arguments) {
-		if (arguments != null) {
-			for (int i = 0; i < arguments.length; i++) {
-				String argument = (String) arguments[i];
-				message = message.replaceAll("\\{" + i + "\\}", argument);
-			}
-		}
-		return message;
-	}
-	
+
+    protected final Log log = LogFactory.getLog(getClass());
+
+    public AccountDomainWrapper getAccount(@RequestParam(value = "personId", required = false) Person person,
+                                           @SpringBean("adminAccountService") AccountService accountService) {
+
+        AccountDomainWrapper account;
+
+        if (person == null) {
+            account = accountService.getAccountByPerson(new Person());
+        } else {
+            account = accountService.getAccountByPerson(person);
+            if (account == null)
+                throw new APIException("Failed to find user account matching person with id:" + person.getPersonId());
+        }
+
+        return account;
+    }
+
+    /**
+     * @param model
+     * @param account
+     * @param accountService
+     * @param providerManagementService
+     */
+    public void get(PageModel model, @MethodParam("getAccount") AccountDomainWrapper account,
+                    @SpringBean("adminAccountService") AccountService accountService,
+                    @SpringBean("adminService") AdministrationService administrationService,
+                    @SpringBean("providerManagementService") ProviderManagementService providerManagementService) {
+
+        setModelAttributes(model, account, accountService, administrationService, providerManagementService);
+
+
+        model.addAttribute("account", account);
+        model.addAttribute("capabilities", accountService.getAllCapabilities());
+        model.addAttribute("privilegeLevels", accountService.getAllPrivilegeLevels());
+        model.addAttribute("rolePrefix", AdminUiConstants.ROLE_PREFIX_CAPABILITY);
+        model.addAttribute("providerRoles", providerManagementService.getAllProviderRoles(false));
+    }
+
+    /**
+     * @param account
+     * @param errors
+     * @param userEnabled
+     * @param providerEnabled
+     * @param countTabs
+     * @param messageSourceService
+     * @param accountService
+     * @param administrationService
+     * @param providerManagementService
+     * @param accountValidator
+     * @param model
+     * @param request
+     * @return
+     */
+    public String post(@MethodParam("getAccount") @BindParams AccountDomainWrapper account, BindingResult errors,
+                       @RequestParam(value = "userEnabled", defaultValue = "false") boolean userEnabled,
+                       @RequestParam(value = "providerEnabled", defaultValue = "false") boolean providerEnabled,
+                       @RequestParam(value = "countTabs", defaultValue = "1") String countTabs,
+                       @SpringBean("messageSourceService") MessageSourceService messageSourceService,
+                       @SpringBean("adminAccountService") AccountService accountService,
+                       @SpringBean("adminService") AdministrationService administrationService,
+                       @SpringBean("accountValidator") AdminUiAccountValidator accountValidator,
+                       @SpringBean("providerManagementService") ProviderManagementService providerManagementService,
+                       PageModel model, HttpServletRequest request) {
+
+        int countUsers = Integer.parseInt(countTabs);
+
+        ArrayList<String> username = new ArrayList<String>();
+        ArrayList<String> password = new ArrayList<String>();
+        ArrayList<String> confirmPassword = new ArrayList<String>();
+        ArrayList<String> privilegeLevel = new ArrayList<String>();
+        ArrayList<String[]> roles = new ArrayList<String[]>();
+
+        if (userEnabled) {
+
+            for (int i = 1; i <= countUsers; i++) {
+                username.add(request.getParameter("user" + i + "_username"));
+                password.add(request.getParameter("user" + i + "_password"));
+                confirmPassword.add(request.getParameter("user" + i + "_confirmPassword"));
+                privilegeLevel.add(request.getParameter("user" + i + "_privilegeLevel"));
+                roles.add(request.getParameterValues("user" + i + "_capabilities"));
+            }
+
+            account.createRequiredUsers(countUsers);
+            account.setUsernames(username);
+            account.setPasswords(password);
+            account.setConfirmPasswords(confirmPassword);
+            account.setPrivilegeLevels(privilegeLevel);
+            account.setCapabilities(roles);
+        }
+
+        if (providerEnabled) {
+            //TODO set provider details
+        }
+
+        accountValidator.validate(account, errors);
+        if (!errors.hasErrors()) {
+            try {
+                accountService.saveAccount(account);
+                InfoErrorMessageUtil.flashInfoMessage(request.getSession(), "adminui.account.saved");
+                return "redirect:/adminui/systemadmin/accounts/manageAccounts.page";
+            } catch (Exception e) {
+                errors.reject("adminui.account.error.save.fail");
+            }
+        }
+
+        setModelAttributes(model, account, accountService, administrationService, providerManagementService);
+        sendErrorMessage(errors, model, messageSourceService, request);
+
+        return "systemadmin/accounts/account";
+
+    }
+
+    public void setModelAttributes(PageModel model, AccountDomainWrapper account, AccountService accountService, AdministrationService administrationService, ProviderManagementService providerManagementService) {
+        model.addAttribute("account", account);
+        model.addAttribute("capabilities", accountService.getAllCapabilities());
+        model.addAttribute("privilegeLevels", accountService.getAllPrivilegeLevels());
+        model.addAttribute("rolePrefix", AdminUiConstants.ROLE_PREFIX_CAPABILITY);
+        model.addAttribute("allowedLocales", administrationService.getAllowedLocales());
+        model.addAttribute("providerRoles", providerManagementService.getAllProviderRoles(false));
+    }
+
+    private void sendErrorMessage(BindingResult errors, PageModel model, MessageSourceService mss, HttpServletRequest request) {
+        model.addAttribute("errors", errors);
+        StringBuffer errorMessage = new StringBuffer(mss.getMessage("error.failed.validation"));
+        errorMessage.append("<ul>");
+        for (ObjectError error : errors.getAllErrors()) {
+            errorMessage.append("<li>");
+            errorMessage.append(mss.getMessage(error.getCode(), error.getArguments(),
+                    error.getDefaultMessage(), null));
+            errorMessage.append("</li>");
+        }
+        errorMessage.append("</ul>");
+        request.getSession().setAttribute(UiCommonsConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE, errorMessage.toString());
+    }
 }
