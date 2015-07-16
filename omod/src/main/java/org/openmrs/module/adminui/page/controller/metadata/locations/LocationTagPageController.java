@@ -17,6 +17,7 @@ package org.openmrs.module.adminui.page.controller.metadata.locations;
 import org.openmrs.LocationTag;
 import org.openmrs.api.LocationService;
 import org.openmrs.module.adminui.AdminUiConstants;
+import org.openmrs.module.uicommons.UiCommonsConstants;
 import org.openmrs.ui.framework.annotation.BindParams;
 import org.openmrs.ui.framework.annotation.SpringBean;
 import org.openmrs.ui.framework.page.PageModel;
@@ -54,15 +55,15 @@ public class LocationTagPageController {
             try {
                 if (saveFlag.length() > 3) {
                     locationService.saveLocationTag(locationTag);
-                    request.getSession().setAttribute(AdminUiConstants.SESSION_ATTRIBUTE_INFO_MESSAGE, "adminui.locationTag.saved");
+                    request.getSession().setAttribute(UiCommonsConstants.SESSION_ATTRIBUTE_INFO_MESSAGE, "adminui.locationTag.saved");
                 } else if (retireFlag.length() > 3) {
                     String reason = request.getParameter("retireReason");
                     locationService.retireLocationTag(locationTag, reason);
-                    request.getSession().setAttribute(AdminUiConstants.SESSION_ATTRIBUTE_INFO_MESSAGE, "adminui.locationTag.retired");
+                    request.getSession().setAttribute(UiCommonsConstants.SESSION_ATTRIBUTE_INFO_MESSAGE, "adminui.locationTag.retired");
                 }
                 return "redirect:/adminui/metadata/locations/manageLocationTags.page";
             } catch (Exception e) {
-                request.getSession().setAttribute(AdminUiConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE, "adminui.save.fail");
+                request.getSession().setAttribute(UiCommonsConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE, "adminui.save.fail");
             }
         } else {
 

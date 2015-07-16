@@ -19,46 +19,30 @@ import org.openmrs.api.PasswordException;
 import org.openmrs.api.UserService;
 import org.openmrs.api.context.Context;
 import org.openmrs.api.db.DAOException;
-import org.openmrs.messagesource.MessageSourceService;
-import org.openmrs.module.adminui.AdminUiConstants;
+import org.openmrs.module.uicommons.UiCommonsConstants;
+import org.openmrs.module.uicommons.util.InfoErrorMessageUtil;
 import org.openmrs.ui.framework.annotation.BindParams;
-import org.openmrs.ui.framework.annotation.MethodParam;
 import org.openmrs.ui.framework.annotation.SpringBean;
 import org.openmrs.ui.framework.page.PageModel;
 import org.openmrs.util.OpenmrsConstants;
 import org.openmrs.util.OpenmrsUtil;
-import org.springframework.context.MessageSource;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 public class ChangePasswordPageController {
 
-    public String get(PageModel model) {
-        setModelForView(model);
-
-        return "myaccount/changePassword";
+    public void get(PageModel model) {
+        setModelAttributes(model);
     }
 
-    public void setModelForView(PageModel model) {
+    public void setModelAttributes(PageModel model) {
         model.addAttribute("passwordMinLength",
                 Context.getAdministrationService().getGlobalProperty(OpenmrsConstants.GP_PASSWORD_MINIMUM_LENGTH, "8"));
     }
 
-    public ChangePassword getChangePassword(@RequestParam(value = "oldPassword", required = false) String oldPassword,
-                                            @RequestParam(value = "newPassword", required = false) String newPassword,
-                                            @RequestParam(value = "confirmPassword", required = false) String confirmPassword) {
-
-        return new ChangePassword(oldPassword, newPassword, confirmPassword);
-    }
-
-    public String post(@MethodParam("getChangePassword") @BindParams ChangePassword changePassword, BindingResult errors,
-                       @SpringBean("userService") UserService userService,
-                       @SpringBean("messageSourceService") MessageSourceService messageSourceService,
-                       @SpringBean("messageSource") MessageSource messageSource, HttpServletRequest request, PageModel model) {
+    public String post(PageModel model, @BindParams ChangePassword changePassword, BindingResult errors,
+                       @SpringBean("userService") UserService userService, HttpServletRequest request) {
 
         User user = Context.getAuthenticatedUser();
         try {
@@ -68,49 +52,22 @@ public class ChangePasswordPageController {
         }
 
         if (errors.hasErrors()) {
-            sendErrorMessage(errors, messageSource, request);
             model.addAttribute("errors", errors);
-            setModelForView(model);
+            setModelAttributes(model);
             return "myaccount/changePassword";
         } else {
-            return changePasswords(changePassword, userService, messageSourceService, request, model);
+            try {
+                userService.changePassword(changePassword.getOldPassword(), changePassword.getNewPassword());
+                InfoErrorMessageUtil.flashInfoMessage(request.getSession(), "emr.account.changePassword.success");
+                return "myaccount/myAccount";
+            } catch (DAOException e) {
+                request.getSession().setAttribute(
+                        UiCommonsConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE, "adminui.account.changePassword.fail");
+
+                setModelAttributes(model);
+                return "myaccount/changePassword";
+            }
         }
-    }
-
-    private String changePasswords(ChangePassword changePassword, UserService userService,
-                                   MessageSourceService messageSourceService, HttpServletRequest request, PageModel model) {
-
-        try {
-            userService.changePassword(changePassword.getOldPassword(), changePassword.getNewPassword());
-            request.getSession().setAttribute(AdminUiConstants.SESSION_ATTRIBUTE_INFO_MESSAGE,
-                    messageSourceService.getMessage("emr.account.changePassword.success", null, Context.getLocale()));
-            request.getSession().setAttribute(AdminUiConstants.SESSION_ATTRIBUTE_TOAST_MESSAGE, "true");
-            return "myaccount/myAccount";
-        } catch (DAOException e) {
-            request.getSession().setAttribute(
-                    AdminUiConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE,
-                    messageSourceService.getMessage("adminui.account.changePassword.fail", new Object[]{e.getMessage()},
-                            Context.getLocale()));
-            setModelForView(model);
-            return "myaccount/changePassword";
-        }
-
-    }
-
-    private void sendErrorMessage(BindingResult errors, MessageSource messageSource, HttpServletRequest request) {
-        List<ObjectError> allErrors = errors.getAllErrors();
-        String message = getMessageErrors(messageSource, allErrors);
-        request.getSession().setAttribute(AdminUiConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE, message);
-    }
-
-    private String getMessageErrors(MessageSource messageSource, List<ObjectError> allErrors) {
-        String message = "";
-        for (ObjectError error : allErrors) {
-            Object[] arguments = error.getArguments();
-            String errorMessage = messageSource.getMessage(error.getCode(), arguments, Context.getLocale());
-            message = message.concat(errorMessage.concat("<br>"));
-        }
-        return message;
     }
 
     private class ChangePassword {

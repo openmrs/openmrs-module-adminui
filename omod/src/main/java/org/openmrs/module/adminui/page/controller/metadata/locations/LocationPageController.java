@@ -24,6 +24,7 @@ import org.openmrs.LocationTag;
 import org.openmrs.api.LocationService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.adminui.AdminUiConstants;
+import org.openmrs.module.uicommons.UiCommonsConstants;
 import org.openmrs.ui.framework.annotation.BindParams;
 import org.openmrs.ui.framework.annotation.SpringBean;
 import org.openmrs.ui.framework.page.PageModel;
@@ -111,16 +112,16 @@ public class LocationPageController {
             try {
                 if (saveFlag.length() > 3) {
                     locationService.saveLocation(location);
-                    request.getSession().setAttribute(AdminUiConstants.SESSION_ATTRIBUTE_INFO_MESSAGE, "adminui.location.saved");
+                    request.getSession().setAttribute(UiCommonsConstants.SESSION_ATTRIBUTE_INFO_MESSAGE, "adminui.location.saved");
                 } else if (retireFlag.length() > 3) {
                     String reason = request.getParameter("retireReason");
                     locationService.retireLocation(location, reason);
-                    request.getSession().setAttribute(AdminUiConstants.SESSION_ATTRIBUTE_INFO_MESSAGE, "adminui.location.retired");
+                    request.getSession().setAttribute(UiCommonsConstants.SESSION_ATTRIBUTE_INFO_MESSAGE, "adminui.location.retired");
                 }
                 return "redirect:/adminui/metadata/locations/manageLocations.page";
             } catch (Exception e) {
                 log.warn("Some error occurred while saving location details:", e);
-                request.getSession().setAttribute(AdminUiConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE,
+                request.getSession().setAttribute(UiCommonsConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE,
                         "adminui.save.fail");
             }
         } else {
@@ -140,7 +141,7 @@ public class LocationPageController {
     private void sendErrorMessage(BindingResult errors, MessageSource messageSource, HttpServletRequest request) {
         List<ObjectError> allErrors = errors.getAllErrors();
         String message = getMessageErrors(messageSource, allErrors);
-        request.getSession().setAttribute(AdminUiConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE,
+        request.getSession().setAttribute(UiCommonsConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE,
                 message);
     }
 

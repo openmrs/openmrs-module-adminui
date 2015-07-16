@@ -18,6 +18,7 @@ import org.openmrs.LocationAttributeType;
 import org.openmrs.api.LocationService;
 import org.openmrs.customdatatype.CustomDatatypeUtil;
 import org.openmrs.module.adminui.AdminUiConstants;
+import org.openmrs.module.uicommons.UiCommonsConstants;
 import org.openmrs.ui.framework.annotation.BindParams;
 import org.openmrs.ui.framework.annotation.SpringBean;
 import org.openmrs.ui.framework.page.PageModel;
@@ -62,18 +63,18 @@ public class LocationAttributeTypePageController {
             try {
                 if (saveFlag.length() > 3) {
                     locationService.saveLocationAttributeType(locationAttributeType);
-                    request.getSession().setAttribute(AdminUiConstants.SESSION_ATTRIBUTE_INFO_MESSAGE, "adminui.locationAttributeType.saved");
+                    request.getSession().setAttribute(UiCommonsConstants.SESSION_ATTRIBUTE_INFO_MESSAGE, "adminui.locationAttributeType.saved");
                 } else if (retireFlag.length() > 3) {
                     String reason = request.getParameter("retireReason");
                     locationService.retireLocationAttributeType(locationAttributeType, reason);
-                    request.getSession().setAttribute(AdminUiConstants.SESSION_ATTRIBUTE_INFO_MESSAGE, "adminui.locationAttributeType.retired");
+                    request.getSession().setAttribute(UiCommonsConstants.SESSION_ATTRIBUTE_INFO_MESSAGE, "adminui.locationAttributeType.retired");
                 } else if (purgeFlag.length() > 3) {
                     locationService.purgeLocationAttributeType(locationAttributeType);
-                    request.getSession().setAttribute(AdminUiConstants.SESSION_ATTRIBUTE_INFO_MESSAGE, "adminui.locationAttributeType.purged");
+                    request.getSession().setAttribute(UiCommonsConstants.SESSION_ATTRIBUTE_INFO_MESSAGE, "adminui.locationAttributeType.purged");
                 }
                 return "redirect:/adminui/metadata/locations/manageLocationAttributeTypes.page";
             } catch (Exception e) {
-                request.getSession().setAttribute(AdminUiConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE, "adminui.save.fail");
+                request.getSession().setAttribute(UiCommonsConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE, "adminui.save.fail");
             }
         } else {
         }

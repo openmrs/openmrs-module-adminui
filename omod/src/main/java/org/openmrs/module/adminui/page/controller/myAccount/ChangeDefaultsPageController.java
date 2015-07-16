@@ -17,92 +17,52 @@ package org.openmrs.module.adminui.page.controller.myaccount;
 import org.openmrs.User;
 import org.openmrs.api.UserService;
 import org.openmrs.api.context.Context;
-import org.openmrs.messagesource.MessageSourceService;
-import org.openmrs.module.adminui.AdminUiConstants;
+import org.openmrs.module.uicommons.UiCommonsConstants;
+import org.openmrs.module.uicommons.util.InfoErrorMessageUtil;
 import org.openmrs.ui.framework.annotation.BindParams;
-import org.openmrs.ui.framework.annotation.MethodParam;
 import org.openmrs.ui.framework.annotation.SpringBean;
 import org.openmrs.ui.framework.page.PageModel;
 import org.openmrs.util.OpenmrsConstants;
-import org.springframework.context.MessageSource;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 import java.util.Map;
 
 public class ChangeDefaultsPageController {
 
-    public String get(PageModel pageModel) {
-        if (Context.isAuthenticated()) {
-            User user = Context.getAuthenticatedUser();
-            Map<String, String> props = user.getUserProperties();
-            UserDefaults userDefaults = new UserDefaults();
-            userDefaults.setDefaultLocale(props.get(OpenmrsConstants.USER_PROPERTY_DEFAULT_LOCALE));
-            userDefaults.setProficientLocales(props.get(OpenmrsConstants.USER_PROPERTY_PROFICIENT_LOCALES));
-            pageModel.addAttribute("userDefaults", userDefaults);
-            pageModel.addAttribute("locales", Context.getAdministrationService().getPresentationLocales());
-        }
-        return "myaccount/changeDefaults";
+    public void get(PageModel pageModel) {
+        User user = Context.getAuthenticatedUser();
+        Map<String, String> props = user.getUserProperties();
+        UserDefaults userDefaults = new UserDefaults();
+        userDefaults.setDefaultLocale(props.get(OpenmrsConstants.USER_PROPERTY_DEFAULT_LOCALE));
+        userDefaults.setProficientLocales(props.get(OpenmrsConstants.USER_PROPERTY_PROFICIENT_LOCALES));
+        pageModel.addAttribute("userDefaults", userDefaults);
+        pageModel.addAttribute("locales", Context.getAdministrationService().getPresentationLocales());
     }
 
-    public String post(@MethodParam("createUserDefaults") @BindParams UserDefaults defaults,
+    public String post(PageModel model, @BindParams UserDefaults userDefaults,
                        BindingResult errors,
                        @SpringBean("userService") UserService userService,
-                       @SpringBean("messageSourceService") MessageSourceService messageSourceService,
-                       @SpringBean("messageSource") MessageSource messageSource,
-                       HttpServletRequest request,
-                       PageModel model) {
-        if (errors.hasErrors()) {
-            sendErrorMessage(errors, messageSource, request, model);
-            return "myaccount/changeDefaults";
-        }
-        return saveDefaults(defaults, userService, messageSourceService, request);
-    }
+                       HttpServletRequest request) {
 
-    private void sendErrorMessage(BindingResult errors, MessageSource messageSource, HttpServletRequest request, PageModel model) {
-        if (errors.hasErrors()) {
-            List<ObjectError> allErrors = errors.getAllErrors();
-            String message = getMessageErrors(messageSource, allErrors);
-            request.getSession().setAttribute(AdminUiConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE, message);
-            model.addAttribute("errors", errors);
-        }
-    }
-
-    private String getMessageErrors(MessageSource messageSource, List<ObjectError> allErrors) {
-        String message = "";
-        if (allErrors != null && allErrors.isEmpty()) {
-            ObjectError error = allErrors.get(0);
-            Object[] arguments = error.getArguments();
-            message = messageSource.getMessage(error.getCode(), arguments, Context.getLocale());
-        }
-        return message;
-    }
-
-    public String saveDefaults(UserDefaults defaults, UserService userService, MessageSourceService messageSourceService,
-                               HttpServletRequest request) {
+        //TODO do some validation
         try {
             User user = Context.getAuthenticatedUser();
             Map<String, String> props = user.getUserProperties();
-            props.put(OpenmrsConstants.USER_PROPERTY_DEFAULT_LOCALE, defaults.getDefaultLocale());
-            props.put(OpenmrsConstants.USER_PROPERTY_PROFICIENT_LOCALES, defaults.getProficientLocales());
+            props.put(OpenmrsConstants.USER_PROPERTY_DEFAULT_LOCALE, userDefaults.getDefaultLocale());
+            props.put(OpenmrsConstants.USER_PROPERTY_PROFICIENT_LOCALES, userDefaults.getProficientLocales());
             user.setUserProperties(props);
             userService.saveUser(user, null);
-            request.getSession().setAttribute(AdminUiConstants.SESSION_ATTRIBUTE_INFO_MESSAGE,
-                    messageSourceService.getMessage("adminui.account.defaults.success", null, Context.getLocale()));
-            request.getSession().setAttribute(AdminUiConstants.SESSION_ATTRIBUTE_TOAST_MESSAGE, "true");
+            InfoErrorMessageUtil.flashInfoMessage(request.getSession(), "adminui.account.defaults.success");
         } catch (Exception ex) {
             request.getSession().setAttribute(
-                    AdminUiConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE,
-                    messageSourceService.getMessage("adminui.account.defaults.fail", null, Context.getLocale()));
+                    UiCommonsConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE, "adminui.account.defaults.fail");
             return "account/changeDefaults";
         }
-        return "myaccount/myAccount";
-    }
 
-    public UserDefaults createUserDefaults(String defaultLocale, String proficientLocales) {
-        return new UserDefaults(defaultLocale, proficientLocales);
+        model.addAttribute("userDefaults", userDefaults);
+        model.addAttribute("locales", Context.getAdministrationService().getPresentationLocales());
+        return "myaccount/myAccount";
     }
 
     public class UserDefaults {

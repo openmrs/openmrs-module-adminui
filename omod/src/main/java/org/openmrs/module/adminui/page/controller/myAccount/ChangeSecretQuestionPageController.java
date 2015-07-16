@@ -15,86 +15,46 @@
 package org.openmrs.module.adminui.page.controller.myaccount;
 
 import org.openmrs.api.UserService;
-import org.openmrs.api.context.Context;
-import org.openmrs.messagesource.MessageSourceService;
-import org.openmrs.module.adminui.AdminUiConstants;
+import org.openmrs.module.uicommons.UiCommonsConstants;
+import org.openmrs.module.uicommons.util.InfoErrorMessageUtil;
 import org.openmrs.ui.framework.annotation.BindParams;
-import org.openmrs.ui.framework.annotation.MethodParam;
 import org.openmrs.ui.framework.annotation.SpringBean;
 import org.openmrs.ui.framework.page.PageModel;
-import org.springframework.context.MessageSource;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 public class ChangeSecretQuestionPageController {
 
-    public String get(PageModel model) {
-        return "myaccount/changeSecretQuestion";
+    public void get(PageModel model) {
+        //TODO populate the model
+        SecretQuestion secretQuestion = null;
+        model.put("secretQuestion", secretQuestion);
     }
 
-    public String post(@MethodParam("createSecretQuestion") @BindParams SecretQuestion secretQuestion,
+    public String post(PageModel model, @BindParams SecretQuestion secretQuestion,
                        BindingResult errors,
                        @SpringBean("userService") UserService userService,
-                       @SpringBean("messageSourceService") MessageSourceService messageSourceService,
-                       @SpringBean("messageSource") MessageSource messageSource,
-                       HttpServletRequest request,
-                       PageModel model) {
-        validateSecretQuestion(secretQuestion, errors, messageSourceService);
-        if (errors.hasErrors()) {
-            sendErrorMessage(errors, messageSource, request, model);
+                       HttpServletRequest request) {
+
+        if (!secretQuestion.getAnswer().equals(secretQuestion.getConfirmAnswer())) {
+            model.put("secretQuestion", secretQuestion);
+            errors.rejectValue("confirmAnswer", "adminui.account.answerAndConfirmAnswer.doesNotMatch");
             return "myaccount/changeSecretQuestion";
         }
-        return changeSecretQuestion(secretQuestion, userService, messageSourceService, request);
+
+        return changeSecretQuestion(secretQuestion, userService, request);
     }
 
-    public SecretQuestion createSecretQuestion(String password, String question, String answer, String confirmAnswer) {
-        return new SecretQuestion(password, question, answer, confirmAnswer);
-    }
-
-    private String changeSecretQuestion(SecretQuestion secretQuestion, UserService userService,
-                                        MessageSourceService messageSourceService, HttpServletRequest request) {
+    private String changeSecretQuestion(SecretQuestion secretQuestion, UserService userService, HttpServletRequest request) {
         try {
             userService.changeQuestionAnswer(secretQuestion.getPassword(), secretQuestion.getQuestion(), secretQuestion.getAnswer());
-            request.getSession().setAttribute(AdminUiConstants.SESSION_ATTRIBUTE_INFO_MESSAGE,
-                    messageSourceService.getMessage("adminui.account.secretQuestion.success", null, Context.getLocale()));
-            request.getSession().setAttribute(AdminUiConstants.SESSION_ATTRIBUTE_TOAST_MESSAGE, "true");
+            InfoErrorMessageUtil.flashInfoMessage(request.getSession(), "adminui.account.secretQuestion.success");
         } catch (Exception ex) {
-            request.getSession().setAttribute(
-                    AdminUiConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE,
-                    messageSourceService.getMessage("adminui.account.secretQuestion.fail", new Object[]{ex.getMessage()},
-                            Context.getLocale()));
+            request.getSession().setAttribute(UiCommonsConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE, "registrationapp.save.fail");
             return "myaccount/changeSecretQuestion";
         }
         return "myaccount/myAccount";
-    }
-
-    private void validateSecretQuestion(SecretQuestion secretQuestion, BindingResult errors,
-                                        MessageSourceService messageSourceService) {
-        if (!secretQuestion.getAnswer().equals(secretQuestion.getConfirmAnswer())) {
-            errors.rejectValue("confirmAnswer", "adminui.account.answerAndConfirmAnswer.doesNotMatch",
-                    new Object[]{messageSourceService
-                            .getMessage("adminui.account.answerAndConfirmAnswer.doesNotMatch")}, null);
-        }
-    }
-
-    private void sendErrorMessage(BindingResult errors, MessageSource messageSource, HttpServletRequest request, PageModel model) {
-        List<ObjectError> allErrors = errors.getAllErrors();
-        String message = getMessageErrors(messageSource, allErrors);
-        request.getSession().setAttribute(AdminUiConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE, message);
-        model.addAttribute("errors", errors);
-    }
-
-    private String getMessageErrors(MessageSource messageSource, List<ObjectError> allErrors) {
-        String message = "";
-        if (allErrors != null && allErrors.isEmpty()) {
-            ObjectError error = allErrors.get(0);
-            Object[] arguments = error.getArguments();
-            message = messageSource.getMessage(error.getCode(), arguments, Context.getLocale());
-        }
-        return message;
     }
 
     public class SecretQuestion {
@@ -145,7 +105,7 @@ public class ChangeSecretQuestionPageController {
 
         @Override
         public String toString() {
-            return "Secret Question:Question=" + question + ", Answer=" + answer;
+            return "Question=" + question + ", Answer=" + answer;
         }
     }
 }
