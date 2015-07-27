@@ -70,13 +70,6 @@ public class AccountPageController {
                     @SpringBean("providerManagementService") ProviderManagementService providerManagementService) {
 
         setModelAttributes(model, account, accountService, administrationService, providerManagementService);
-
-
-        model.addAttribute("account", account);
-        model.addAttribute("capabilities", accountService.getAllCapabilities());
-        model.addAttribute("privilegeLevels", accountService.getAllPrivilegeLevels());
-        model.addAttribute("rolePrefix", AdminUiConstants.ROLE_PREFIX_CAPABILITY);
-        model.addAttribute("providerRoles", providerManagementService.getAllProviderRoles(false));
     }
 
     /**
