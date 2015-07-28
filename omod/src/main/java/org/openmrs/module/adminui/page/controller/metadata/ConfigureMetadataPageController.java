@@ -37,12 +37,11 @@ public class ConfigureMetadataPageController {
      *
      * @param model
      * @param appFrameworkService
-     * @throws IOException
      */
     public void get(PageModel model, @SpringBean("appFrameworkService") AppFrameworkService appFrameworkService, UiUtils ui) {
         //We need to keep the groups and links sorted by label
         //for consistent ordering every time the page gets loaded
-        Comparator comparator = new ExtensionByLabelComparator(ui);
+        ExtensionByLabelComparator comparator = new ExtensionByLabelComparator(ui);
         Map<Extension, Set<Extension>> adminGroupAndLinksMap = new TreeMap<Extension, Set<Extension>>(comparator);
         List<Extension> adminGroups = appFrameworkService.getExtensionsForCurrentUser(CONFIGURE_METADATA_ADMIN_GROUPS_EXTENSION_POINT_ID);
         List<Extension> adminLinks = appFrameworkService.getExtensionsForCurrentUser(CONFIGURE_METADATA_ADMIN_LINKS_EXTENSION_POINT_ID);
