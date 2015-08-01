@@ -1,11 +1,10 @@
 [
     {
-        "id": "${project.parent.groupId}.${project.parent.artifactId}.myAccount",
-        "extensionPointId": "org.openmrs.referenceapplication.homepageLink",
+        "id": "${project.parent.groupId}.${project.parent.artifactId}.myAccount.menuItem",
+        "extensionPointId": "org.openmrs.module.appui.header.userAccount.menuItems",
         "type": "link",
         "label": "adminui.app.myAccount.label",
-        "url": "adminui/myaccount/myAccount.page",
-        "icon": "icon-cog"
+        "url": "adminui/myaccount/myAccount.page"
     },
     {
         "id": "${project.parent.groupId}.${project.parent.artifactId}.accounts",
