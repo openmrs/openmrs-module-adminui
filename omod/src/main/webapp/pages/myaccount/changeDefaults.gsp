@@ -47,7 +47,7 @@ ${ui.includeFragment("uicommons", "validationMessages")}
                     label        : ui.message("adminui.account.proficientLocales"),
                     formFieldName: "proficientLocales",
                     initialValue : userDefaults.proficientLocales
-            ])} example: "en_US, en_GB, en, fr_RW"
+            ])} ${ui.message('adminui.example')}: "en_US, en_GB, en, fr_RW"
         </fieldset>
     </section>
 
@@ -55,7 +55,7 @@ ${ui.includeFragment("uicommons", "validationMessages")}
         <span class="title">${ui.message("adminui.confirm")}</span>
 
         <div id="confirmationQuestion">
-            Confirm submission?
+            ${ui.message('adminui.confirmSubmission')}
             <p style="display: inline">
                 <input type="submit" class="confirm right" value="${ui.message("adminui.confirm")}"/>
             </p>

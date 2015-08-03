@@ -57,7 +57,7 @@ ${ ui.includeFragment("uicommons", "validationMessages")}
     <div id="confirmation">
         <span class="title">${ui.message("adminui.confirm")}</span>
         <div id="confirmationQuestion">
-            Confirm submission?
+            ${ui.message('adminui.confirmSubmission')}
             <p style="display: inline">
                 <input type="submit" class="confirm right" value="${ui.message("adminui.confirm")}" />
             </p>
