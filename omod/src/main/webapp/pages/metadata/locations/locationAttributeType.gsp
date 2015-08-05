@@ -107,6 +107,7 @@
             label        : ui.message("general.description"),
             formFieldName: "description",
             id           : "description",
+
             initialValue : (locationAttributeType.description ?: ''),
             cols         : 54,
             rows: 3
@@ -116,7 +117,7 @@
             <tr class="adminui-no-border" >
                 <td class="adminui-no-border" valign="top">
                 ${ui.includeFragment("uicommons", "field/text", [
-                    label        : ui.message("adminui.locationAttributeType.minOccurs")+"<span class='adminui-text-red'>*</span>",
+                    label        : ui.message("adminui.minOccurs")+"<span class='adminui-text-red'>*</span>",
                     formFieldName: "minOccurs",
                     id           : "minOccurs",
                     maxLength    : 101,
@@ -125,7 +126,7 @@
                 </td>
                 <td class="adminui-no-border" valign="top" style="padding-left: 15px">
                 ${ui.includeFragment("uicommons", "field/text", [
-                    label        : ui.message("adminui.locationAttributeType.maxOccurs"),
+                    label        : ui.message("adminui.maxOccurs"),
                     formFieldName: "maxOccurs",
                     id           : "maxOccurs",
                     maxLength    : 101,
@@ -145,7 +146,7 @@
     ])}
 
     ${ui.includeFragment("uicommons", "field/textarea", [
-            label        : ui.message("adminui.locationAttributeType.datatypeConfig"),
+            label        : ui.message("adminui.datatypeConfig"),
             formFieldName: "datatypeConfig",
             id           : "datatypeConfig",
             initialValue : (locationAttributeType.datatypeConfig ?: ''),
@@ -154,7 +155,7 @@
     ])}
 
     ${ ui.includeFragment("uicommons", "field/dropDown", [
-            label: ui.message("adminui.locationAttributeType.preferredHandler"),
+            label: ui.message("adminui.preferredHandler"),
             emptyOptionLabel: ui.message("adminui.chooseOne"),
             formFieldName: "preferredHandlerClassname",
             id           : "preferredHandlerClassname",
@@ -163,7 +164,7 @@
     ])}
 
     ${ui.includeFragment("uicommons", "field/textarea", [
-            label        : ui.message("adminui.locationAttributeType.handlerConfig"),
+            label        : ui.message("adminui.handlerConfig"),
             formFieldName: "handlerConfig",
             id           : "handlerConfig",
             initialValue : (locationAttributeType.handlerConfig ?: ''),

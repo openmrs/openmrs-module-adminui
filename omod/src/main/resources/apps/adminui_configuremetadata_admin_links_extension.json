@@ -34,6 +34,18 @@
             "group": "org.openmrs.module.adminui.locations.group"
         }
     },
+    
+    {
+        "id": "${project.parent.groupId}.${project.parent.artifactId}.manageVisitAttributeTypes.link",
+        "extensionPointId": "${project.parent.groupId}.${project.parent.artifactId}.adminLinks",
+        "type": "link",
+        "label": "adminui.manageVisitAttributeTypes.title",
+        "url": "adminui/metadata/visits/visitattributetypes/manageVisitAttributeTypes.page",
+        "requiredPrivilege": "Manage Visit Attribute Types",
+        "extensionParams":{
+            "group": "org.openmrs.module.adminui.visits.group"
+        }
+    },
 
     {
         "id": "${project.parent.groupId}.${project.parent.artifactId}.locationHierarchy.link",

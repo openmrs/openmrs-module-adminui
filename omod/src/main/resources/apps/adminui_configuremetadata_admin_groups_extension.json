@@ -14,6 +14,14 @@
         "label": "adminui.encounters.title",
         "icon": "icon-list"
     },
+    
+    {
+        "id": "${project.parent.groupId}.${project.parent.artifactId}.visits.group",
+        "extensionPointId": "${project.parent.groupId}.${project.parent.artifactId}.adminGroups",
+        "type": "group",
+        "label": "adminui.visits.title",
+        "icon": "icon-list"
+    },
 
     {
         "id": "${project.parent.groupId}.${project.parent.artifactId}.rolesAndPrivileges.group",
