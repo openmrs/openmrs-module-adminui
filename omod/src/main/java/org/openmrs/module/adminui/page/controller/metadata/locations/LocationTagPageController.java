@@ -9,21 +9,25 @@
  */
 package org.openmrs.module.adminui.page.controller.metadata.locations;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.openmrs.LocationTag;
 import org.openmrs.api.LocationService;
-import org.openmrs.module.adminui.AdminUiConstants;
 import org.openmrs.module.uicommons.UiCommonsConstants;
+import org.openmrs.module.uicommons.util.InfoErrorMessageUtil;
 import org.openmrs.ui.framework.annotation.BindParams;
 import org.openmrs.ui.framework.annotation.SpringBean;
 import org.openmrs.ui.framework.page.PageModel;
 import org.openmrs.validator.LocationTagValidator;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.validation.BeanPropertyBindingResult;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 
 public class LocationTagPageController {
+
+    protected final Log log = LogFactory.getLog(getClass());
 
     public void get(PageModel model, @RequestParam(value = "locationTagId", required = false) Integer locationTagId,
                     @SpringBean("locationService") LocationService locationService) {
@@ -36,32 +40,23 @@ public class LocationTagPageController {
         model.addAttribute("locationTag", locationTag);
     }
 
-    public String post(PageModel model, @ModelAttribute("locationTag") @BindParams LocationTag locationTag,
-                       BindingResult errors,
+    public String post(PageModel model, @RequestParam(value = "locationTagId", required = false) @BindParams LocationTag locationTag,
                        @SpringBean("locationService") LocationService locationService,
                        @SpringBean("locationTagValidator") LocationTagValidator locationTagValidator,
-                       @RequestParam(required = false, value = "save") String saveFlag,
-                       @RequestParam(required = false, value = "retire") String retireFlag,
                        HttpServletRequest request) {
 
+        Errors errors = new BeanPropertyBindingResult(locationTag, "locationTag");
         locationTagValidator.validate(locationTag, errors);
 
         if (!errors.hasErrors()) {
             try {
-                if (saveFlag.length() > 3) {
-                    locationService.saveLocationTag(locationTag);
-                    request.getSession().setAttribute(UiCommonsConstants.SESSION_ATTRIBUTE_INFO_MESSAGE, "adminui.locationTag.saved");
-                } else if (retireFlag.length() > 3) {
-                    String reason = request.getParameter("retireReason");
-                    locationService.retireLocationTag(locationTag, reason);
-                    request.getSession().setAttribute(UiCommonsConstants.SESSION_ATTRIBUTE_INFO_MESSAGE, "adminui.locationTag.retired");
-                }
+                locationService.saveLocationTag(locationTag);
+                InfoErrorMessageUtil.flashInfoMessage(request.getSession(), "adminui.locationTag.save.success");
                 return "redirect:/adminui/metadata/locations/manageLocationTags.page";
             } catch (Exception e) {
-                request.getSession().setAttribute(UiCommonsConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE, "adminui.save.fail");
+                log.error("Failed to save location tag:", e);
+                request.getSession().setAttribute(UiCommonsConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE, "adminui.locationTag.save.fail");
             }
-        } else {
-
         }
 
         model.addAttribute("errors", errors);

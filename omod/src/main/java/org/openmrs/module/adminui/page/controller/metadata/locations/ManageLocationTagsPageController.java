@@ -9,18 +9,53 @@
  */
 package org.openmrs.module.adminui.page.controller.metadata.locations;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.openmrs.LocationTag;
 import org.openmrs.api.LocationService;
+import org.openmrs.module.uicommons.UiCommonsConstants;
+import org.openmrs.module.uicommons.util.InfoErrorMessageUtil;
 import org.openmrs.ui.framework.annotation.SpringBean;
 import org.openmrs.ui.framework.page.PageModel;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import javax.servlet.http.HttpServletRequest;
 
 public class ManageLocationTagsPageController {
-	
-	/**
-	 * @param model
-	 * @param locationService
-	 */
+
+    protected final Log log = LogFactory.getLog(getClass());
+
+    /**
+     * @param model
+     * @param locationService
+     */
     public void get(PageModel model, @SpringBean("locationService") LocationService locationService) {
         model.addAttribute("locationTags", locationService.getAllLocationTags(true));
     }
 
+    public String post(PageModel model, @RequestParam("locationTagId") LocationTag tag,
+                       @RequestParam("action") String action,
+                       @RequestParam(value = "reason", required = false) String reason,
+                       @SpringBean("locationService") LocationService locationService, HttpServletRequest request) {
+
+        try {
+            if ("retire".equals(action)) {
+                locationService.retireLocationTag(tag, reason);
+            } else if ("restore".equals(action)) {
+                locationService.unretireLocationTag(tag);
+            } else if ("purge".equals(action)) {
+                locationService.purgeLocationTag(tag);
+            }
+            InfoErrorMessageUtil.flashInfoMessage(request.getSession(), "adminui.locationTag." + action + ".success");
+            return "redirect:/adminui/metadata/locations/manageLocationTags.page";
+        } catch (Exception e) {
+            log.error("Failed to " + action + " location tag:", e);
+        }
+
+        request.getSession().setAttribute(UiCommonsConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE,
+                "adminui.locationTag." + action + ".fail");
+        model.addAttribute("locationTags", locationService.getAllLocationTags(true));
+
+        return "metadata/locations/manageLocationTags";
+    }
 }
