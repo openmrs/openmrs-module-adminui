@@ -79,6 +79,7 @@
          <form id="purgeLocationTagForm" method="post">
              <input type="hidden" name="action" value="purge" />
              <input type="hidden" id="purge-location-tag-id" name="locationTagId" value="" />
+             <br />
              <div>
                  <button class="confirm right">${ ui.message("uicommons.confirm") }</button>
                  <button class="cancel">${ ui.message("uicommons.cancel") }</button>

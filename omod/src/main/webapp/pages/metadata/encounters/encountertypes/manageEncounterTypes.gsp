@@ -12,6 +12,7 @@
 
     ui.includeJavascript("uicommons", "ngDialog/ngDialog.js")
     ui.includeCss("uicommons", "ngDialog/ngDialog.min.css")
+    ui.includeCss("adminui", "adminui.css")
 
     ui.includeJavascript("adminui", "metadata/manageEncounterTypes.js")
 %>

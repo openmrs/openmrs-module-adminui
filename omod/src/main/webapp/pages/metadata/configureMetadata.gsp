@@ -13,7 +13,7 @@
         { label: "${ ui.message("adminui.app.configureMetadata.label")}" }
     ];
 </script>
-x
+
 <table id="adminui-configure-metadata-table">
     <tbody>
     <tr>
