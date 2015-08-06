@@ -7,7 +7,8 @@
 }
 
 .adminui-auditInfo{
-  font-size: 90%
+  font-size: 90%;
+  max-width: 400px;
 }
 
 .adminui-action-column {
@@ -16,4 +17,12 @@
 
 .adminui-hidden {
   visibility: hidden;
+}
+
+.adminui-text-red {
+  color: red;
+}
+
+.adminui-no-border {
+  border: 0;
 }

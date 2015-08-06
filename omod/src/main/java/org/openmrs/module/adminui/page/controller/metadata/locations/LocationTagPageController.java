@@ -18,7 +18,7 @@ import org.openmrs.module.uicommons.util.InfoErrorMessageUtil;
 import org.openmrs.ui.framework.annotation.BindParams;
 import org.openmrs.ui.framework.annotation.SpringBean;
 import org.openmrs.ui.framework.page.PageModel;
-import org.openmrs.validator.LocationTagValidator;
+import org.openmrs.validator.ValidateUtil;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -29,12 +29,11 @@ public class LocationTagPageController {
 
     protected final Log log = LogFactory.getLog(getClass());
 
-    public void get(PageModel model, @RequestParam(value = "locationTagId", required = false) Integer locationTagId,
+    public void get(PageModel model, @RequestParam(value = "locationTagId", required = false) LocationTag locationTag,
                     @SpringBean("locationService") LocationService locationService) {
 
-        LocationTag locationTag = new LocationTag();
-        if (locationTagId != null) {
-            locationTag = locationService.getLocationTag(Integer.valueOf(locationTagId));
+        if (locationTag == null) {
+            locationTag = new LocationTag();
         }
 
         model.addAttribute("locationTag", locationTag);
@@ -42,11 +41,10 @@ public class LocationTagPageController {
 
     public String post(PageModel model, @RequestParam(value = "locationTagId", required = false) @BindParams LocationTag locationTag,
                        @SpringBean("locationService") LocationService locationService,
-                       @SpringBean("locationTagValidator") LocationTagValidator locationTagValidator,
                        HttpServletRequest request) {
 
         Errors errors = new BeanPropertyBindingResult(locationTag, "locationTag");
-        locationTagValidator.validate(locationTag, errors);
+        ValidateUtil.validate(locationTag, errors);
 
         if (!errors.hasErrors()) {
             try {

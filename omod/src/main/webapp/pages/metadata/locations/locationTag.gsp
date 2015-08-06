@@ -1,7 +1,6 @@
 <%
     ui.decorateWith("appui", "standardEmrPage")
     ui.includeJavascript("adminui", "jquery.validate.js")
-    ui.includeJavascript("adminui", "metadata/manageLocationTags.js")
     ui.includeCss("adminui", "adminui.css")
 
     def createLocationTag = (locationTag.locationTagId == null ? true : false);
@@ -28,7 +27,6 @@
                     maxlength: 255
                 },
                 "description": {
-                    required: false,
                     maxlength: 1024
                 }
             },
@@ -77,10 +75,10 @@
 </fieldset>
 <% } %>
 
-<form id="locationTagForm" method="post">
+<form class="simple-form-ui" id="locationTagForm" method="post">
 
     ${ui.includeFragment("uicommons", "field/text", [
-            label        : ui.message("general.name"),
+            label        : ui.message("general.name")+"<span class='adminui-text-red'>*</span>",
             formFieldName: "name",
             id           : "name",
             maxLength    : 101,
@@ -92,7 +90,7 @@
             formFieldName: "description",
             id           : "description",
             initialValue : (locationTag.description ?: ''),
-            cols         : 20
+            cols         : 54
     ])}
 
     <p>

@@ -9,84 +9,105 @@
  */
 package org.openmrs.module.adminui.page.controller.metadata.locations;
 
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.openmrs.LocationAttributeType;
 import org.openmrs.api.LocationService;
 import org.openmrs.customdatatype.CustomDatatypeUtil;
-import org.openmrs.module.adminui.AdminUiConstants;
 import org.openmrs.module.uicommons.UiCommonsConstants;
+import org.openmrs.module.uicommons.util.InfoErrorMessageUtil;
 import org.openmrs.ui.framework.annotation.BindParams;
 import org.openmrs.ui.framework.annotation.SpringBean;
 import org.openmrs.ui.framework.page.PageModel;
 import org.openmrs.validator.LocationAttributeTypeValidator;
-import org.springframework.validation.BindException;
-import org.springframework.validation.BindingResult;
+import org.openmrs.validator.ValidateUtil;
+import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.validation.ValidationUtils;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 public class LocationAttributeTypePageController {
 
-    public void get(PageModel model, @RequestParam(value = "locationAttributeTypeId", required = false) Integer locationAttributeTypeId,
+    protected final Log log = LogFactory.getLog(getClass());
+
+    public void get(PageModel model, @RequestParam(value = "locationAttributeTypeId", required = false) LocationAttributeType locationAttributeType,
                     @SpringBean("locationService") LocationService locationService) {
 
-        LocationAttributeType locationAttributeType = new LocationAttributeType();
-        if (locationAttributeTypeId != null) {
-            locationAttributeType = locationService.getLocationAttributeType(Integer.valueOf(locationAttributeTypeId));
+        if (locationAttributeType == null) {
+            locationAttributeType = new LocationAttributeType();
         }
 
         model.addAttribute("locationAttributeType", locationAttributeType);
-        model.addAttribute("datatypes", getDatatypes());
-        model.addAttribute("handlers", getHandlers());
+        model.addAttribute("datatypesMap", getDatatypes());
+        model.addAttribute("handlersMap", getHandlers());
     }
 
-    public String post(PageModel model, @ModelAttribute("locationAttributeType") @BindParams LocationAttributeType locationAttributeType,
-                       BindingResult errors,
+    public String post(PageModel model, @RequestParam(value = "locationAttributeTypeId", required = false) @BindParams LocationAttributeType locationAttributeType,
                        @SpringBean("locationService") LocationService locationService,
-                       @SpringBean("locationAttributeTypeValidator") LocationAttributeTypeValidator locationAttributeTypeValidator,
-                       @RequestParam(required = false, value = "save") String saveFlag,
-                       @RequestParam(required = false, value = "retire") String retireFlag,
-                       @RequestParam(required = false, value = "purge") String purgeFlag,
                        HttpServletRequest request) {
 
-        Errors newErrors = new BindException(locationAttributeType, "locationAttributeType");
-        locationAttributeTypeValidator.validate(locationAttributeType, newErrors);
-
-        if (!newErrors.hasErrors()) {
-            try {
-                if (saveFlag.length() > 3) {
-                    locationService.saveLocationAttributeType(locationAttributeType);
-                    request.getSession().setAttribute(UiCommonsConstants.SESSION_ATTRIBUTE_INFO_MESSAGE, "adminui.locationAttributeType.saved");
-                } else if (retireFlag.length() > 3) {
-                    String reason = request.getParameter("retireReason");
-                    locationService.retireLocationAttributeType(locationAttributeType, reason);
-                    request.getSession().setAttribute(UiCommonsConstants.SESSION_ATTRIBUTE_INFO_MESSAGE, "adminui.locationAttributeType.retired");
-                } else if (purgeFlag.length() > 3) {
-                    locationService.purgeLocationAttributeType(locationAttributeType);
-                    request.getSession().setAttribute(UiCommonsConstants.SESSION_ATTRIBUTE_INFO_MESSAGE, "adminui.locationAttributeType.purged");
-                }
-                return "redirect:/adminui/metadata/locations/manageLocationAttributeTypes.page";
-            } catch (Exception e) {
-                request.getSession().setAttribute(UiCommonsConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE, "adminui.save.fail");
-            }
-        } else {
+        Errors errors = new BeanPropertyBindingResult(locationAttributeType, "locationAttributeType");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", "adminui.field.required");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "datatypeClassname", "adminui.field.required");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "minOccurs", "adminui.field.required");
+        if (locationAttributeType.getMinOccurs() == null) {
+            locationAttributeType.setMinOccurs(0);
         }
 
-        model.addAttribute("errors", newErrors);
+        if (!errors.hasErrors()) {
+            ValidateUtil.validate(locationAttributeType, errors);
+        }
+
+        if (!errors.hasErrors()) {
+            try {
+                locationService.saveLocationAttributeType(locationAttributeType);
+                InfoErrorMessageUtil.flashInfoMessage(request.getSession(), "adminui.locationAttributeType.save.success");
+                return "redirect:/adminui/metadata/locations/manageLocationAttributeTypes.page";
+            } catch (Exception e) {
+                log.error("Failed to save location attribute type:", e);
+                request.getSession().setAttribute(UiCommonsConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE, "adminui.locationAttributeType.save.fail");
+            }
+        }
+
+        model.addAttribute("errors", errors);
         model.addAttribute("locationAttributeType", locationAttributeType);
-        model.addAttribute("datatypes", getDatatypes());
-        model.addAttribute("handlers", getHandlers());
+        model.addAttribute("datatypesMap", getDatatypes());
+        model.addAttribute("handlersMap", getHandlers());
 
         return "metadata/locations/locationAttributeType";
     }
 
-    public Collection<String> getDatatypes() {
-        return CustomDatatypeUtil.getDatatypeClassnames();
+    public Map<String, String> getDatatypes() {
+        Collection<String> datatypes = CustomDatatypeUtil.getDatatypeClassnames();
+        Map<String, String> ret = new HashMap<String, String>();
+        for (String dt : datatypes) {
+            ret.put(dt, beautify(dt));
+        }
+        return ret;
     }
 
-    public Collection<String> getHandlers() {
-        return CustomDatatypeUtil.getHandlerClassnames();
+    public Map<String, String> getHandlers() {
+        Collection<String> handlers = CustomDatatypeUtil.getHandlerClassnames();
+        Map<String, String> ret = new HashMap<String, String>();
+        for (String h : handlers) {
+            ret.put(h, beautify(h));
+        }
+        return ret;
+    }
+
+    /**
+     * Beautifies a fully qualified java class name
+     */
+    private String beautify(String input) {
+        String classname = input.toString();
+        classname = classname.substring(classname.lastIndexOf(".") + 1);
+        String[] sections = StringUtils.splitByCharacterTypeCamelCase(classname);
+        return StringUtils.join(sections, " ");
     }
 }

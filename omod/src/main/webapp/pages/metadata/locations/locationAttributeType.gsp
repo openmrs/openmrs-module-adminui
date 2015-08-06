@@ -1,18 +1,20 @@
 <%
+    context.requirePrivilege('Manage Location Attribute Types')
     ui.decorateWith("appui", "standardEmrPage")
 
     ui.includeJavascript("adminui", "jquery.validate.js")
+    ui.includeCss("adminui", "adminui.css")
 
     def createLocationAttributeType = (locationAttributeType.locationAttributeTypeId == null ? true : false);
 
     def datatypeOptions = []
-    datatypes. each {
-        datatypeOptions.push([ label: ui.format(it), value: it ])
+    datatypesMap. each { k, v ->
+        datatypeOptions.push([ label: v, value: k ])
     }
 
     def handlerOptions = []
-    handlers. each {
-        handlerOptions.push([ label: ui.format(it), value: it])
+    handlersMap. each { k, v ->
+        handlerOptions.push([ label: v, value: k])
     }
 %>
 
@@ -34,12 +36,13 @@
             rules: {
                 "name": {
                     required: true,
-                    minlength: 3,
                     maxlength: 255
                 },
                 "description": {
-                    required: false,
                     maxlength: 1024
+                },
+                "minOccurs": {
+                    required: true
                 },
                 "datatypeClassname": {
                     required: true,
@@ -69,10 +72,31 @@
 
 <h2>${ ui.message((createLocationAttributeType) ? "adminui.addLocationAttributeType.label" : "adminui.editLocationAttributeType.label") }</h2>
 
-<form class="simple-form-ui" method="post" id="locationAttributeTypeForm" autocomplete="off">
-<fieldset>
+<% if(!createLocationAttributeType) { %>
+<fieldset class="right adminui-auditInfo">
+    <legend>${ui.message('adminui.auditInfo')}</legend>
+    <p>
+        <label class="adminui-label">${ui.message('general.uuid')}:</label> ${ locationAttributeType.uuid }
+    </p>
+    <% if(locationAttributeType.creator) { %>
+    <p>
+        <span class="adminui-label">${ui.message('general.createdBy')}:</span> ${ ui.format(locationAttributeType.creator) }
+        <label class="adminui-label">${ui.message('general.onDate')}</label> ${ ui.format(locationAttributeType.dateCreated) }
+    </p>
+    <% } %>
+    <% if(locationAttributeType.changedBy) { %>
+    <p>
+        <span class="adminui-label">${ui.message('general.changedBy')}:</span> ${ ui.format(locationAttributeType.changedBy) }
+        <label class="adminui-label">${ui.message('general.onDate')}</label> ${ ui.format(locationAttributeType.dateChanged) }
+    </p>
+    <% } %>
+</fieldset>
+<% } %>
+
+<form class="simple-form-ui" id="locationAttributeTypeForm" method="post">
+
     ${ui.includeFragment("uicommons", "field/text", [
-            label        : ui.message("general.name")+"*",
+            label        : ui.message("general.name")+"<span class='adminui-text-red'>*</span>",
             formFieldName: "name",
             id           : "name",
             maxLength    : 101,
@@ -83,29 +107,39 @@
             label        : ui.message("general.description"),
             formFieldName: "description",
             id           : "description",
-            initialValue : (locationAttributeType.description ?: '')
+            initialValue : (locationAttributeType.description ?: ''),
+            cols         : 54,
+            rows: 3
     ])}
-
-    ${ui.includeFragment("uicommons", "field/text", [
-            label        : ui.message("adminui.locationAttributeType.minOccurs")+"*",
-            formFieldName: "minOccurs",
-            id           : "minOccurs",
-            maxLength    : 101,
-            initialValue : (locationAttributeType.minOccurs ?: '0')
-    ])}
-
-    ${ui.includeFragment("uicommons", "field/text", [
-            label        : ui.message("adminui.locationAttributeType.maxOccurs"),
-            formFieldName: "maxOccurs",
-            id           : "maxOccurs",
-            maxLength    : 101,
-            initialValue : (locationAttributeType.maxOccurs ?: '')
-    ])}
-
+    <div style="width: 45%">
+        <table cellpadding="0" cellspacing="0" border="0">
+            <tr class="adminui-no-border" >
+                <td class="adminui-no-border" valign="top">
+                ${ui.includeFragment("uicommons", "field/text", [
+                    label        : ui.message("adminui.locationAttributeType.minOccurs")+"<span class='adminui-text-red'>*</span>",
+                    formFieldName: "minOccurs",
+                    id           : "minOccurs",
+                    maxLength    : 101,
+                    initialValue : (locationAttributeType.minOccurs ?: '0')
+                ])}
+                </td>
+                <td class="adminui-no-border" valign="top" style="padding-left: 15px">
+                ${ui.includeFragment("uicommons", "field/text", [
+                    label        : ui.message("adminui.locationAttributeType.maxOccurs"),
+                    formFieldName: "maxOccurs",
+                    id           : "maxOccurs",
+                    maxLength    : 101,
+                    initialValue : (locationAttributeType.maxOccurs ?: '')
+                ])}
+                </td>
+            </tr>
+        </table>
+    </div>
     ${ ui.includeFragment("uicommons", "field/dropDown", [
-            label: ui.message("adminui.locationAttributeType.datatype"),
+            label: ui.message("adminui.locationAttributeType.datatype")+"<span class='adminui-text-red'>*</span>",
             emptyOptionLabel: ui.message("adminui.chooseOne"),
             formFieldName: "datatypeClassname",
+            id           : "datatypeClassname",
             options: datatypeOptions,
             initialValue : (locationAttributeType.datatypeClassname ?: '')
     ])}
@@ -114,13 +148,16 @@
             label        : ui.message("adminui.locationAttributeType.datatypeConfig"),
             formFieldName: "datatypeConfig",
             id           : "datatypeConfig",
-            initialValue : (locationAttributeType.datatypeConfig ?: '')
+            initialValue : (locationAttributeType.datatypeConfig ?: ''),
+            cols         : 54,
+            rows: 3
     ])}
 
     ${ ui.includeFragment("uicommons", "field/dropDown", [
             label: ui.message("adminui.locationAttributeType.preferredHandler"),
             emptyOptionLabel: ui.message("adminui.chooseOne"),
             formFieldName: "preferredHandlerClassname",
+            id           : "preferredHandlerClassname",
             options: handlerOptions,
             initialValue : (locationAttributeType.preferredHandlerClassname ?: '')
     ])}
@@ -129,32 +166,14 @@
             label        : ui.message("adminui.locationAttributeType.handlerConfig"),
             formFieldName: "handlerConfig",
             id           : "handlerConfig",
-            initialValue : (locationAttributeType.handlerConfig ?: '')
+            initialValue : (locationAttributeType.handlerConfig ?: ''),
+            cols         : 54,
+            rows: 3
     ])}
 
     <div>
         <input type="button" class="cancel" value="${ui.message("general.cancel")}" onclick="window.location='/${ contextPath }/adminui/metadata/locations/manageLocationAttributeTypes.page'"/>
         <input type="submit" class="confirm" name="save" id="save-button" value="${ui.message("general.save")}"/>
     </div>
-    </fieldset>
-
-    <% if(!createLocationAttributeType) { %>
-            <div>
-                <fieldset>
-                    ${ui.includeFragment("uicommons", "field/text", [
-                        label        : ui.message("general.retireReason"),
-                        formFieldName: "retireReason",
-                        id           : "retireReason",
-                        initialValue : (locationAttributeType.retireReason ?: '')
-                    ])}
-                    <input type="submit" class="button" name="retire" id="retire-button" value="${ui.message("adminui.locationAttributeType.retire")}"/>
-                </fieldset>
-
-                <fieldset>
-                    <input type="submit" class="button" name="purge" id="purge-button" value="${ui.message("adminui.locationAttributeType.purge")}"/>
-                </fieldset>
-
-            </div>
-    <% } %>
 
 </form>

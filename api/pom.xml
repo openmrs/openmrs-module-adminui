@@ -74,11 +74,10 @@
 			<type>pom</type>
 			<scope>test</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.openmrs.module</groupId>
 			<artifactId>providermanagement-api</artifactId>
-			<type>jar</type>
 		</dependency>
 				
 		<!-- End OpenMRS core -->

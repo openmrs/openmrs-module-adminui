@@ -9,17 +9,53 @@
  */
 package org.openmrs.module.adminui.page.controller.metadata.locations;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.openmrs.LocationAttributeType;
 import org.openmrs.api.LocationService;
+import org.openmrs.module.uicommons.UiCommonsConstants;
+import org.openmrs.module.uicommons.util.InfoErrorMessageUtil;
 import org.openmrs.ui.framework.annotation.SpringBean;
 import org.openmrs.ui.framework.page.PageModel;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import javax.servlet.http.HttpServletRequest;
 
 public class ManageLocationAttributeTypesPageController {
 
-	/**
-	 * @param model
-	 * @param locationService
-	 */
+    protected final Log log = LogFactory.getLog(getClass());
+
+    /**
+     * @param model
+     * @param locationService
+     */
     public void get(PageModel model, @SpringBean("locationService") LocationService locationService) {
         model.addAttribute("locationAttributeTypes", locationService.getAllLocationAttributeTypes());
+    }
+
+    public String post(PageModel model, @RequestParam("locationAttributeTypeId") LocationAttributeType locationAttributeType,
+                       @RequestParam("action") String action,
+                       @RequestParam(value = "reason", required = false) String reason,
+                       @SpringBean("locationService") LocationService locationService, HttpServletRequest request) {
+
+        try {
+            if ("retire".equals(action)) {
+                locationService.retireLocationAttributeType(locationAttributeType, reason);
+            } else if ("restore".equals(action)) {
+                locationService.unretireLocationAttributeType(locationAttributeType);
+            } else if ("purge".equals(action)) {
+                locationService.purgeLocationAttributeType(locationAttributeType);
+            }
+            InfoErrorMessageUtil.flashInfoMessage(request.getSession(), "adminui.locationAttributeType." + action + ".success");
+            return "redirect:/adminui/metadata/locations/manageLocationAttributeTypes.page";
+        } catch (Exception e) {
+            log.error("Failed to " + action + " location attribute type:", e);
+        }
+
+        request.getSession().setAttribute(UiCommonsConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE,
+                "adminui.locationAttributeType." + action + ".fail");
+        model.addAttribute("locationAttributeTypes", locationService.getAllLocationAttributeTypes());
+
+        return "metadata/locations/manageLocationAttributeTypes";
     }
 }

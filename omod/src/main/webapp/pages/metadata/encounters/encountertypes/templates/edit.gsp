@@ -21,14 +21,14 @@
 </fieldset>
 
 
-<form name="encounterTypeForm" novalidate ng-submit="save()">
+<form class="simple-form-ui" name="encounterTypeForm" novalidate ng-submit="save()">
     <p>
         <label>${ui.message('general.name')}</label>
         <input ng-model="encounterType.name" required/>
     </p>
     <p>
         <label>${ui.message('general.description')}</label>
-        <input ng-model="encounterType.description" required/>
+        <textarea ng-model="encounterType.description" cols="54" required></textarea>
     </p>
 
     <p>
