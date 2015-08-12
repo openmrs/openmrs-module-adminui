@@ -70,7 +70,7 @@
     });
 </script>
 
-<h2>${ ui.message((createLocationAttributeType) ? "adminui.addLocationAttributeType.label" : "adminui.editLocationAttributeType.label") }</h2>
+<h2>${ ui.message((createLocationAttributeType) ? "adminui.addNewLocationAttributeType.label" : "adminui.editLocationAttributeType.label") }</h2>
 
 <% if(!createLocationAttributeType) { %>
 <fieldset class="right adminui-auditInfo">
