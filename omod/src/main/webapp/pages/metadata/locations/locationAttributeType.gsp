@@ -23,7 +23,7 @@
         { icon: "icon-home", link: '/' + OPENMRS_CONTEXT_PATH + '/index.htm' },
         { label: "${ ui.message('adminui.app.configureMetadata.label')}" , link: '${ui.pageLink("adminui", "metadata/configureMetadata")}'},
         { label: "${ ui.message("adminui.manageLocationAttributeTypes.label")}", link: '${ui.pageLink("adminui","metadata/locations/manageLocationAttributeTypes")}'},
-        { label: "${ ui.message((createLocationAttributeType) ? "adminui.addLocationAttributeType.label" : "adminui.editLocationAttributeType.label")}" }
+        { label: "${ ui.message((createLocationAttributeType) ? "adminui.addNewLocationAttributeType.label" : "adminui.editLocationAttributeType.label")}" }
 
     ];
 </script>
