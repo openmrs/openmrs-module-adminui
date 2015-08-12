@@ -79,11 +79,6 @@
 			<groupId>org.openmrs.module</groupId>
 			<artifactId>providermanagement-api</artifactId>
 		</dependency>
-
-        <dependency>
-            <groupId>org.openmrs.module</groupId>
-            <artifactId>uiframework-api</artifactId>
-        </dependency>
 				
 		<!-- End OpenMRS core -->
 		
