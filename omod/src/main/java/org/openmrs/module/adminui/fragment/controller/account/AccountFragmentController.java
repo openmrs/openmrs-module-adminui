@@ -10,7 +10,7 @@
 package org.openmrs.module.adminui.fragment.controller.account;
 
 import org.openmrs.Person;
-import org.openmrs.module.adminui.account.AccountDomainWrapper;
+import org.openmrs.module.adminui.account.Account;
 import org.openmrs.module.adminui.account.AccountService;
 import org.openmrs.ui.framework.UiUtils;
 import org.openmrs.ui.framework.annotation.SpringBean;
@@ -28,7 +28,7 @@ public class AccountFragmentController {
 	                                   @SpringBean("adminAccountService") AccountService accountService, UiUtils ui) {
 		
 		try {
-			AccountDomainWrapper account = accountService.getAccountByPerson(person);
+			Account account = accountService.getAccountByPerson(person);
 			//account.unlock();
 			return new SuccessResult(ui.message("emr.account.unlocked.successMessage"));
 		}
