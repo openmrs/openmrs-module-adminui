@@ -9,6 +9,8 @@
  */
 package org.openmrs.module.adminui.page.controller.metadata.locations;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.LocationTag;
@@ -23,43 +25,42 @@ import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.servlet.http.HttpServletRequest;
-
 public class LocationTagPageController {
-
-    protected final Log log = LogFactory.getLog(getClass());
-
-    public void get(PageModel model, @RequestParam(value = "locationTagId", required = false) LocationTag locationTag,
-                    @SpringBean("locationService") LocationService locationService) {
-
-        if (locationTag == null) {
-            locationTag = new LocationTag();
-        }
-
-        model.addAttribute("locationTag", locationTag);
-    }
-
-    public String post(PageModel model, @RequestParam(value = "locationTagId", required = false) @BindParams LocationTag locationTag,
-                       @SpringBean("locationService") LocationService locationService,
-                       HttpServletRequest request) {
-
-        Errors errors = new BeanPropertyBindingResult(locationTag, "locationTag");
-        ValidateUtil.validate(locationTag, errors);
-
-        if (!errors.hasErrors()) {
-            try {
-                locationService.saveLocationTag(locationTag);
-                InfoErrorMessageUtil.flashInfoMessage(request.getSession(), "adminui.locationTag.save.success");
-                return "redirect:/adminui/metadata/locations/manageLocationTags.page";
-            } catch (Exception e) {
-                log.error("Failed to save location tag:", e);
-                request.getSession().setAttribute(UiCommonsConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE, "adminui.locationTag.save.fail");
-            }
-        }
-
-        model.addAttribute("errors", errors);
-        model.addAttribute("locationTag", locationTag);
-
-        return "metadata/locations/locationTag";
-    }
+	
+	protected final Log log = LogFactory.getLog(getClass());
+	
+	public void get(PageModel model, @RequestParam(value = "locationTagId", required = false) LocationTag locationTag) {
+		
+		if (locationTag == null) {
+			locationTag = new LocationTag();
+		}
+		
+		model.addAttribute("locationTag", locationTag);
+	}
+	
+	public String post(PageModel model,
+	                   @RequestParam(value = "locationTagId", required = false) @BindParams LocationTag locationTag,
+	                   @SpringBean("locationService") LocationService locationService, HttpServletRequest request) {
+		
+		Errors errors = new BeanPropertyBindingResult(locationTag, "locationTag");
+		ValidateUtil.validate(locationTag, errors);
+		
+		if (!errors.hasErrors()) {
+			try {
+				locationService.saveLocationTag(locationTag);
+				InfoErrorMessageUtil.flashInfoMessage(request.getSession(), "adminui.locationTag.save.success");
+				return "redirect:/adminui/metadata/locations/manageLocationTags.page";
+			}
+			catch (Exception e) {
+				log.error("Failed to save location tag:", e);
+				request.getSession().setAttribute(UiCommonsConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE,
+				    "adminui.locationTag.save.fail");
+			}
+		}
+		
+		model.addAttribute("errors", errors);
+		model.addAttribute("locationTag", locationTag);
+		
+		return "metadata/locations/locationTag";
+	}
 }
