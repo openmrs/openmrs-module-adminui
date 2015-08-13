@@ -21,7 +21,7 @@ import org.openmrs.api.PersonService;
 import org.openmrs.api.ProviderService;
 import org.openmrs.api.UserService;
 import org.openmrs.api.impl.BaseOpenmrsService;
-import org.openmrs.module.adminui.AdminUIConstants;
+import org.openmrs.module.adminui.AdminUiConstants;
 import org.openmrs.module.providermanagement.api.ProviderManagementService;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -81,7 +81,7 @@ public class AccountServiceImpl extends BaseOpenmrsService implements AccountSer
 		
 		for (User user : userService.getAllUsers()) {
 			//exclude daemon user
-			if (AdminUIConstants.DAEMON_USER_UUID.equals(user.getUuid()))
+			if (AdminUiConstants.DAEMON_USER_UUID.equals(user.getUuid()))
 				continue;
 			
 			if (!user.getPerson().isVoided()) {
@@ -127,7 +127,7 @@ public class AccountServiceImpl extends BaseOpenmrsService implements AccountSer
 	public List<Role> getAllCapabilities() {
 		List<Role> capabilities = new ArrayList<Role>();
 		for (Role candidate : userService.getAllRoles()) {
-			if (candidate.getName().startsWith(AdminUIConstants.ROLE_PREFIX_CAPABILITY))
+			if (candidate.getName().startsWith(AdminUiConstants.ROLE_PREFIX_CAPABILITY))
 				capabilities.add(candidate);
 		}
 		return capabilities;
@@ -141,7 +141,7 @@ public class AccountServiceImpl extends BaseOpenmrsService implements AccountSer
 	public List<Role> getAllPrivilegeLevels() {
 		List<Role> privilegeLevels = new ArrayList<Role>();
 		for (Role candidate : userService.getAllRoles()) {
-			if (candidate.getName().startsWith(AdminUIConstants.ROLE_PREFIX_PRIVILEGE_LEVEL))
+			if (candidate.getName().startsWith(AdminUiConstants.ROLE_PREFIX_PRIVILEGE_LEVEL))
 				privilegeLevels.add(candidate);
 		}
 		return privilegeLevels;

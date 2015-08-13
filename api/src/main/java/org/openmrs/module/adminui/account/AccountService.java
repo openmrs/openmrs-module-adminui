@@ -13,7 +13,7 @@ import java.util.List;
 
 import org.openmrs.Person;
 import org.openmrs.Role;
-import org.openmrs.module.adminui.AdminUIConstants;
+import org.openmrs.module.adminui.AdminUiActivator;
 
 public interface AccountService {
 	
@@ -32,7 +32,7 @@ public interface AccountService {
 	List<Account> getAllAccounts();
 	
 	/**
-	 * Gets all Capabilities, i.e roles with the {@link AdminUIConstants#ROLE_PREFIX_CAPABILITY}
+	 * Gets all Capabilities, i.e roles with the {@link AdminUiActivator#ROLE_PREFIX_CAPABILITY}
 	 * prefix
 	 *
 	 * @return a list of Roles

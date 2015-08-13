@@ -19,7 +19,7 @@ import org.openmrs.Person;
 import org.openmrs.api.APIException;
 import org.openmrs.api.AdministrationService;
 import org.openmrs.messagesource.MessageSourceService;
-import org.openmrs.module.adminui.AdminUIConstants;
+import org.openmrs.module.adminui.AdminUiConstants;
 import org.openmrs.module.adminui.account.Account;
 import org.openmrs.module.adminui.account.AccountService;
 import org.openmrs.module.adminui.account.AccountValidator;
@@ -149,7 +149,7 @@ public class AccountPageController {
 		model.addAttribute("account", account);
 		model.addAttribute("capabilities", accountService.getAllCapabilities());
 		model.addAttribute("privilegeLevels", accountService.getAllPrivilegeLevels());
-		model.addAttribute("rolePrefix", AdminUIConstants.ROLE_PREFIX_CAPABILITY);
+		model.addAttribute("rolePrefix", AdminUiConstants.ROLE_PREFIX_CAPABILITY);
 		model.addAttribute("allowedLocales", administrationService.getAllowedLocales());
 		model.addAttribute("providerRoles", providerManagementService.getAllProviderRoles(false));
 	}

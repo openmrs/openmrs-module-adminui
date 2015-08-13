@@ -23,7 +23,7 @@ import org.openmrs.User;
 import org.openmrs.api.PersonService;
 import org.openmrs.api.ProviderService;
 import org.openmrs.api.UserService;
-import org.openmrs.module.adminui.AdminUIConstants;
+import org.openmrs.module.adminui.AdminUiConstants;
 import org.openmrs.module.providermanagement.Provider;
 import org.openmrs.module.providermanagement.ProviderRole;
 import org.openmrs.module.providermanagement.api.ProviderManagementService;
@@ -196,7 +196,7 @@ public class Account {
 		User user = userSet.get(i);
 		if (user != null && user.getRoles() != null) {
 			for (Role role : user.getRoles()) {
-				if (role.getRole().startsWith(AdminUIConstants.ROLE_PREFIX_PRIVILEGE_LEVEL)) {
+				if (role.getRole().startsWith(AdminUiConstants.ROLE_PREFIX_PRIVILEGE_LEVEL)) {
 					return role;
 				}
 			}
@@ -226,7 +226,7 @@ public class Account {
 		
 		if (user.getRoles() != null) {
 			for (Role role : user.getRoles()) {
-				if (role.getRole().startsWith(AdminUIConstants.ROLE_PREFIX_CAPABILITY)) {
+				if (role.getRole().startsWith(AdminUiConstants.ROLE_PREFIX_CAPABILITY)) {
 					capabilities.add(role);
 				}
 			}

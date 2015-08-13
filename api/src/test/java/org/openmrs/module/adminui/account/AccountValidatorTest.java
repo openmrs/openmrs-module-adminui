@@ -28,7 +28,7 @@ import org.openmrs.api.PersonService;
 import org.openmrs.api.ProviderService;
 import org.openmrs.api.UserService;
 import org.openmrs.messagesource.MessageSourceService;
-import org.openmrs.module.adminui.AdminUIConstants;
+import org.openmrs.module.adminui.AdminUiConstants;
 import org.openmrs.module.providermanagement.api.ProviderManagementService;
 import org.openmrs.util.OpenmrsUtil;
 import org.powermock.core.classloader.annotations.PrepareForTest;
@@ -74,10 +74,10 @@ public class AccountValidatorTest {
 		validator.setUserService(userService);
 		validator.setProviderManagementService(providerManagementService);
 		
-		fullPrivileges = new Role(AdminUIConstants.PRIVILEGE_LEVEL_FULL_ROLE);
+		fullPrivileges = new Role(AdminUiConstants.PRIVILEGE_LEVEL_FULL_ROLE);
 		when(accountService.getAllPrivilegeLevels()).thenReturn(Collections.singletonList(fullPrivileges));
 		
-		someCapability = new Role(AdminUIConstants.ROLE_PREFIX_CAPABILITY + "Some Capability");
+		someCapability = new Role(AdminUiConstants.ROLE_PREFIX_CAPABILITY + "Some Capability");
 		someCapabilitySet = new HashSet<Role>();
 		someCapabilitySet.add(someCapability);
 		when(accountService.getAllCapabilities()).thenReturn(Collections.singletonList(someCapability));

@@ -34,7 +34,7 @@ import org.openmrs.User;
 import org.openmrs.api.PersonService;
 import org.openmrs.api.ProviderService;
 import org.openmrs.api.UserService;
-import org.openmrs.module.adminui.AdminUIConstants;
+import org.openmrs.module.adminui.AdminUiConstants;
 import org.openmrs.module.providermanagement.api.ProviderManagementService;
 
 public class AccountTest {
@@ -68,17 +68,17 @@ public class AccountTest {
 		providerManagementService = mock(ProviderManagementService.class);
 		
 		fullPrivileges = new Role();
-		fullPrivileges.setRole(AdminUIConstants.ROLE_PREFIX_PRIVILEGE_LEVEL + "Full");
+		fullPrivileges.setRole(AdminUiConstants.ROLE_PREFIX_PRIVILEGE_LEVEL + "Full");
 		limitedPrivileges = new Role();
-		limitedPrivileges.setRole(AdminUIConstants.ROLE_PREFIX_PRIVILEGE_LEVEL + "Limited");
+		limitedPrivileges.setRole(AdminUiConstants.ROLE_PREFIX_PRIVILEGE_LEVEL + "Limited");
 		when(accountService.getAllPrivilegeLevels()).thenReturn(Arrays.asList(fullPrivileges, limitedPrivileges));
 		
 		receptionApp = new Role();
-		receptionApp.setRole(AdminUIConstants.ROLE_PREFIX_CAPABILITY + "Reception");
+		receptionApp.setRole(AdminUiConstants.ROLE_PREFIX_CAPABILITY + "Reception");
 		archiveApp = new Role();
-		archiveApp.setRole(AdminUIConstants.ROLE_PREFIX_CAPABILITY + "Archives");
+		archiveApp.setRole(AdminUiConstants.ROLE_PREFIX_CAPABILITY + "Archives");
 		adminApp = new Role();
-		adminApp.setRole(AdminUIConstants.ROLE_PREFIX_CAPABILITY + "Admin");
+		adminApp.setRole(AdminUiConstants.ROLE_PREFIX_CAPABILITY + "Admin");
 		when(accountService.getAllCapabilities()).thenReturn(Arrays.asList(receptionApp, archiveApp, adminApp));
 		
 	}

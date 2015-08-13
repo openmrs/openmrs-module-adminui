@@ -28,7 +28,7 @@ import org.openmrs.User;
 import org.openmrs.api.PersonService;
 import org.openmrs.api.ProviderService;
 import org.openmrs.api.UserService;
-import org.openmrs.module.adminui.AdminUIConstants;
+import org.openmrs.module.adminui.AdminUiConstants;
 import org.openmrs.module.adminui.TestUtils;
 import org.openmrs.module.providermanagement.api.ProviderManagementService;
 
@@ -71,7 +71,7 @@ public class AccountServiceTest {
 		Person person2 = new Person();
 		user2.setPerson(person2);
 		User daemonUser = new User();
-		daemonUser.setUuid(AdminUIConstants.DAEMON_USER_UUID);
+		daemonUser.setUuid(AdminUiConstants.DAEMON_USER_UUID);
 		Person daemonPerson = new Person();
 		daemonUser.setPerson(daemonPerson);
 		
@@ -129,15 +129,15 @@ public class AccountServiceTest {
 	 */
 	@Test
 	public void getAllCapabilities_shouldReturnAllRolesWithTheCapabilityPrefix() throws Exception {
-		Role role1 = new Role(AdminUIConstants.ROLE_PREFIX_CAPABILITY + "role1");
+		Role role1 = new Role(AdminUiConstants.ROLE_PREFIX_CAPABILITY + "role1");
 		Role role3 = new Role("role2");
-		Role role2 = new Role(AdminUIConstants.ROLE_PREFIX_CAPABILITY + "role3");
+		Role role2 = new Role(AdminUiConstants.ROLE_PREFIX_CAPABILITY + "role3");
 		
 		when(userService.getAllRoles()).thenReturn(Arrays.asList(role1, role2, role3));
 		List<Role> capabilities = accountService.getAllCapabilities();
 		Assert.assertEquals(2, capabilities.size());
 		assertThat(capabilities, TestUtils.isCollectionOfExactlyElementsWithProperties("role",
-		    AdminUIConstants.ROLE_PREFIX_CAPABILITY + "role1", AdminUIConstants.ROLE_PREFIX_CAPABILITY + "role3"));
+		    AdminUiConstants.ROLE_PREFIX_CAPABILITY + "role1", AdminUiConstants.ROLE_PREFIX_CAPABILITY + "role3"));
 	}
 	
 	/**
@@ -146,17 +146,17 @@ public class AccountServiceTest {
 	 */
 	@Test
 	public void getAllPrivilegeLevels_shouldReturnAllRolesWithThePrivilegeLevelPrefix() throws Exception {
-		Role role1 = new Role(AdminUIConstants.ROLE_PREFIX_PRIVILEGE_LEVEL + "role1");
+		Role role1 = new Role(AdminUiConstants.ROLE_PREFIX_PRIVILEGE_LEVEL + "role1");
 		Role role3 = new Role("role2");
-		Role role2 = new Role(AdminUIConstants.ROLE_PREFIX_PRIVILEGE_LEVEL + "role3");
+		Role role2 = new Role(AdminUiConstants.ROLE_PREFIX_PRIVILEGE_LEVEL + "role3");
 		
 		when(userService.getAllRoles()).thenReturn(Arrays.asList(role1, role2, role3));
 		List<Role> privilegeLevels = accountService.getAllPrivilegeLevels();
 		Assert.assertEquals(2, privilegeLevels.size());
 		assertThat(
 		    privilegeLevels,
-		    TestUtils.isCollectionOfExactlyElementsWithProperties("role", AdminUIConstants.ROLE_PREFIX_PRIVILEGE_LEVEL
-		            + "role1", AdminUIConstants.ROLE_PREFIX_PRIVILEGE_LEVEL + "role3"));
+		    TestUtils.isCollectionOfExactlyElementsWithProperties("role", AdminUiConstants.ROLE_PREFIX_PRIVILEGE_LEVEL
+		            + "role1", AdminUiConstants.ROLE_PREFIX_PRIVILEGE_LEVEL + "role3"));
 	}
 	
 }
