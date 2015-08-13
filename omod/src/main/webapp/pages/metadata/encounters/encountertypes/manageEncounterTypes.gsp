@@ -24,7 +24,16 @@
         { label: "${ ui.message("adminui.manageEncounterTypes.title")}" }
     ];
     emr.loadMessages([
-        "uicommons.generalSavedNotification"
+        "adminui.saved",
+        "adminui.savedChanges",
+        "adminui.retired",
+        "adminui.restored",
+        "adminui.purged",
+        "adminui.save.fail",
+        "adminui.saveChanges.fail",
+        "adminui.retire.fail",
+        "adminui.restore.fail",
+        "adminui.purge.fail"
     ]);
 </script>
 

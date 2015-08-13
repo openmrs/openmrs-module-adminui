@@ -56,17 +56,18 @@ angular.module("manageEncounterTypes", [ "encounterTypeService", "ngDialog", "ui
                         reason: reason
                     }).$promise.then(function() {
                         loadEncounterTypes();
+                            emr.successMessage(emr.message("adminui.retired"));
                     });
                 });
             }
 
             $scope.unretire = function(encounterType) {
-                // will fail until RESTWS-456
                 EncounterType.save({
                     uuid: encounterType.uuid,
                     retired: false
                 }).$promise.then(function() {
                     loadEncounterTypes();
+                        emr.successMessage(emr.message("adminui.restored"));
                 })
             }
 
@@ -89,7 +90,7 @@ angular.module("manageEncounterTypes", [ "encounterTypeService", "ngDialog", "ui
                         purge: ""
                     }).$promise.then(function() {
                         loadEncounterTypes();
-                        emr.successMessage(emr.message("adminui.encounterType.purge.success"));
+                        emr.successMessage(emr.message("adminui.purged"));
                     })
                 });
             }
@@ -108,11 +109,11 @@ angular.module("manageEncounterTypes", [ "encounterTypeService", "ngDialog", "ui
                     name: $scope.encounterType.name,
                     description: $scope.encounterType.description
                 }
+
+                var successMessageCode = ($scope.encounterType.uuid) ? "adminui.savedChanges" : "adminui.saved";
                 EncounterType.save(toSave).$promise.then(function() {
                     $state.go("list");
-                    emr.successMessage(emr.message("uicommons.generalSavedNotification"));
-                }, function() {
-                    // TODO handle server-side errors
+                    emr.successMessage(emr.message(successMessageCode));
                 })
             }
         }]);
