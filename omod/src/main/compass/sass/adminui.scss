@@ -1,22 +1,22 @@
-.adminui-retired {
-  text-decoration: line-through;
-}
-
 .adminui-label {
   font-weight: bold;
 }
 
-.adminui-auditInfo{
-  font-size: 90%;
-  max-width: 400px;
+.adminui-text-left {
+  text-align: left;
+}
+
+.adminui-auditInfo {
+  font-size: 80%;
+  width: 400px;
 }
 
 .adminui-action-column {
-  width: 72px
+  width: 90px;
 }
 
-.adminui-hidden {
-  visibility: hidden;
+.adminui-center {
+  text-align: center;
 }
 
 .adminui-text-red {
@@ -25,4 +25,60 @@
 
 .adminui-no-border {
   border: 0;
+}
+
+.adminui-expand-column {
+  width: 100%;
+}
+
+.adminui-shrink-column {
+  white-space: nowrap;
+}
+
+.adminui-label-column {
+  @extend .adminui-label, .adminui-text-left, .adminui-shrink-column;
+}
+
+.adminui-clear-no-border {
+  @extend .adminui-no-border;
+}
+
+.adminui-no-bg-color {
+  background-color: white;
+}
+
+.adminui-no-border-no-bg-color {
+  @extend .adminui-no-border, .adminui-no-bg-color;
+}
+
+.adminui-form-table {
+  @extend .adminui-no-border;
+}
+
+.adminui-form-table tr {
+  @extend .adminui-no-border-no-bg-color;
+}
+
+.adminui-form-table td {
+  @extend .adminui-no-border-no-bg-color, .adminui-text-left;
+}
+
+.adminui-form-table th {
+  @extend .adminui-no-border-no-bg-color, .adminui-label-column;
+  background-color: white;
+  padding-left: 0;
+}
+
+.adminui-form-table td:nth-child(1) {
+  @extend .adminui-shrink-column;
+  padding-left: 0;
+}
+
+.adminui-form-table td:nth-child(2) {
+  @extend .adminui-expand-column;
+  padding-left: 15px;
+}
+
+.adminui-border-bottom {
+  border-bottom: 1px solid #F5F5F5 !important;
 }

@@ -30,6 +30,7 @@ import org.openmrs.api.ProviderService;
 import org.openmrs.api.UserService;
 import org.openmrs.module.adminui.AdminUiConstants;
 import org.openmrs.module.adminui.TestUtils;
+import org.openmrs.module.emrapi.EmrApiProperties;
 import org.openmrs.module.providermanagement.api.ProviderManagementService;
 
 public class AccountServiceTest {
@@ -44,18 +45,21 @@ public class AccountServiceTest {
 	
 	private ProviderManagementService providerManagementService;
 	
+	private EmrApiProperties emrApiProperties;
+	
 	@Before
 	public void setup() {
 		userService = mock(UserService.class);
 		personService = mock(PersonService.class);
 		providerService = mock(ProviderService.class);
 		providerManagementService = mock(ProviderManagementService.class);
+		emrApiProperties = mock(EmrApiProperties.class);
 		
 		accountService = new AccountServiceImpl();
 		accountService.setUserService(userService);
 		accountService.setPersonService(personService);
 		accountService.setProviderService(providerService);
-		accountService.setProviderManagementService(providerManagementService);
+		accountService.setEmrApiProperties(emrApiProperties);
 	}
 	
 	/**
@@ -70,6 +74,8 @@ public class AccountServiceTest {
 		User user2 = new User();
 		Person person2 = new Person();
 		user2.setPerson(person2);
+		User user3 = new User();
+		user3.setPerson(person1);//duplicate
 		User daemonUser = new User();
 		daemonUser.setUuid(AdminUiConstants.DAEMON_USER_UUID);
 		Person daemonPerson = new Person();
@@ -78,14 +84,17 @@ public class AccountServiceTest {
 		Provider provider1 = new Provider();
 		provider1.setPerson(person1);//duplicate
 		Provider provider2 = new Provider();
-		Person person3 = new Person();
-		provider2.setPerson(person3);
+		Person personA = new Person();
+		provider2.setPerson(personA);
+		Person personB = new Person();
+		Provider unknownProvider = new Provider();
+		unknownProvider.setPerson(personB);
 		
-		when(userService.getAllUsers()).thenReturn(Arrays.asList(user1, user2, daemonUser));
-		when(providerService.getAllProviders()).thenReturn(Arrays.asList(provider1, provider2));
+		when(emrApiProperties.getUnknownProvider()).thenReturn(unknownProvider);
+		when(userService.getAllUsers()).thenReturn(Arrays.asList(user1, user2, user3, daemonUser));
+		when(providerService.getAllProviders()).thenReturn(Arrays.asList(provider1, provider2, unknownProvider));
 		
-		List<Account> accounts = accountService.getAllAccounts();
-		Assert.assertEquals(2, accounts.size());
+		Assert.assertEquals(3, accountService.getAllAccounts().size());
 	}
 	
 	/**

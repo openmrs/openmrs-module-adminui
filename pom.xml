@@ -59,6 +59,11 @@
 		<uiframeworkVersion>3.4-SNAPSHOT</uiframeworkVersion>
 		<appframeworkVersion>2.0</appframeworkVersion>
 		<providermanagementVersion>2.0</providermanagementVersion>
+        <emrapiVersion>1.6</emrapiVersion>
+        <!-- These are are only used in the test scope -->
+        <reportingVersion>0.9.6</reportingVersion>
+        <calculationVersion>1.1</calculationVersion>
+        <serialization.xstreamVersion>0.2.7</serialization.xstreamVersion>
 	</properties>
 
 	<dependencyManagement>
@@ -155,6 +160,14 @@
 				<type>jar</type>
 				<scope>provided</scope>
 			</dependency>
+
+            <dependency>
+                <groupId>org.openmrs.module</groupId>
+                <artifactId>emrapi-api</artifactId>
+                <version>${emrapiVersion}</version>
+                <type>jar</type>
+                <scope>provided</scope>
+            </dependency>
 
 		</dependencies>
 	</dependencyManagement>

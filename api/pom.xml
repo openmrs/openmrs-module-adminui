@@ -28,18 +28,6 @@
 	<description>API project for adminui</description>
 
 	<dependencies>
-	
-		<!-- 
-		Add other dependencies from parent's pom:
-		<dependency>
-			<groupId>org.other.library</groupId> 
-			<artifactId>library-name</artifactId>
-		</dependency> 
-		-->
-
-		
-		
-
 		<!-- Begin OpenMRS core -->
 		
 		<dependency>
@@ -75,12 +63,46 @@
 			<scope>test</scope>
 		</dependency>
 
+        <!-- End OpenMRS core -->
+
 		<dependency>
 			<groupId>org.openmrs.module</groupId>
 			<artifactId>providermanagement-api</artifactId>
 		</dependency>
-				
-		<!-- End OpenMRS core -->
+
+        <dependency>
+            <groupId>org.openmrs.module</groupId>
+            <artifactId>emrapi-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openmrs.module</groupId>
+            <artifactId>uiframework-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openmrs.module</groupId>
+            <artifactId>reporting-api</artifactId>
+            <type>jar</type>
+            <version>${reportingVersion}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openmrs.module</groupId>
+            <artifactId>calculation-api</artifactId>
+            <type>jar</type>
+            <version>${calculationVersion}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openmrs.module</groupId>
+            <artifactId>serialization.xstream-api</artifactId>
+            <type>jar</type>
+            <version>${serialization.xstreamVersion}</version>
+            <scope>test</scope>
+        </dependency>
 		
 	</dependencies>
 	

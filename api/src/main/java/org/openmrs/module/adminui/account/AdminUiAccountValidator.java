@@ -9,51 +9,17 @@
  */
 package org.openmrs.module.adminui.account;
 
-import org.apache.commons.lang.StringUtils;
+import java.util.List;
+
+import org.openmrs.Provider;
+import org.openmrs.User;
 import org.openmrs.annotation.Handler;
-import org.openmrs.api.UserService;
-import org.openmrs.messagesource.MessageSourceService;
-import org.openmrs.module.providermanagement.api.ProviderManagementService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.openmrs.validator.ValidateUtil;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 @Handler(supports = { Account.class }, order = 50)
 public class AdminUiAccountValidator implements Validator {
-	
-	@Autowired
-	@Qualifier("messageSourceService")
-	private MessageSourceService messageSourceService;
-	
-	@Autowired
-	@Qualifier("userService")
-	private UserService userService;
-	
-	@Autowired
-	@Qualifier("providerManagementService")
-	private ProviderManagementService providerManagementService;
-	
-	public static final String USERNAME_MIN_LENGTH = "2";
-	
-	public static final String USERNAME_MAX_LENGTH = "50";
-	
-	public boolean ProviderEnabled = false;
-	
-	/**
-	 * @param messageSourceService the messageSourceService to set
-	 */
-	public void setMessageSourceService(MessageSourceService messageSourceService) {
-		this.messageSourceService = messageSourceService;
-	}
-	
-	public void setUserService(UserService userService) {
-		this.userService = userService;
-	}
-	
-	public void setProviderManagementService(ProviderManagementService providerManagementService) {
-		this.providerManagementService = providerManagementService;
-	}
 	
 	/**
 	 * @see org.springframework.validation.Validator#supports(java.lang.Class)
@@ -64,50 +30,49 @@ public class AdminUiAccountValidator implements Validator {
 	}
 	
 	/**
-	 * @should reject an empty family name
-	 * @should reject an empty given name
-	 * @should reject an empty gender
-	 * @should reject if none of the checkbox (user or provider) ticked
 	 * @see org.springframework.validation.Validator#validate(java.lang.Object,
 	 *      org.springframework.validation.Errors)
+	 * @fail reject an account with no user or provider account
 	 **/
 	
 	@Override
 	public void validate(Object obj, Errors errors) {
-		if (obj == null || !(obj instanceof Account))
-			throw new IllegalArgumentException("The parameter obj should not be null and must be of type" + Account.class);
 		
+		if (obj == null || !(obj instanceof Account)) {
+			throw new IllegalArgumentException("The parameter obj should not be null and must be of type" + Account.class);
+		}
 		Account account = (Account) obj;
 		
-		checkIfGivenAndFamilyNameAreNotNull(errors, account);
-		checkIfGenderIsNull(errors, account);
-		checkIfUserAndProviderAreNull(errors, account);
+		try {
+			errors.pushNestedPath("person");
+			ValidateUtil.validate(account.getPerson(), errors);
+		}
+		finally {
+			errors.popNestedPath();
+		}
 		
-	}
-	
-	private void checkIfGivenAndFamilyNameAreNotNull(Errors errors, Account account) {
-		if (StringUtils.isBlank(account.getGivenName())) {
-			errors.rejectValue("givenName", "error.required",
-			    new Object[] { messageSourceService.getMessage("adminui.person.givenName") }, null);
+		List<User> userAccounts = account.getUserAccounts();
+		for (int i = 0; i < userAccounts.size(); i++) {
+			try {
+				errors.pushNestedPath("userAccounts[" + i + "]");
+				ValidateUtil.validate(account.getUserAccounts().get(0), errors);
+			}
+			finally {
+				errors.popNestedPath();
+			}
 		}
-		if (StringUtils.isBlank(account.getFamilyName())) {
-			errors.rejectValue("familyName", "error.required",
-			    new Object[] { messageSourceService.getMessage("adminui.person.familyName") }, null);
+		
+		List<Provider> providerAccounts = account.getProviderAccounts();
+		for (int i = 0; i < providerAccounts.size(); i++) {
+			try {
+				errors.pushNestedPath("providerAccounts[" + i + "]");
+				ValidateUtil.validate(account.getProviderAccounts().get(0), errors);
+			}
+			finally {
+				errors.popNestedPath();
+			}
 		}
-	}
-	
-	private void checkIfGenderIsNull(Errors errors, Account account) {
-		if (StringUtils.isBlank(account.getGender())) {
-			errors.rejectValue("gender", "error.required",
-			    new Object[] { messageSourceService.getMessage("adminui.gender") }, null);
-		}
-	}
-	
-	private void checkIfUserAndProviderAreNull(Errors errors, Account account) {
-		if (account.getUserEnabled() == false && account.getProviderEnabled() == false) {
-			errors.rejectValue("userEnabled", "error.required",
-			    new Object[] { messageSourceService.getMessage("Both User and Provider can't be null") }, null);
-		}
+		
 	}
 	
 }

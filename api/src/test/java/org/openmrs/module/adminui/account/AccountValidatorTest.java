@@ -9,8 +9,6 @@
  */
 package org.openmrs.module.adminui.account;
 
-import static org.junit.Assert.assertTrue;
-import static org.powermock.api.mockito.PowerMockito.mockStatic;
 import static org.powermock.api.mockito.PowerMockito.when;
 
 import java.util.Collections;
@@ -18,7 +16,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.junit.Before;
-import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.openmrs.Person;
@@ -27,14 +24,11 @@ import org.openmrs.Role;
 import org.openmrs.api.PersonService;
 import org.openmrs.api.ProviderService;
 import org.openmrs.api.UserService;
-import org.openmrs.messagesource.MessageSourceService;
 import org.openmrs.module.adminui.AdminUiConstants;
 import org.openmrs.module.providermanagement.api.ProviderManagementService;
 import org.openmrs.util.OpenmrsUtil;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
-import org.springframework.validation.BindException;
-import org.springframework.validation.Errors;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(OpenmrsUtil.class)
@@ -70,9 +64,6 @@ public class AccountValidatorTest {
 		personService = Mockito.mock(PersonService.class);
 		
 		validator = new AdminUiAccountValidator();
-		validator.setMessageSourceService(Mockito.mock(MessageSourceService.class));
-		validator.setUserService(userService);
-		validator.setProviderManagementService(providerManagementService);
 		
 		fullPrivileges = new Role(AdminUiConstants.PRIVILEGE_LEVEL_FULL_ROLE);
 		when(accountService.getAllPrivilegeLevels()).thenReturn(Collections.singletonList(fullPrivileges));
@@ -84,54 +75,5 @@ public class AccountValidatorTest {
 		
 		Person person = new Person();
 		person.addName(new PersonName());
-		
-		account = new Account(person, accountService, userService, providerService, providerManagementService, personService);
-	}
-	
-	/**
-	 * @verifies reject an empty givenname
-	 * @see AdminUiAccountValidator#validate(Object, Errors)
-	 */
-	@Test
-	public void validate_shouldRejectAnEmptyGivenname() throws Exception {
-		Errors errors = new BindException(account, "account");
-		validator.validate(account, errors);
-		assertTrue(errors.hasFieldErrors("givenName"));
-	}
-	
-	/**
-	 * @verifies reject an empty familyname
-	 * @see AdminUiAccountValidator#validate(Object, Errors)
-	 */
-	@Test
-	public void validate_shouldRejectAnEmptyFamilyname() throws Exception {
-		account.setGivenName("give name");
-		
-		Errors errors = new BindException(account, "account");
-		validator.validate(account, errors);
-		assertTrue(errors.hasFieldErrors("familyName"));
-	}
-	
-	@Test
-	public void validate_shouldRejectAnEmptyGender() throws Exception {
-		account.setGivenName("givenName");
-		account.setFamilyName("familyName");
-		
-		Errors errors = new BindException(account, "account");
-		validator.validate(account, errors);
-		assertTrue(errors.hasFieldErrors("gender"));
-	}
-	
-	@Test
-	public void shouldCreateAnErrorMessageWhenUserIsNullAndNoProviderRole() {
-		mockStatic(OpenmrsUtil.class);
-		
-		account.setFamilyName("family name");
-		account.setGivenName("given Name");
-		
-		Errors errors = new BindException(account, "account");
-		validator.validate(account, errors);
-		
-		assertTrue(errors.hasErrors());
 	}
 }

@@ -10,9 +10,11 @@
 package org.openmrs.module.adminui.account;
 
 import java.util.List;
+import java.util.Map;
 
 import org.openmrs.Person;
 import org.openmrs.Role;
+import org.openmrs.User;
 import org.openmrs.module.adminui.AdminUiActivator;
 
 public interface AccountService {
@@ -21,9 +23,10 @@ public interface AccountService {
 	 * Save the account details to the database
 	 *
 	 * @param account
-	 * @return
+	 * @param userPasswordMap
+     * @return
 	 */
-	void saveAccount(Account account);
+	void saveAccount(Account account, Map<User, String> userPasswordMap);
 	
 	/**
 	 * @return
@@ -32,7 +35,7 @@ public interface AccountService {
 	List<Account> getAllAccounts();
 	
 	/**
-	 * Gets all Capabilities, i.e roles with the {@link AdminUiActivator#ROLE_PREFIX_CAPABILITY}
+	 * Gets all Capabilities, i.e roles with the {@link org.openmrs.module.adminui.AdminUiConstants#ROLE_PREFIX_CAPABILITY}
 	 * prefix
 	 *
 	 * @return a list of Roles

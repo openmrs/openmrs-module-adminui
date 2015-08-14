@@ -1,0 +1,13 @@
+@import "../../adminui";
+
+#adminui-occurences-table {
+  @extend .adminui-form-table;
+}
+
+#adminui-occurences-table tr {
+  @extend .adminui-clear-no-border;
+}
+
+#adminui-occurences-table td {
+  @extend .adminui-clear-no-border;
+}

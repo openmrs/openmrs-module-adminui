@@ -3,7 +3,7 @@
     ui.decorateWith("appui", "standardEmrPage")
 
     ui.includeJavascript("adminui", "jquery.validate.js")
-    ui.includeCss("adminui", "adminui.css")
+    ui.includeCss("adminui", "metadata/locations/locationAttributeTypes.css")
 
     def createLocationAttributeType = (locationAttributeType.locationAttributeTypeId == null ? true : false);
 
@@ -113,9 +113,9 @@
             rows: 3
     ])}
     <div style="width: 45%">
-        <table cellpadding="0" cellspacing="0" border="0">
-            <tr class="adminui-no-border" >
-                <td class="adminui-no-border" valign="top">
+        <table id="adminui-occurences-table" cellpadding="0" cellspacing="0">
+            <tr>
+                <td valign="top">
                 ${ui.includeFragment("uicommons", "field/text", [
                     label        : ui.message("adminui.minOccurs")+"<span class='adminui-text-red'>*</span>",
                     formFieldName: "minOccurs",
@@ -124,7 +124,7 @@
                     initialValue : (locationAttributeType.minOccurs ?: '0')
                 ])}
                 </td>
-                <td class="adminui-no-border" valign="top" style="padding-left: 15px">
+                <td valign="top">
                 ${ui.includeFragment("uicommons", "field/text", [
                     label        : ui.message("adminui.maxOccurs"),
                     formFieldName: "maxOccurs",

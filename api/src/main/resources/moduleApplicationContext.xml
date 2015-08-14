@@ -43,7 +43,7 @@
                 <property name="userService" ref="userService"/>
                 <property name="personService" ref="personService"/>
                 <property name="providerService" ref="providerService"/>
-                <property name="providerManagementService" ref="providerManagementService"/>
+                <property name="emrApiProperties" ref="emrApiProperties"/>
             </bean>
         </property>
         <property name="preInterceptors">

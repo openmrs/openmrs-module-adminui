@@ -11,6 +11,7 @@
         "extensionPointId": "systemAdministration.apps",
         "type": "link",
         "label": "adminui.manageAccounts.label",
+        "requiredPrivilege": "Add Users",
         "url": "adminui/systemadmin/accounts/manageAccounts.page",
         "icon": "icon-cog",
         "order": 20

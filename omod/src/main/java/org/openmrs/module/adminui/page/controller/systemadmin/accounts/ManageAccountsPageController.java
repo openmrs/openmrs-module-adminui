@@ -9,6 +9,13 @@
  */
 package org.openmrs.module.adminui.page.controller.systemadmin.accounts;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.openmrs.Provider;
+import org.openmrs.api.AdministrationService;
+import org.openmrs.module.adminui.account.Account;
 import org.openmrs.module.adminui.account.AccountService;
 import org.openmrs.ui.framework.annotation.SpringBean;
 import org.openmrs.ui.framework.page.PageModel;
@@ -19,8 +26,28 @@ public class ManageAccountsPageController {
 	 * @param model
 	 * @param accountService
 	 */
-	public void get(PageModel model, @SpringBean("adminAccountService") AccountService accountService) {
-		model.addAttribute("accounts", accountService.getAllAccounts());
+	public void get(PageModel model, @SpringBean("adminAccountService") AccountService accountService,
+	                @SpringBean("adminService") AdministrationService adminService) {
+		
+		List<Account> accounts = accountService.getAllAccounts();
+		model.addAttribute("accounts", accounts);
+		Map<Provider, String> providerNameMap = new HashMap<Provider, String>();
+		for (Account a : accountService.getAllAccounts()) {
+			//There seems to be some sort of bug in hbm mappings for provider
+			//in the provider management module where when a provider
+			//account is not linked to the user the name field never gets
+			//populated, this is a hack to fetch the name via raw SQL
+			for (Provider p : a.getProviderAccounts()) {
+				if (p.getPerson() == null) {
+					List<List<Object>> rows = adminService.executeSQL(
+					    "select name from provider where provider_id=" + p.getProviderId(), true);
+					
+					providerNameMap.put(p, (String) rows.get(0).get(0));
+				}
+			}
+		}
+		
+		model.addAttribute("providerNameMap", providerNameMap);
 	}
 	
 }

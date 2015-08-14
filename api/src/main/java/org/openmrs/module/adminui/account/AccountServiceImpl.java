@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.openmrs.Person;
+import org.openmrs.Provider;
 import org.openmrs.Role;
 import org.openmrs.User;
 import org.openmrs.api.PersonService;
@@ -22,7 +23,7 @@ import org.openmrs.api.ProviderService;
 import org.openmrs.api.UserService;
 import org.openmrs.api.impl.BaseOpenmrsService;
 import org.openmrs.module.adminui.AdminUiConstants;
-import org.openmrs.module.providermanagement.api.ProviderManagementService;
+import org.openmrs.module.emrapi.EmrApiProperties;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
@@ -34,7 +35,7 @@ public class AccountServiceImpl extends BaseOpenmrsService implements AccountSer
 	
 	private ProviderService providerService;
 	
-	private ProviderManagementService providerManagementService;
+	private EmrApiProperties emrApiProperties;
 	
 	/**
 	 * @param userService the userService to set
@@ -51,10 +52,10 @@ public class AccountServiceImpl extends BaseOpenmrsService implements AccountSer
 	}
 	
 	/**
-	 * @param providerManagementService
+	 * @param emrApiProperties
 	 */
-	public void setProviderManagementService(ProviderManagementService providerManagementService) {
-		this.providerManagementService = providerManagementService;
+	public void setEmrApiProperties(EmrApiProperties emrApiProperties) {
+		this.emrApiProperties = emrApiProperties;
 	}
 	
 	/**
@@ -65,56 +66,72 @@ public class AccountServiceImpl extends BaseOpenmrsService implements AccountSer
 	}
 	
 	/**
-	 * @see org.openmrs.module.adminui.account.AccountService#saveAccount(Account)
+	 * @see AccountService#saveAccount(Account, Map)
 	 */
 	@Override
-	@Transactional
-	public void saveAccount(Account account) {
-		account.save();
+	public void saveAccount(Account account, Map<User, String> userPasswordMap) {
+		personService.savePerson(account.getPerson());
+		for (Provider provider : account.getProviderAccounts()) {
+			providerService.saveProvider(provider);
+		}
+		for (User user : account.getUserAccounts()) {
+			String password = null;
+			if (user.getUserId() == null) {
+				password = userPasswordMap.get(user);
+			}
+			userService.saveUser(user, password);
+		}
 	}
 	
 	@Override
 	@Transactional(readOnly = true)
 	public List<Account> getAllAccounts() {
 		
-		Map<Person, Account> byPerson = new LinkedHashMap<Person, Account>();
+		Map<Person, Account> personAccountMap = new LinkedHashMap<Person, Account>();
 		
 		for (User user : userService.getAllUsers()) {
 			//exclude daemon user
-			if (AdminUiConstants.DAEMON_USER_UUID.equals(user.getUuid()))
+			if (AdminUiConstants.DAEMON_USER_UUID.equals(user.getUuid())) {
 				continue;
+			}
 			
-			if (!user.getPerson().isVoided()) {
-				byPerson.put(user.getPerson(), new Account(user.getPerson(), this, userService, providerService,
-				        providerManagementService, personService));
+			Person person = user.getPerson();
+			Account account = personAccountMap.get(person);
+			if (account == null) {
+				account = new Account(person);
+				personAccountMap.put(person, account);
+			}
+			if (!account.getUserAccounts().contains(user)) {
+				account.addUserAccount(user);
 			}
 		}
 		
-		/*	Currently, OpenMRS core API doesn't support to view account associated with multiple providers. 
-		 * To implement it, below function will do the task, but supportive functions need to be added.
-		 */
-		
-		/*for (Provider provider : providerService.getAllProviders()) {
-
-		    // skip the baked-in unknown provider
-		    if (provider.equals(emrApiProperties.getUnknownProvider())) {
-		        continue;
-		    }
-
-		    if (provider.getPerson() == null)
-		        throw new APIException("Providers not associated to a person are not supported");
-
-		    AccountDomainWrapper account = byPerson.get(provider.getPerson());
-		    if (account == null && !provider.getPerson().isVoided()) {
-		        byPerson.put(provider.getPerson(), new AccountDomainWrapper(provider.getPerson(), this, userService,
-		                providerService, providerManagementService, personService, providerIdentifierGenerator));
-		    }
-		}*/
+		Provider unknownProvider = emrApiProperties.getUnknownProvider();
+		for (Provider provider : providerService.getAllProviders()) {
+			//skip the baked-in unknown provider
+			if (provider.equals(unknownProvider)) {
+				continue;
+			}
+			
+			Person person = provider.getPerson();
+			if (person == null) {
+				person = new Person();
+			}
+			Account account = personAccountMap.get(person);
+			if (account == null) {
+				account = new Account(person);
+				personAccountMap.put(person, account);
+			}
+			if (!account.getProviderAccounts().contains(provider)) {
+				//We don't use account.addProviderAccount because
+				//If the session gets auto flushed, the new person object
+				//that account.addProviderAccount sets might get saved to the DB
+				account.getProviderAccounts().add(provider);
+			}
+		}
 		
 		List<Account> accounts = new ArrayList<Account>();
-		for (Account account : byPerson.values()) {
-			accounts.add(account);
-		}
+		accounts.addAll(personAccountMap.values());
 		
 		return accounts;
 	}
@@ -153,7 +170,7 @@ public class AccountServiceImpl extends BaseOpenmrsService implements AccountSer
 	@Override
 	@Transactional(readOnly = true)
 	public Account getAccountByPerson(Person person) {
-		return new Account(person, this, userService, providerService, providerManagementService, personService);
+		return new Account(person);
 	}
 	
 }

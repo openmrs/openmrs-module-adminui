@@ -1,0 +1,59 @@
+<%
+    config.require('user');
+
+    def user = config.user;
+    def uuid = user.uuid ?: '';
+%>
+
+<div class="user-${uuid}" ${user.userId ? "" : "hidden"}>
+    <i class="icon-edit edit-action right" title="${ ui.message("general.edit") }"
+       ng-show="!inEditMode"
+       ng-click="edit('${uuid}')" ng-show="!uuidUserMap['${uuid}'].retired"></i>
+
+    <table class="adminui-form-table" cellpadding="0" cellspacing="0">
+        <tr class="adminui-border-bottom">
+            <th valign="top">${ui.message("User.username")}</th>
+            <td valign="top" ng-class="{retired: uuidUserMap['${uuid}'].retired}">
+                {{uuidUserMap['${uuid}'].username}}
+            </td>
+        </tr>
+        <tr class="adminui-border-bottom">
+            <th valign="top">${ui.message("adminui.account.privilegeLevel")}</th>
+            <td valign="top" ng-class="{retired: uuidUserMap['${uuid}'].retired}">
+                {{privilegeLevels[uuidUserMap['${uuid}'].privilegeLevel]}}
+            </td>
+        </tr>
+        <tr class="adminui-border-bottom">
+            <th valign="top">
+                ${ui.message("adminui.account.user.isSupposedToChangePassword")}
+            </th>
+            <td valign="top" ng-class="{retired: uuidUserMap['${uuid}'].retired}">
+                {{yesOrNo[uuidUserMap['${uuid}'].userProperties.forcePassword]}}
+            </td>
+        </tr>
+        <tr>
+            <th valign="top">${ui.message("adminui.account.capabilities")}</th>
+            <td valign="top" ng-class="{retired: uuidUserMap['${uuid}'].retired}">
+                {{printCapabilities(uuidUserMap['${uuid}'].capabilities)}}
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="user-${uuid}" ${user.userId ? "hidden" : ""}>
+    <div class="right">
+        <button id="adminui-user-cancel${uuid}" type="button" class="cancel"
+            ng-click="cancel('${uuid}'<% if(!user.userId) { %>, true<% } %>)">
+            ${ ui.message("general.cancel") }
+        </button>
+        <button id="adminui-user-save" type="button" class="confirm"
+            ng-click="save('${uuid}'<% if(!user.userId) { %>, '${account.person.uuid}'<% } %>)"
+            ng-disabled="userDetailsForm['username${uuid}'].\$invalid
+                        || userDetailsForm['privilegeLevel${uuid}'].\$invalid
+                        || userDetailsForm['password${uuid}'].\$invalid
+                        || userDetailsForm['confirmPassword${uuid}'].\$invalid">
+            ${ ui.message("general.save") }
+        </button>
+    </div>
+    ${ui.includeFragment("adminui", "systemadmin/accounts/userFormFields", [user: user])}
+</div>

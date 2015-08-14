@@ -29,11 +29,11 @@
 	<tbody>
 		<% locationAttributeTypes.each{  %>
 	 	<tr>
-            <td ${it.retired ? 'class="adminui-retired"' : ''}>${ ui.format(it.name) }</td>
-            <td ${it.retired ? 'class="adminui-retired"' : ''}>${ ui.format(it.description) }</td>
+            <td ${it.retired ? 'class="retired"' : ''}>${ ui.format(it.name) }</td>
+            <td ${it.retired ? 'class="retired"' : ''}>${ ui.format(it.description) }</td>
             <td>
                 <form id="adminui-restore-form-${it.id}" method="POST">
-                    <i class="icon-pencil edit-action${it.retired ? ' adminui-hidden' : ''}" title="${ ui.message("general.edit") }"
+                    <i class="icon-pencil edit-action${it.retired ? ' invisible' : ''}" title="${ ui.message("general.edit") }"
                     onclick="location.href='${ui.pageLink("adminui", "metadata/locations/locationAttributeType",[locationAttributeTypeId: it.id])}'"></i>
                     <% if(!it.retired) { %>
                     <i class="icon-remove delete-action" title="${ ui.message("general.retire") }" onclick="adminui_retireLocationAttributeType(${it.id}, '${it.name}')"></i>
