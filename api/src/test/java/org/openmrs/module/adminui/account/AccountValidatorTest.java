@@ -40,7 +40,7 @@ import org.springframework.validation.Errors;
 @PrepareForTest(OpenmrsUtil.class)
 public class AccountValidatorTest {
 	
-	private AccountValidator validator;
+	private AdminUiAccountValidator validator;
 	
 	private Account account;
 	
@@ -69,7 +69,7 @@ public class AccountValidatorTest {
 		providerManagementService = Mockito.mock(ProviderManagementService.class);
 		personService = Mockito.mock(PersonService.class);
 		
-		validator = new AccountValidator();
+		validator = new AdminUiAccountValidator();
 		validator.setMessageSourceService(Mockito.mock(MessageSourceService.class));
 		validator.setUserService(userService);
 		validator.setProviderManagementService(providerManagementService);
@@ -90,7 +90,7 @@ public class AccountValidatorTest {
 	
 	/**
 	 * @verifies reject an empty givenname
-	 * @see AccountValidator#validate(Object, Errors)
+	 * @see AdminUiAccountValidator#validate(Object, Errors)
 	 */
 	@Test
 	public void validate_shouldRejectAnEmptyGivenname() throws Exception {
@@ -101,7 +101,7 @@ public class AccountValidatorTest {
 	
 	/**
 	 * @verifies reject an empty familyname
-	 * @see AccountValidator#validate(Object, Errors)
+	 * @see AdminUiAccountValidator#validate(Object, Errors)
 	 */
 	@Test
 	public void validate_shouldRejectAnEmptyFamilyname() throws Exception {

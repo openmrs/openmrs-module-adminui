@@ -22,7 +22,7 @@ import org.openmrs.messagesource.MessageSourceService;
 import org.openmrs.module.adminui.AdminUiConstants;
 import org.openmrs.module.adminui.account.Account;
 import org.openmrs.module.adminui.account.AccountService;
-import org.openmrs.module.adminui.account.AccountValidator;
+import org.openmrs.module.adminui.account.AdminUiAccountValidator;
 import org.openmrs.module.providermanagement.api.ProviderManagementService;
 import org.openmrs.module.uicommons.UiCommonsConstants;
 import org.openmrs.module.uicommons.util.InfoErrorMessageUtil;
@@ -90,7 +90,7 @@ public class AccountPageController {
 	                   @SpringBean("messageSourceService") MessageSourceService messageSourceService,
 	                   @SpringBean("adminAccountService") AccountService accountService,
 	                   @SpringBean("adminService") AdministrationService administrationService,
-	                   @SpringBean("accountValidator") AccountValidator accountValidator,
+	                   @SpringBean("accountValidator") AdminUiAccountValidator accountValidator,
 	                   @SpringBean("providerManagementService") ProviderManagementService providerManagementService,
 	                   PageModel model, HttpServletRequest request) {
 		

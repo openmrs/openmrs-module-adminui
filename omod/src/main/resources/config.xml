@@ -36,7 +36,7 @@
 	</require_modules>
 
 	<!-- Module Activator -->
-	<activator>${project.parent.groupId}.${project.parent.artifactId}.adminuiActivator</activator>
+	<activator>${project.parent.groupId}.${project.parent.artifactId}.AdminUiActivator</activator>
 	
 
 	<!-- Internationalization -->

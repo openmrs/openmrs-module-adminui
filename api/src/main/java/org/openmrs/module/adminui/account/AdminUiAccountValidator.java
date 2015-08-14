@@ -20,7 +20,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 @Handler(supports = { Account.class }, order = 50)
-public class AccountValidator implements Validator {
+public class AdminUiAccountValidator implements Validator {
 	
 	@Autowired
 	@Qualifier("messageSourceService")
