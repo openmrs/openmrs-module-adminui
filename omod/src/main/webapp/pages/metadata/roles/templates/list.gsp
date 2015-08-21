@@ -1,8 +1,8 @@
-<button ui-sref="edit">${ ui.message("adminui.addNewRole.title") }</button>
+<button ui-sref="edit">${ ui.message("adminui.role.addNewRole.title") }</button>
 <br/>
 <br/>
 
-<table>
+<table id="list-roles" cellspacing="0" cellpadding="2">
     <thead>
     <tr>
         <th>${ui.message('adminui.role.role')}</th>
@@ -53,3 +53,4 @@
     </tr>
     </tbody>
 </table>
+

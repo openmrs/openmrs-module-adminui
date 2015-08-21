@@ -35,7 +35,6 @@ angular.module("manageRoles", [ "roleService", "privilegeService", "ngDialog", "
 
             function loadRoles() {
                 // TODO standard function for failure of REST call
-                //Role.query({ v: "default", includeAll: true }).$promise.then(function(response) {
                 Role.query({ v: "full", includeAll: true }).$promise.then(function(response) {
                     // TODO handle multiple pages of results in a standard way
                     $scope.roles = sortWithRetiredLast(response.results);
@@ -55,10 +54,6 @@ angular.module("manageRoles", [ "roleService", "privilegeService", "ngDialog", "
                 }).then(function(role, reason) {
                     var toSave = {
                         uuid: role.uuid,
-                        //name: $scope.role.name,
-                        //description: $scope.role.description,
-                        //inheritedRoles: $scope.role.inheritedRoles,
-                        //privileges: $scope.role.privileges,
                         retired: true,
                         reason: reason
                     }
@@ -66,7 +61,6 @@ angular.module("manageRoles", [ "roleService", "privilegeService", "ngDialog", "
                     Role.save(
                         toSave
                     ).$promise.then(function() {
-                        // loadRoles();
                         $state.reload(); 
                     });
                 });
@@ -76,17 +70,12 @@ angular.module("manageRoles", [ "roleService", "privilegeService", "ngDialog", "
                 // TODO manage roles unretire
                 var toSave = {
                     uuid: role.uuid,
-                    //name: $scope.role.name,
-                    //description: $scope.role.description,
-                    //inheritedRoles: $scope.role.inheritedRoles,
-                    //privileges: $scope.role.privileges,
                     retired: false
                 }
                 // will fail until RESTWS-456
                 Role.save(
                     toSave
                 ).$promise.then(function() {
-                    // loadRoles();
                     $state.reload(); 
                 })
             }
@@ -109,7 +98,6 @@ angular.module("manageRoles", [ "roleService", "privilegeService", "ngDialog", "
                         uuid: role.uuid,
                         purge: ""
                     }).$promise.then(function() {
-                        //loadRoles();
                         emr.successMessage(emr.message("adminui.role.purge.success"));
                         $state.reload(); 
                      })
@@ -141,20 +129,6 @@ angular.module("manageRoles", [ "roleService", "privilegeService", "ngDialog", "
                 return inArray;
             }
             
-            // get name of privilege
-            function getNamePrivilege(myArray, myValue)
-            {
-            	var name = myValue.uuid;
-                if (myArray != null) {
-                    myArray.map(function(arrayObj){
-                        if (arrayObj.uuid === myValue.uuid) {
-                            name = arrayObj.name;
-                        }
-                    });
-                }
-                return name;
-            }
-            
             // load inherited privileges
             function loadInheritedPrivileges() {
                 $scope.inheritedPrivileges = [];         
@@ -162,16 +136,18 @@ angular.module("manageRoles", [ "roleService", "privilegeService", "ngDialog", "
                 if ($scope.role.allInheritedRoles != null) {
                     
                     $scope.role.inheritedRoles.forEach(function(val, idx) {
-                        if (val.privileges != null) {
+                        
+                        var inhRole = Role.get({ uuid: val.uuid, v: "full", includeAll: true });
+                        
+                        if (inhRole.privileges != null) {
                             
-                            val.privileges.forEach(function(inp, inpx){
-                                if (!isInArray($scope.inheritedPrivileges, inp)) { // no duplicates
+                            inhRole.privileges.forEach(function(inp, inpx){
+                                
                                     var inpPrivilege = {
                                         uuid: inp.uuid,
-                                        name: getNamePrivilege($scope.privileges, inp)
+                                        name: inp.name
                                     }
                                     $scope.inheritedPrivileges.push(inpPrivilege);
-                                }
                             });
                         }
                     });
@@ -273,7 +249,7 @@ angular.module("manageRoles", [ "roleService", "privilegeService", "ngDialog", "
                 }
                 Role.save(toSave).$promise.then(function() {
                     $state.go("list");
-                    emr.successMessage(emr.message("uicommons.generalSavedNotification"));
+                    emr.successMessage(emr.message("adminui.role.purge.success"));
                 }, function() {
                     // TODO handle server-side errors
                 })

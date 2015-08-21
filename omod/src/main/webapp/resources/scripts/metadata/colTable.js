@@ -4,7 +4,7 @@ angular.module("colTable", [  ])
         return {
             scope: {
                 main: "=omCtMain", 
-                cols: "=omCtCols", 
+                cols: "=omCtCols",  // 1..3
                 ckb: "=omCtCkb", 
                 sec: "=omCtSec"
             },
