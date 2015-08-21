@@ -58,6 +58,18 @@
             "group": "org.openmrs.module.adminui.encounters.group"
         }
     },
+    
+    {
+        "id": "${project.parent.groupId}.${project.parent.artifactId}.manageEncounterRoles.link",
+        "extensionPointId": "${project.parent.groupId}.${project.parent.artifactId}.adminLinks",
+        "type": "link",
+        "label": "adminui.manageEncounterRoles.title",
+        "url": "adminui/metadata/encounters/encounterroles/manageEncounterRoles.page",
+        "requiredPrivilege": "Manage Encounter Roles",
+        "extensionParams":{
+            "group": "org.openmrs.module.adminui.encounters.group"
+        }
+    },
 
     {
         "id": "${project.parent.groupId}.${project.parent.artifactId}.roles",
