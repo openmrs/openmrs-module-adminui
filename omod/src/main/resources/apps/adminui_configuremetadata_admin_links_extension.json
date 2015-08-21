@@ -93,5 +93,17 @@
         "extensionParams":{
             "group": "${project.parent.groupId}.${project.parent.artifactId}.rolesAndPrivileges.group"
         }
+    },
+    
+    {
+        "id": "${project.parent.groupId}.${project.parent.artifactId}.managePatientIdentifierTypes.link",
+        "extensionPointId": "${project.parent.groupId}.${project.parent.artifactId}.adminLinks",
+        "type": "link",
+        "label": "adminui.managePatientIdentifierTypes.title",
+        "url": "adminui/metadata/patients/patientidentifiertypes/managePatientIdentifierTypes.page",
+        "requiredPrivilege": "Manage Patient Identifier Types",
+        "extensionParams":{
+            "group": "${project.parent.groupId}.${project.parent.artifactId}.patients.group"
+        }
     }
 ]

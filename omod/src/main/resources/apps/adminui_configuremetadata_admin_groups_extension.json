@@ -21,5 +21,13 @@
         "type": "group",
         "label": "adminui.rolesAndPrivileges.title",
         "icon": "icon-cog"
+    },
+    
+    {
+        "id": "${project.parent.groupId}.${project.parent.artifactId}.patients.group",
+        "extensionPointId": "${project.parent.groupId}.${project.parent.artifactId}.adminGroups",
+        "type": "group",
+        "label": "adminui.patients.title",
+        "icon": "icon-user-md"
     }
 ]
