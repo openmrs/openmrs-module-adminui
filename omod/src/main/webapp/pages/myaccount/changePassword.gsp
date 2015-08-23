@@ -17,9 +17,11 @@ ${ ui.includeFragment("uicommons", "validationMessages")}
     passwordMinLength = ${ passwordMinLength };
 
     //emrMessages is in uicommons's validationMessages.gsp
-    emrMessages.minLength = '${ui.message("adminui.account.changePassword.password.short", passwordMinLength)}';
-    emrMessages.matchedInput = '${ui.message("adminui.account.changePassword.newAndConfirmPassword.should.match", passwordMinLength)}';
-
+    if(passwordMinLength != undefined) {
+	    emrMessages.minLength = '${ui.message("adminui.account.changePassword.password.short", passwordMinLength)}';
+	    emrMessages.matchedInput = '${ui.message("adminui.account.changePassword.newAndConfirmPassword.should.match", passwordMinLength)}';
+	}
+	
     var breadcrumbs = [
         { icon: "icon-home", link: '/' + OPENMRS_CONTEXT_PATH + '/index.htm' },
         { label: "${ ui.message("adminui.app.myAccount.label")}", link: '${ui.pageLink("adminui", "myaccount/myAccount")}' },
