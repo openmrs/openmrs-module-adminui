@@ -9,98 +9,72 @@
  */
 package org.openmrs.module.adminui.page.controller.myaccount;
 
-import org.openmrs.api.UserService;
-import org.openmrs.module.uicommons.UiCommonsConstants;
-import org.openmrs.module.uicommons.util.InfoErrorMessageUtil;
-import org.openmrs.ui.framework.annotation.BindParams;
-import org.openmrs.ui.framework.annotation.SpringBean;
-import org.openmrs.ui.framework.page.PageModel;
-import org.springframework.validation.BindingResult;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.openmrs.api.UserService;
+import org.openmrs.api.context.Context;
+import org.openmrs.api.db.LoginCredential;
+import org.openmrs.api.db.UserDAO;
+import org.openmrs.module.uicommons.UiCommonsConstants;
+import org.openmrs.module.uicommons.util.InfoErrorMessageUtil;
+import org.openmrs.ui.framework.annotation.SpringBean;
+import org.openmrs.ui.framework.page.PageModel;
+import org.springframework.web.bind.annotation.RequestParam;
+
 public class ChangeSecretQuestionPageController {
-
-    public void get(PageModel model) {
-        //TODO populate the model
-        SecretQuestion secretQuestion = null;
-        model.put("secretQuestion", secretQuestion);
-    }
-
-    public String post(PageModel model, @BindParams SecretQuestion secretQuestion,
-                       BindingResult errors,
-                       @SpringBean("userService") UserService userService,
-                       HttpServletRequest request) {
-
-        if (!secretQuestion.getAnswer().equals(secretQuestion.getConfirmAnswer())) {
-            model.put("secretQuestion", secretQuestion);
-            errors.rejectValue("confirmAnswer", "adminui.account.answerAndConfirmAnswer.doesNotMatch");
-            return "myaccount/changeSecretQuestion";
-        }
-
-        return changeSecretQuestion(secretQuestion, userService, request);
-    }
-
-    private String changeSecretQuestion(SecretQuestion secretQuestion, UserService userService, HttpServletRequest request) {
-        try {
-            userService.changeQuestionAnswer(secretQuestion.getPassword(), secretQuestion.getQuestion(), secretQuestion.getAnswer());
-            InfoErrorMessageUtil.flashInfoMessage(request.getSession(), "adminui.account.secretQuestion.success");
-        } catch (Exception ex) {
-            request.getSession().setAttribute(UiCommonsConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE, "registrationapp.save.fail");
-            return "myaccount/changeSecretQuestion";
-        }
-        return "myaccount/myAccount";
-    }
-
-    public class SecretQuestion {
-
-        private String password;
-        private String question;
-        private String answer;
-        private String confirmAnswer;
-
-        public SecretQuestion(String password, String question, String answer, String confirmAnswer) {
-            this.password = password;
-            this.question = question;
-            this.answer = answer;
-            this.confirmAnswer = confirmAnswer;
-        }
-
-        public String getPassword() {
-            return password;
-        }
-
-        public void setPassword(String password) {
-            this.password = password;
-        }
-
-        public String getQuestion() {
-            return question;
-        }
-
-        public void setQuestion(String question) {
-            this.question = question;
-        }
-
-        public String getAnswer() {
-            return answer;
-        }
-
-        public void setAnswer(String answer) {
-            this.answer = answer;
-        }
-
-        public String getConfirmAnswer() {
-            return confirmAnswer;
-        }
-
-        public void setConfirmAnswer(String confirmAnswer) {
-            this.confirmAnswer = confirmAnswer;
-        }
-
-        @Override
-        public String toString() {
-            return "Question=" + question + ", Answer=" + answer;
-        }
-    }
+	
+	public void get(PageModel model) {
+		String secretQuestion = fetchExistingSecretQuestionOrEmpty();
+		model.put("secretQuestion", secretQuestion);
+	}
+	
+	public String post(PageModel model, @RequestParam("password") String password,
+	                   @RequestParam("question") String question, @RequestParam("answer") String answer,
+	                   @RequestParam("confirmAnswer") String confirmAnswer,
+	                   @SpringBean("userService") UserService userService, HttpServletRequest request) {
+		if (!answer.equals(confirmAnswer)) {
+			model.put("secretQuestion", fetchExistingSecretQuestionOrEmpty());
+			request.getSession().setAttribute(UiCommonsConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE,
+			    Context.getMessageSourceService().getMessage("adminui.account.answerAndConfirmAnswer.doesNotMatch"));
+			
+			return "myaccount/changeSecretQuestion";
+		} else {
+			return changeSecretQuestion(password, question, answer, userService, request, model);
+		}
+	}
+	
+	private String changeSecretQuestion(String password, String question, String answer, UserService userService,
+	                                    HttpServletRequest request, PageModel model) {
+		try {
+			userService.changeQuestionAnswer(password, question, answer);
+			InfoErrorMessageUtil.flashInfoMessage(request.getSession(),
+			    Context.getMessageSourceService().getMessage("adminui.account.secretQuestion.success"));
+		}
+		catch (Exception ex) {
+			request.getSession().setAttribute(
+			    UiCommonsConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE,
+			    Context.getMessageSourceService().getMessage("registrationapp.save.fail") + "<br />"
+			            + ex.getLocalizedMessage());
+			model.put("secretQuestion", question);
+			
+			return "myaccount/changeSecretQuestion";
+		}
+		return "myaccount/myAccount";
+	}
+	
+	public String fetchExistingSecretQuestionOrEmpty() {
+		LoginCredential credential = getComponent(UserDAO.class).getLoginCredential(Context.getAuthenticatedUser());
+		String secretQuestion = credential.getSecretQuestion();
+		
+		return secretQuestion == null ? "" : secretQuestion;
+	}
+	
+	private <T> T getComponent(Class<T> clazz) {
+		List<T> list = Context.getRegisteredComponents(clazz);
+		if (list == null || list.size() == 0)
+			throw new RuntimeException("Cannot find component of " + clazz);
+		return list.get(0);
+	}
 }
