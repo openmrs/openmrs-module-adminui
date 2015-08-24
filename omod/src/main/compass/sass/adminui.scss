@@ -26,3 +26,11 @@
 .adminui-no-border {
   border: 0;
 }
+
+tr.retired {
+    text-decoration: line-through;
+}
+
+input.ng-touched.ng-invalid {
+    background: #ff8888;
+}
