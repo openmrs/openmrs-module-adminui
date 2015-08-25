@@ -12,6 +12,7 @@ package org.openmrs.module.adminui.page.controller.metadata.patients.patientiden
 import java.util.Collection;
 
 import org.openmrs.PatientIdentifierType.LocationBehavior;
+import org.openmrs.PatientIdentifierType.UniquenessBehavior;
 import org.openmrs.api.PatientService;
 import org.openmrs.patient.IdentifierValidator;
 import org.openmrs.ui.framework.annotation.SpringBean;
@@ -25,26 +26,4 @@ public class EditPageController {
     	model.addAttribute("uniquenessBehaviors", UniquenessBehavior.values());
     	model.addAttribute("locationBehaviors", LocationBehavior.values());
     }
-	
-	/**
-	 * Enumeration for the way to handle uniqueness among identifiers for a given identifier type
-	 */
-	public enum UniquenessBehavior {
-		
-		/**
-		 * Indicates that identifiers should be globally unique
-		 */
-		UNIQUE,
-		
-		/**
-		 * Indicates that duplicates identifiers are allowed
-		 */
-		NON_UNIQUE,
-		
-		/**
-		 * Indicates that identifiers should be unique only across a location if the identifier's
-		 * location property is not null
-		 */
-		LOCATION
-	}
 }
