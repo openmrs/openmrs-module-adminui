@@ -25,6 +25,12 @@
         { label: "${ ui.message("adminui.manageRoles.title")}" }
     ];
     emr.loadMessages([
+    	"adminui.role.purge.success",
+    	"adminui.role.purge.error",
+    	"adminui.role.getRoles.error",
+    	"adminui.role.getPrivileges.error",
+    	"adminui.role.save.success",
+    	"adminui.role.save.error",
         "uicommons.generalSavedNotification"
     ]);
 </script>
@@ -41,7 +47,7 @@
 </style>
 
 <div id="manage-roles">
-    <ui-view/>
+    <ui-view  onload="load()" ></ui-view>
 </div>
 
 <script type="text/javascript">

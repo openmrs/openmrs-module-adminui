@@ -13,7 +13,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr ng-repeat="role in roles" ng-class="{ retired: role.retired }">
+    <tr ng-repeat="role in roles" >
         <td>{{role.name}}</td>
         <td>{{role.description}}</td>
         <td>
@@ -35,17 +35,9 @@
         	</table>
         </td>
         <td>
-            <a ng-hide="role.retired" ui-sref="edit({roleUuid: role.uuid})">
+            <a ui-sref="edit({roleUuid: role.uuid})">
                 <i class="icon-pencil edit-action" title="${ui.message("emr.edit")}"></i>
             </a>
-            <a ng-hide="role.retired" ng-click="retire(role)">
-                <i class="icon-remove delete-action" title="${ui.message("emr.delete")}"></i>
-            </a>
-            <a ng-show="role.retired" ng-click="unretire(role)">
-                <i class="icon-reply edit-action" title="${ui.message("uicommons.unretire")}"></i>
-            </a>
-            <!-- though purge works, if not required, button can be removed/commented out
-            -->
             <a ng-click="purge(role)" class="right">
                 <i class="icon-trash delete-action" title="${ui.message("general.purge")}"></i>
             </a>

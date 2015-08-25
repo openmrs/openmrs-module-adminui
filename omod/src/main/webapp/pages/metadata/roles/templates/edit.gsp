@@ -30,7 +30,7 @@
         <input ng-model="role.description" required/>
     </p>
     <p>
-		<label>${ ui.message("adminui.role.containedRoles.label") } </label>{{role.name}}
+		${ ui.message("adminui.role.containedRoles.label") } {{role.name}}
     </p>
     <p>
     	<om-coltable om-ct-main="dependantRoles" om-ct-cols="2" om-ct-ckb="false" om-ct-sec=""></om-coltable>
