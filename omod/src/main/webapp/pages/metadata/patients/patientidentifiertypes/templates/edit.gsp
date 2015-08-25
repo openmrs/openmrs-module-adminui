@@ -45,15 +45,36 @@
     </p>
     <p>
         <label>${ui.message('PatientIdentifierType.locationBehavior')}</label>
-        <input ng-model="patientIdentifierType.locationBehavior"/>
+        <select ng-model="patientIdentifierType.locationBehavior">
+        	<option></option>
+        	<% locationBehaviors.each { lbhv -> %>
+	        	<option value="${lbhv}" <% if (lbhv == '{{patientIdentifierType.locationBehavior}}') { %> selected="selected" <% } %> >
+	        		${ui.message('PatientIdentifierType.locationBehavior.' + lbhv)}
+	        	</option>
+        	<% } %>
+        </select>
     </p>
     <p>
         <label>${ui.message('PatientIdentifierType.uniquenessBehavior')}</label>
-        <input ng-model="patientIdentifierType.uniquenessBehavior"/>
+        <select ng-model="patientIdentifierType.uniquenessBehavior">
+        	<option></option>
+        	<% uniquenessBehaviors.each { ubhv -> %>
+	        	<option value="${ubhv}" <% if (ubhv == '{{patientIdentifierType.uniquenessBehavior}}') { %> selected="selected" <% } %> >
+	        		${ui.message('PatientIdentifierType.uniquenessBehavior.' + ubhv)}
+	        	</option>
+        	<% } %>
+        </select>
     </p>
     <p>
         <label>${ui.message('PatientIdentifierType.validator')}</label>
-        <input ng-model="patientIdentifierType.validator"/>
+        <select ng-model="patientIdentifierType.validator">
+        	<option></option>
+        	<% validators.each { pv -> %>
+	        	<option value="${pv.class.name}" <% if (pv.class.name == '{{patientIdentifierType.validator}}') { %> selected="selected" <% } %> >
+	        		${pv.name}
+	        	</option>
+        	<% } %>
+        </select>
     </p>
 
     <p>

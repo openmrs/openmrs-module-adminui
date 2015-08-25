@@ -107,7 +107,13 @@ angular.module("managePatientIdentifierTypes", [ "patientIdentifierTypeService",
                 var toSave = {
                     uuid: $scope.patientIdentifierType.uuid,
                     name: $scope.patientIdentifierType.name,
-                    description: $scope.patientIdentifierType.description
+                    description: $scope.patientIdentifierType.description,
+                    format: $scope.patientIdentifierType.format,
+                    formatDescription: $scope.patientIdentifierType.formatDescription,
+                    required: $scope.patientIdentifierType.required,
+                    locationBehavior: $scope.patientIdentifierType.locationBehavior ? $scope.patientIdentifierType.locationBehavior : null,
+                    uniquenessBehavior: $scope.patientIdentifierType.uniquenessBehavior ? $scope.patientIdentifierType.uniquenessBehavior : null,
+                    validator: $scope.patientIdentifierType.validator
                 }
 
                 var successMessageCode = ($scope.patientIdentifierType.uuid) ? "adminui.savedChanges" : "adminui.saved";
