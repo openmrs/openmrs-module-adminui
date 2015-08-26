@@ -27,7 +27,7 @@
 	</thead>
 	<tbody>
 		<% privileges.each{  %>
-	 	<tr ng-class="{ retired: privilege.retired }">
+	 	<tr >
 	 		<td>
 				 ${ ui.format(it.name) }
 			</td>
@@ -38,11 +38,6 @@
                 <form id="adminui-restore-form-${it.name}" method="POST">
                     <i class="icon-pencil edit-action${it.retired ? ' adminui-hidden' : ''}" title="${ ui.message("general.edit") }"
                        onclick="location.href='${ui.pageLink("adminui", "metadata/privileges/privilege",[privilegeName: it.name, action: 'edit'])}'"></i>
-                    <% if(!it.retired) { %>
-                    <i class="icon-remove delete-action" title="${ ui.message("general.retire") }" onclick="adminui_retirePrivilege('${it.name}', '${it.name}')"></i>
-				    <% } else { %>
-                    <i class="icon-reply edit-action" title="${ ui.message("general.restore") }" onclick="adminui_restorePrivilege('${it.name}')"></i>
-				    <% } %>
                     <i class="icon-trash delete-action right" title="${ ui.message("general.purge") }" onclick="adminui_purgePrivilege('${it.name}', '${it.name}')"></i>
                     <input type="hidden" name="privilegeName" value="${it.name}" />
                     <input id="adminui-restore-action" type="hidden" name="action" value="restore" />
@@ -52,28 +47,6 @@
 		<% } %>
 	</tbody>
 </table>
-
-
-<div id="adminui-retire-privilege-dialog" class="dialog" style="display: none">
-    <div class="dialog-header">
-		 <h3>${ui.message('adminui.privilege.retire')}</h3>
-    </div>
-    <div class="dialog-content">
-        <h4 id="retirePrivilegeMessage">${ui.message('adminui.retire')}</h4>
-        <form id="retirePrivilegeForm" method="POST">
-            <span>
-                ${ui.message('general.reason')}: <input type="text" name="reason" placeholder="${ ui.message("emr.optional") }" />
-            </span>
-            <br/>
-            <input type="hidden" name="action" value="retire">
-            <input type="hidden" id="retire-privilege-name" name="privilegeName" value="">
-            <div>
-                <button class="confirm right">${ ui.message("uicommons.confirm") }</button>
-                <button class="cancel">${ ui.message("uicommons.cancel") }</button>
-            </div>
-        </form>
-	 </div>
-</div>
 
 <div id="adminui-purge-privilege-dialog" class="dialog" style="display: none">
      <div class="dialog-header">

@@ -19,8 +19,12 @@ import org.apache.commons.logging.LogFactory;
 import org.openmrs.api.UserService;
 import org.openmrs.module.uicommons.UiCommonsConstants;
 import org.openmrs.module.uicommons.util.InfoErrorMessageUtil;
+import org.openmrs.ui.framework.annotation.BindParams;
 import org.openmrs.ui.framework.annotation.SpringBean;
 import org.openmrs.ui.framework.page.PageModel;
+import org.openmrs.validator.PrivilegeValidator;
+import org.springframework.validation.BeanPropertyBindingResult;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.RequestParam;
 
 public class ManagePrivilegesPageController {
@@ -36,13 +40,16 @@ public class ManagePrivilegesPageController {
 	}
 
 
-    public String post(PageModel model, @RequestParam("privilegeName") String privilegeName,
+    public String post(PageModel model, 
+            		   @RequestParam(value = "privilegeName", required = false) @BindParams Privilege privilege,
                        @RequestParam("action") String action,
                        @RequestParam(value = "reason", required = false) String reason,
                        @SpringBean("userService") UserService userService, HttpServletRequest request) {
 
+    	Errors errors = new BeanPropertyBindingResult(privilege, "privilege");
+        new PrivilegeValidator().validate(privilege, errors);
+
         try {
-            Privilege privilege = userService.getPrivilege(privilegeName);
             if ("retire".equals(action)) {
                 privilege.setRetired(true);
                 privilege.setRetireReason(request.getParameter("reason"));
@@ -61,6 +68,7 @@ public class ManagePrivilegesPageController {
 
         request.getSession().setAttribute(UiCommonsConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE,
                 "adminui.privilege." + action + ".fail");
+        model.addAttribute("errors", errors);
         model.addAttribute("privileges", userService.getAllPrivileges());
 
         return "metadata/privileges/managePrivileges";
