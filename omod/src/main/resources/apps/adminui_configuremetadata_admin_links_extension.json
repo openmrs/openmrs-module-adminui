@@ -105,5 +105,17 @@
         "extensionParams":{
             "group": "${project.parent.groupId}.${project.parent.artifactId}.patients.group"
         }
+    },
+    
+    {
+        "id": "${project.parent.groupId}.${project.parent.artifactId}.manageProviderAttributeTypes.link",
+        "extensionPointId": "${project.parent.groupId}.${project.parent.artifactId}.adminLinks",
+        "type": "link",
+        "label": "adminui.manageProviderAttributeTypes.title",
+        "url": "adminui/metadata/providers/providerattributetypes/manageProviderAttributeTypes.page",
+        "requiredPrivilege": "Manage Provider Attribute Types",
+        "extensionParams":{
+            "group": "${project.parent.groupId}.${project.parent.artifactId}.providers.group"
+        }
     }
 ]

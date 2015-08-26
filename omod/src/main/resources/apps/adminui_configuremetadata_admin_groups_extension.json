@@ -29,5 +29,13 @@
         "type": "group",
         "label": "adminui.patients.title",
         "icon": "icon-user-md"
+    },
+    
+    {
+        "id": "${project.parent.groupId}.${project.parent.artifactId}.providers.group",
+        "extensionPointId": "${project.parent.groupId}.${project.parent.artifactId}.adminGroups",
+        "type": "group",
+        "label": "adminui.providers.title",
+        "icon": "icon-user"
     }
 ]
