@@ -68,11 +68,11 @@
             formFieldName: "privilege",
             id           : "privilege",
             maxLength    : 101,
-            initialValue : privilege.privilege
+            initialValue : privilege.name
         ])}
     <% } else{ %>
-        <b>${ui.message("general.name")}:</b> ${privilege.privilege}
-        <input type="hidden" name="privilegeName" value="${privilege.privilege}" />
+        <b>${ui.message("general.name")}:</b> ${privilege.name}
+        <input type="hidden" name="privilegeName" value="${privilege.name}" />
     <% } %>
     ${ui.includeFragment("uicommons", "field/textarea", [
             label        : ui.message("general.description"),
