@@ -22,6 +22,16 @@ public class ManageGlobalPropertiesPageController {
 		
 		AdministrationService administrationService = Context.getAdministrationService();
 		List<GlobalProperty> globalProps = administrationService.getAllGlobalProperties();
+		
+		//remove those with the .started and .mandatory suffixes
+		for (int index = 0; index < globalProps.size(); index++) {
+			String property = globalProps.get(index).getProperty();
+			if (property.endsWith(".started") || property.endsWith("mandatory")) {
+				globalProps.remove(index);
+				index -= 1;
+			}
+		}
+		
 		//TODO Remove module global properties
 		model.addAttribute("globalProperties", globalProps);
 	}

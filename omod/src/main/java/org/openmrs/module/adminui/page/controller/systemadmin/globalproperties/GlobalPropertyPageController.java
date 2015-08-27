@@ -53,7 +53,7 @@ public class GlobalPropertyPageController {
                     administrationService.purgeGlobalProperty(globalProperty);
                     InfoErrorMessageUtil.flashInfoMessage(request.getSession(), "adminui.globalProperty.purged");
                 }
-                return "redirect:/adminqui/systemadmin/globalproperties/manageGlobalProperties.page";
+                return "redirect:/adminui/systemadmin/globalproperties/manageGlobalProperties.page";
             } catch (Exception e) {
                 request.getSession().setAttribute(UiCommonsConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE, "adminui.save.fail");
             }
