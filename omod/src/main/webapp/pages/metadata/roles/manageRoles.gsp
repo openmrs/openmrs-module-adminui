@@ -13,6 +13,7 @@
 
     ui.includeJavascript("uicommons", "ngDialog/ngDialog.js")
     ui.includeCss("uicommons", "ngDialog/ngDialog.min.css")
+	ui.includeCss("adminui", "adminui.css")
 
     ui.includeJavascript("adminui", "metadata/colTable.js")
     ui.includeJavascript("adminui", "metadata/manageRoles.js")
@@ -34,17 +35,6 @@
         "uicommons.generalSavedNotification"
     ]);
 </script>
-
-<style type="text/css">
-    /* TODO move this to a shared SCSS file */
-    tr.retired {
-        text-decoration: line-through;
-    }
-
-    input.ng-touched.ng-invalid {
-        background: #ff8888;
-    }
-</style>
 
 <div id="manage-roles">
     <ui-view  onload="load()" ></ui-view>

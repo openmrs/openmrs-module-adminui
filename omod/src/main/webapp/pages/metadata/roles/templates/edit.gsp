@@ -1,57 +1,76 @@
 <h2 ng-hide="role.uuid">${ ui.message("adminui.role.addNewRole.title") }</h2>
 <h2 ng-show="role.uuid">${ ui.message("adminui.role.editRole.title") }</h2>
 
-<fieldset class="right" ng-show="role.uuid">
-    <legend>${ui.message('general.auditInfo')}</legend>
-    <p>
-        ${ui.message('general.uuid')}: {{ role.uuid }}
-    </p>
-    <p>
-        ${ui.message('general.createdBy')}:
-        {{ role.auditInfo.creator | omrs.display }}
-        ${ui.message('general.onDate')}
-        {{ role.auditInfo.dateCreated | serverDate }}
-    </p>
-    <p ng-show="role.changedBy">
-        ${ui.message('general.changedBy')}:
-        {{ role.auditInfo.changedBy | omrs.display }}
-        ${ui.message('general.onDate')}
-        {{ role.auditInfo.dateChanged | serverDate }}
-    </p>
-</fieldset>
-
 <form class="simple-form-ui" name="roleForm" novalidate ng-submit="save()">
     <p>
         <label>${ ui.message("adminui.role.role") }</label>
-        <input ng-model="role.name" required/>
+        <input ng-disabled="role.uuid" ng-model="role.name" ng-class="{ adminuiDisabled: role.uuid }" required/>
     </p>
     <p>
         <label>${ ui.message("adminui.role.description") }</label>
         <input ng-model="role.description" required/>
     </p>
-    <p>
-		${ ui.message("adminui.role.containedRoles.label") } {{role.name}}
-    </p>
-    <p>
-    	<om-coltable om-ct-main="dependantRoles" om-ct-cols="2" om-ct-ckb="false" om-ct-sec=""></om-coltable>
-    </p>
+    <div ng-if="dependantRoles.length > 0">
+	    <p>
+			${ ui.message("adminui.role.containedRoles.label") } {{role.name}}
+	    </p>
+	    <p>
+            <table>
+                <tbody>
+                    <tr ng-repeat="(idx, val) in dependantRoles" ng-hide="idx % 2">
+                        <td >
+                            {{dependantRoles[idx].name}}
+                        </td>
+                        <td ng-hide="!dependantRoles[idx + 1]">
+                            {{dependantRoles[idx + 1].name}}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+	    </p>
+    </div>
     <p>
         <label>${ ui.message("adminui.role.inheritedRoles") }</label>
     </p>
     <p>
-    	<om-coltable om-ct-main="roles" om-ct-cols="2" om-ct-ckb="true" om-ct-sec="inheritedRoles"></om-coltable>
+        <table>
+            <tbody>
+                <tr ng-repeat="(idx, val) in roles" ng-hide="idx % 2">
+                    <td >
+                        <input type="checkbox" ng-model="inheritedRoles[idx]"
+        					ng-click="selectInheritedRole()">
+                        {{roles[idx].name}}
+                    </td>
+                    <td ng-hide="!roles[idx + 1]" >
+                        <input type="checkbox" ng-model="inheritedRoles[idx + 1]"
+        					ng-click="selectInheritedRole()">
+                        {{roles[idx + 1].name}}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </p>
-    <p>
-    	<label>${ ui.message("adminui.role.inheritedPrivileges.label") }</label>
-    </p>
-    <p>
-    	<om-coltable om-ct-main="inheritedPrivileges" om-ct-cols="2" om-ct-ckb="false" om-ct-sec=""></om-coltable>
-     </p>
     <p>
         <label>${ ui.message("adminui.role.privileges") }</label>
     </p>
+    <p>
+        <label>${ ui.message("adminui.role.inheritedPrivileges.label") }</label>
+    </p>
      <p>
-    	<om-coltable om-ct-main="privileges" om-ct-cols="2" om-ct-ckb="true" om-ct-sec="privilegeFlags"></om-coltable>
+        <table>
+            <tbody>
+                <tr ng-repeat="(idx, val) in privileges" ng-hide="idx % 2">
+                    <td ng-class="{adminuiDisabled: inheritedPrivilegeFlags[idx] }">
+                        <input type="checkbox" ng-disabled="inheritedPrivilegeFlags[idx]" ng-model="privilegeFlags[idx]">
+                        {{privileges[idx].name}}
+                    </td>
+                    <td ng-hide="!privileges[idx + 1]" ng-class="{ adminuiDisabled: inheritedPrivilegeFlags[idx + 1] }">
+                        <input type="checkbox" ng-disabled="inheritedPrivilegeFlags[idx + 1]" ng-model="privilegeFlags[idx + 1]">
+                        {{privileges[idx + 1].name}}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </p>
 
     <p>

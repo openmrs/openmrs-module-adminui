@@ -7,8 +7,6 @@
     <tr>
         <th>${ui.message('adminui.role.role')}</th>
         <th>${ui.message('general.description')}</th>
-        <th>${ui.message('adminui.role.inheritedRoles')}</th>
-        <th>${ui.message('adminui.role.privileges')}</th>
         <th>${ui.message('general.action')}</th>
     </tr>
     </thead>
@@ -16,24 +14,6 @@
     <tr ng-repeat="role in roles" >
         <td>{{role.name}}</td>
         <td>{{role.description}}</td>
-        <td>
-        	<table>
-        		<tbody>
-        			<tr ng-repeat="inheritedRole in role.inheritedRoles" >
-        				<td>{{inheritedRole.name}}</td>
-        			</tr>
-        		</tbody>
-        	</table>
-        </td>
-        <td>
-        	<table>
-        		<tbody>
-        			<tr ng-repeat="privilege in role.privileges" >
-       					<td>{{privilege.name}}</td>
-        			</tr>
-        		</tbody>
-        	</table>
-        </td>
         <td>
             <a ui-sref="edit({roleUuid: role.uuid})">
                 <i class="icon-pencil edit-action" title="${ui.message("emr.edit")}"></i>

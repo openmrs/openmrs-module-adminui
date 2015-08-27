@@ -1,4 +1,4 @@
-angular.module("manageRoles", [ "roleService", "privilegeService", "ngDialog", "ui.router", "uicommons.filters", "colTable" ])
+angular.module("manageRoles", [ "roleService", "privilegeService", "ngDialog", "ui.router", "uicommons.filters" ])
 
     .config([ "$stateProvider", "$urlRouterProvider", function($stateProvider, $urlRouterProvider) {
         $urlRouterProvider.otherwise("/list");
@@ -13,7 +13,7 @@ angular.module("manageRoles", [ "roleService", "privilegeService", "ngDialog", "
                 url: "/edit/:roleUuid",
                 templateUrl: "templates/edit.page",
                 params: {
-                	roleUuid: null,
+                	roleUuid: null
                 },
                 resolve: {
                     role: function($stateParams, Role) {
@@ -29,9 +29,9 @@ angular.module("manageRoles", [ "roleService", "privilegeService", "ngDialog", "
 
     .controller("ManageRolesController", [ "$scope", "$state", "Role", "ngDialog", 
         function($scope, $state, Role, ngDialog) {
-
+    		
             function loadRoles() {
-                 Role.query({ v: "full", includeAll: true }).$promise.then(function(response) {
+                 Role.query({ v: "default", includeAll: true }).$promise.then(function(response) {
                     // TODO handle multiple pages of results in a standard way
                     $scope.roles = response.results;
                 }, function() {
@@ -59,8 +59,7 @@ angular.module("manageRoles", [ "roleService", "privilegeService", "ngDialog", "
                     }
                 	}).then(function() {
 	                    var toDelete = {
-	                    		uuid: role.uuid,
-	                    		name: role.name
+	                    		uuid: role.uuid
 	                    }
                     Role.delete(toDelete)
                     .$promise.then(function() {
@@ -75,6 +74,7 @@ angular.module("manageRoles", [ "roleService", "privilegeService", "ngDialog", "
 
     .controller("EditRoleController", [ "$scope", "$state", "Role", "role", "Privilege",
         function($scope, $state, Role, role, Privilege) {
+
             $scope.role = role;
             
             // test whether an object is contained within an array
@@ -84,37 +84,12 @@ angular.module("manageRoles", [ "roleService", "privilegeService", "ngDialog", "
                 if (myArray != null) {
                     myArray.map(function(arrayObj){
                         if (arrayObj.uuid === myValue.uuid) {
-                            inArray = true;
+                        	inArray =  true;
                         }
                     });
                 }
                 return inArray;
             }
-            
-            // load inherited privileges
-            function loadInheritedPrivileges() {
-                $scope.inheritedPrivileges = [];         
-                       
-                if ($scope.role.allInheritedRoles != null) {
-                    
-                    $scope.role.inheritedRoles.forEach(function(val, idx) {
-                        
-                        var inhRole = Role.get({ uuid: val.uuid, v: "full", includeAll: true });
-                        
-                        if (inhRole.privileges != null) {
-                            
-                            inhRole.privileges.forEach(function(inp, inpx){
-                                
-                                    var inpPrivilege = {
-                                        uuid: inp.uuid,
-                                        name: inp.name
-                                    }
-                                    $scope.inheritedPrivileges.push(inpPrivilege);
-                            });
-                        }
-                    });
-                } 
-           }
             
             // load roles with indication of those contained in current role inherited roles
             function loadRole() {
@@ -122,86 +97,140 @@ angular.module("manageRoles", [ "roleService", "privilegeService", "ngDialog", "
                     // TODO handle multiple pages of results in a standard way
                     $scope.roles = response.results;
                     
-                    //remove self from array
-                    var idx = $scope.roles.length;
+                    $scope.inheritedRoles = Array($scope.roles.length);
+                    loadInheritedRoles(true);  
+                    
+                    // remove self and bases from inheritable roles
+                    idx = $scope.roles.length;
                     while(idx--){
-                        if ($scope.roles[idx].uuid === $scope.role.uuid)  { 
-                            break;
+                        if ($scope.roles[idx].uuid === $scope.role.uuid 
+                        		|| isInArray($scope.dependantRoles, $scope.roles[idx]))  { 
+                            $scope.roles.splice(idx, 1);
                         }
                     }
-                    $scope.roles.splice(idx, 1);  
-                                      
-                    $scope.inheritedRoles = Array($scope.roles.length);
-                    if ($scope.roles != null) {
-                        
-                        $scope.dependantRoles = []; 
-                         
-                        $scope.roles.forEach(function(val, idx) { 
-                            
-                            $scope.inheritedRoles[idx] = isInArray($scope.role.inheritedRoles, val);
-                            
-                            // load dependant roles
-                            if (!isInArray( $scope.dependantRoles, val)) { // no duplicates
-                                if (val.allInheritedRoles != null) {
-                                    if (isInArray(val.allInheritedRoles, $scope.role)) {
-                                        var depRole = {
-                                            uuid: val.uuid,
-                                            name: val.name
-                                        }
-                                        $scope.dependantRoles.push(depRole);                        
-                                    }
-                                }
-                            }
-                        });
-                    }
+
+                    // load privileges with indication of those contained in current role      
+                    Privilege.query({ v: "default", includeAll: true }).$promise.then(function(response) {
+                        // TODO handle multiple pages of results in a standard way
+                        $scope.privileges = response.results;          
+                        $scope.inheritedPrivilegeFlags = Array($scope.privileges.length);
+                        $scope.privilegeFlags = Array($scope.privileges.length);
+                                                
+                        loadInheritedPrivileges();
+
+                    }, function() {
+                        emr.errorMessage(emr.message("adminui.role.getPrivileges.error"));
+                    });
+                    
                 }, function() {
                     emr.errorMessage(emr.message("adminui.role.getRoles.error"));
                 })
-                loadPrivileges();
-                loadInheritedPrivileges();
             }
-
-              // load privileges with indication of those contained in current role      
-            function loadPrivileges() {                
-                Privilege.query({ v: "full", includeAll: true }).$promise.then(function(response) {
-                    // TODO handle multiple pages of results in a standard way
-                    $scope.privileges = response.results;                    
-                    $scope.privilegeFlags = Array($scope.privileges.length);
-                    if ($scope.privileges != null) {
-                        $scope.privileges.forEach(function(val, idx) { 
-                            $scope.privilegeFlags[idx] = isInArray($scope.role.privileges, val);                            
-                        });
-                    }
-                }, function() {
-                    emr.errorMessage(emr.message("adminui.role.getPrivileges.error"));
-                })
+ 
+            function loadPrivilegeFlags() {
+                if ($scope.privileges != null) {
+                    $scope.privileges.forEach(function(val, idx) { 
+                        $scope.inheritedPrivilegeFlags[idx] = false; 
+                        $scope.privilegeFlags[idx] = false;
+                    	if (isInArray($scope.inheritedPrivileges, val)) {
+                    		// ok, because inheritedPrivileges take precendence
+                            $scope.inheritedPrivilegeFlags[idx] = true; 
+                            $scope.privilegeFlags[idx] = true;
+                    	}
+                    	else if (isInArray($scope.role.privileges, val)) {
+                            $scope.privilegeFlags[idx] = true;
+                    	}
+                    });
+                }
             }
             
-            $scope.load = function() {
-            	loadRole();
+            // load inherited privileges
+            function loadInheritedPrivileges() {
+                $scope.inheritedPrivileges = [];                         
+                if ($scope.role.inheritedRoles != null) {                    
+                	$scope.role.inheritedRoles.forEach(function(val, idx) {                       
+            			$scope.roles.map(function(arrayObj){
+                            if (arrayObj.uuid === val.uuid) {
+                            	arrayObj.privileges.forEach(function(inp, inpx){                                
+                                    if (!isInArray($scope.inheritedPrivileges, inp)) { // no duplicates
+                                        var inpPrivilege = {
+                                            uuid: inp.uuid
+                                        }
+                                        $scope.inheritedPrivileges.push(inpPrivilege);
+                                    }
+                                });
+                            }
+                        });
+                    });
+                } 
+                loadPrivilegeFlags();
             }
 
-            $scope.save = function() {
+            function loadInheritedRoles(loadDependants) {
+                if (loadDependants)
+                	$scope.dependantRoles = []; 
+                
+                if ($scope.roles != null) {                                         
+                	$scope.roles.forEach(function(val, idx) { 
+	                    $scope.inheritedRoles[idx] = isInArray($scope.role.inheritedRoles, val);	                    
+	                    if (loadDependants) {
+	                        // load dependant roles
+	                        if (!isInArray( $scope.dependantRoles, val)) { // no duplicates
+	                            if (val.inheritedRoles != null) {
+	                                if (isInArray(val.inheritedRoles, $scope.role)) {
+	                                    var depRole = {
+	                                        uuid: val.uuid,
+	                                        name: val.name
+	                                    }
+	                                    $scope.dependantRoles.push(depRole);                        
+	                                }
+	                            }
+	                        }
+	                    }
+                    });   
+                }
+            }
+                
+            function updateInheritedRoles() {
                 // save selected inherited roles
                 $scope.role.inheritedRoles = []; // clear list
                 var idx = $scope.inheritedRoles.length;
                 while(idx--){
-                    if ($scope.inheritedRoles[idx])  { // role selected
+                    if ($scope.inheritedRoles[idx])  { // inherited role selected
                         var inheritedRole = {};                         
                         inheritedRole.uuid = $scope.roles[idx].uuid;                         
                         $scope.role.inheritedRoles.push(inheritedRole);  // add role to list 
                     }
                 }               
-                // save selected privilegess
-                $scope.role.privileges = []; 
+            }
+            
+            function updatePrivileges() {
+                // save selected privileges
+                $scope.role.privileges = [];  // clear list
                 idx = $scope.privilegeFlags.length;
                 while(idx--){
-                    if ($scope.privilegeFlags[idx])  { 
+                	// privilege which is not inherited selected
+                    if ($scope.privilegeFlags[idx] && !$scope.inheritedPrivilegeFlags[idx])  { 
                         var privilege = {};                         
                         privilege.uuid = $scope.privileges[idx].uuid;                         
                         $scope.role.privileges.push(privilege);   
                     }
                 }
+            }
+            
+            $scope.load = function() {
+            	loadRole();
+            }
+            
+            // update inherited privileges when list of inherited roles changes
+            $scope.selectInheritedRole = function() {
+            	updateInheritedRoles();
+                loadInheritedPrivileges();
+            }
+
+            $scope.save = function() {
+            	updateInheritedRoles();
+            	updatePrivileges();
 
                 var toSave = {
                     uuid: $scope.role.uuid,
