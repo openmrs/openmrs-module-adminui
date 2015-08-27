@@ -23,7 +23,7 @@
 
         jq("#privilegeForm").validate({
             rules: {
-                "name": {
+                "privilege": {
                     required: true,
                     minlength: 3,
                     maxlength: 255
@@ -64,7 +64,7 @@
 <fieldset>
     <% if(createPrivilege){ %>
         ${ui.includeFragment("uicommons", "field/text", [
-            label        : ui.message("general.name")+"*",
+            label        : ui.message("general.name")+"<span class='adminui-text-red'>*</span>",
             formFieldName: "privilege",
             id           : "privilege",
             maxLength    : 101,
