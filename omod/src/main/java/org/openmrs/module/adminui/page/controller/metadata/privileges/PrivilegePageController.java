@@ -62,11 +62,6 @@ public class PrivilegePageController {
         if (!errors.hasErrors()) {
             try {
                 String successMsg = "adminui.privilege.saved";
-                if ("delete".equals(action)) {
-                    privilege.setRetired(true);
-                    privilege.setRetireReason(request.getParameter("reason"));
-                    successMsg = "adminui.privilege.retired";
-                }
                 userService.savePrivilege(privilege);
                 InfoErrorMessageUtil.flashInfoMessage(request.getSession(), successMsg);
                 return "redirect:/adminui/metadata/privileges/managePrivileges.page";
