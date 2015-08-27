@@ -82,11 +82,12 @@ angular.module("manageRoles", [ "roleService", "privilegeService", "ngDialog", "
             {
             	var inArray = false;
                 if (myArray != null) {
-                    myArray.map(function(arrayObj){
-                        if (arrayObj.uuid === myValue.uuid) {
+                	for (idx = 0; idx < myArray.length; idx++) {
+                        if (myArray[idx].uuid === myValue.uuid) {
                         	inArray =  true;
+                        	break; // only process as many as necessary
                         }
-                    });
+                    };
                 }
                 return inArray;
             }
@@ -147,11 +148,11 @@ angular.module("manageRoles", [ "roleService", "privilegeService", "ngDialog", "
             // load inherited privileges
             function loadInheritedPrivileges() {
                 $scope.inheritedPrivileges = [];                         
-                if ($scope.role.inheritedRoles != null) {                    
-                	$scope.role.inheritedRoles.forEach(function(val, idx) {                       
-            			$scope.roles.map(function(arrayObj){
-                            if (arrayObj.uuid === val.uuid) {
-                            	arrayObj.privileges.forEach(function(inp, inpx){                                
+                if ($scope.role.allInheritedRoles != null) {                    
+                	$scope.role.allInheritedRoles.forEach(function(val, idx) { 
+                    	for (inrx = 0; inrx < $scope.roles.length; inrx++) {
+                            if (val.uuid === $scope.roles[inrx].uuid) {
+                            	$scope.roles[inrx].privileges.forEach(function(inp, inpx){                                
                                     if (!isInArray($scope.inheritedPrivileges, inp)) { // no duplicates
                                         var inpPrivilege = {
                                             uuid: inp.uuid
@@ -159,8 +160,9 @@ angular.module("manageRoles", [ "roleService", "privilegeService", "ngDialog", "
                                         $scope.inheritedPrivileges.push(inpPrivilege);
                                     }
                                 });
+                            	break; // only process as many as necessary
                             }
-                        });
+                		}
                     });
                 } 
                 loadPrivilegeFlags();
@@ -176,8 +178,8 @@ angular.module("manageRoles", [ "roleService", "privilegeService", "ngDialog", "
 	                    if (loadDependants) {
 	                        // load dependant roles
 	                        if (!isInArray( $scope.dependantRoles, val)) { // no duplicates
-	                            if (val.inheritedRoles != null) {
-	                                if (isInArray(val.inheritedRoles, $scope.role)) {
+	                            if (val.allInheritedRoles != null) {
+	                                if (isInArray(val.allInheritedRoles, $scope.role)) {
 	                                    var depRole = {
 	                                        uuid: val.uuid,
 	                                        name: val.name
