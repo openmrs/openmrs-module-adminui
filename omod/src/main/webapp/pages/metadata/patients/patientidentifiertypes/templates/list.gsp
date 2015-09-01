@@ -11,9 +11,9 @@
     </tr>
     </thead>
     <tbody>
-    <tr ng-repeat="patientIdentifierType in patientIdentifierTypes" ng-class="{ retired: patientIdentifierType.retired }">
-        <td>{{patientIdentifierType.name}}</td>
-        <td>{{patientIdentifierType.description}}</td>
+    <tr ng-repeat="patientIdentifierType in patientIdentifierTypes">
+        <td ng-class="{ retired: patientIdentifierType.retired }">{{patientIdentifierType.name}}</td>
+        <td ng-class="{ retired: patientIdentifierType.retired }">{{patientIdentifierType.description}}</td>
         <td>
             <a ng-hide="patientIdentifierType.retired" ui-sref="edit({patientIdentifierTypeUuid: patientIdentifierType.uuid})">
                 <i class="icon-pencil edit-action" title="${ui.message("emr.edit")}"></i>

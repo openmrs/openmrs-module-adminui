@@ -11,9 +11,9 @@
     </tr>
     </thead>
     <tbody>
-    <tr ng-repeat="encounterType in encounterTypes" ng-class="{ retired: encounterType.retired }">
-        <td>{{encounterType.name}}</td>
-        <td>{{encounterType.description}}</td>
+    <tr ng-repeat="encounterType in encounterTypes">
+        <td ng-class="{ retired: encounterType.retired }">{{encounterType.name}}</td>
+        <td ng-class="{ retired: encounterType.retired }">{{encounterType.description}}</td>
         <td>
             <a ng-hide="encounterType.retired" ui-sref="edit({encounterTypeUuid: encounterType.uuid})">
                 <i class="icon-pencil edit-action" title="${ui.message("emr.edit")}"></i>

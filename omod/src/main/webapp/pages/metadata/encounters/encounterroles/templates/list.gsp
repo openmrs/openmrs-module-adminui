@@ -11,9 +11,9 @@
     </tr>
     </thead>
     <tbody>
-    <tr ng-repeat="encounterRole in encounterRoles" ng-class="{ retired: encounterRole.retired }">
-        <td>{{encounterRole.name}}</td>
-        <td>{{encounterRole.description}}</td>
+    <tr ng-repeat="encounterRole in encounterRoles">
+        <td ng-class="{ retired: encounterRole.retired }">{{encounterRole.name}}</td>
+        <td ng-class="{ retired: encounterRole.retired }">{{encounterRole.description}}</td>
         <td>
             <a ng-hide="encounterRole.retired" ui-sref="edit({encounterRoleUuid: encounterRole.uuid})">
                 <i class="icon-pencil edit-action" title="${ui.message("emr.edit")}"></i>

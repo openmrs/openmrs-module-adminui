@@ -11,9 +11,9 @@
     </tr>
     </thead>
     <tbody>
-    <tr ng-repeat="providerAttributeType in providerAttributeTypes" ng-class="{ retired: providerAttributeType.retired }">
-        <td>{{providerAttributeType.name}}</td>
-        <td>{{providerAttributeType.description}}</td>
+    <tr ng-repeat="providerAttributeType in providerAttributeTypes">
+        <td ng-class="{ retired: providerAttributeType.retired }">{{providerAttributeType.name}}</td>
+        <td ng-class="{ retired: providerAttributeType.retired }">{{providerAttributeType.description}}</td>
         <td>
             <a ng-hide="providerAttributeType.retired" ui-sref="edit({providerAttributeTypeUuid: providerAttributeType.uuid})">
                 <i class="icon-pencil edit-action" title="${ui.message("emr.edit")}"></i>
