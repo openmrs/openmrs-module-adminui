@@ -1,46 +1,42 @@
- <%
+<%
     ui.decorateWith("appui", "standardEmrPage")
+
+    ui.includeJavascript("uicommons", "angular.min.js")
+    ui.includeJavascript("uicommons", "angular-resource.min.js")
+    ui.includeJavascript("uicommons", "angular-ui/angular-ui-router.min.js")
+    ui.includeJavascript("uicommons", "angular-app.js")
+    ui.includeJavascript("uicommons", "angular-common.js")
+    ui.includeJavascript("uicommons", "services/systemSettingService.js")
+    ui.includeJavascript("uicommons", "filters/display.js")
+    ui.includeJavascript("uicommons", "filters/serverDate.js")
+
+    ui.includeJavascript("uicommons", "ngDialog/ngDialog.js")
+    ui.includeCss("uicommons", "ngDialog/ngDialog.min.css")
+    ui.includeCss("adminui", "adminui.css")
+
+    ui.includeJavascript("adminui", "systemadmin/manageSystemSettings.js")
 %>
 
 <script type="text/javascript">
     var breadcrumbs = [
         { icon: "icon-home", link: '/' + OPENMRS_CONTEXT_PATH + '/index.htm' },
-        { label: "${ ui.message('coreapps.app.systemAdministration.label')}" , link: '${ui.pageLink("coreapps", "systemadministration/systemAdministration")}'},
-        { label: "${ ui.message('adminui.globalProperties.label')}" }
-       ];
+        { label: "${ ui.message('coreapps.app.systemAdministration.label')}", link: '${ui.pageLink("coreapps", "systemadministration/systemAdministration")}'},
+        { label: "${ ui.message("adminui.manageSystemSettings.title")}" }
+    ];
+    emr.loadMessages([
+        "adminui.saved",
+        "adminui.savedChanges",
+        "adminui.purged",
+        "adminui.save.fail",
+        "adminui.saveChanges.fail",
+        "adminui.purge.fail"
+    ]);
 </script>
 
-<h1>
-    <h3>${ ui.message("adminui.globalProperties.label") }</h3>
-</h1>
+<div id="manage-system-settings">
+    <ui-view/>
+</div>
 
- <input type="submit" class="button" value="${ui.message("adminui.addGlobalProperty.label")}" onclick="window.location='/${ contextPath }/adminui/systemadmin/globalproperties/globalProperty.page'"/>
-
-<br><br>
-
- <table style="table-layout: fixed; width: 100%">
-    <thead>
-		<tr>
-			<th>${ ui.message("adminui.globalProp.name")}</th>
-			<th style="width: 38%">${ ui.message("adminui.globalProp.value") }</th>
-            <th style="width: 15px"></th>
-		</tr>
-	</thead>
-	<tbody>
-		<% globalProperties.each{  %>
-	 	<tr>
-	 		<td>
-				<b>${ ui.format(it.property)}</b><br />
-                <i style="font-size: 0.7em;">${ ui.format(it.description) }</i>
-			</td>
-			<td>
-                ${ ui.format(it.propertyValue) }
-			</td>
-			<td>
-                <i class="icon-pencil edit-action" title="${ ui.message("general.edit") }"
-                   onclick="location.href='${ui.pageLink("adminui","systemadmin/globalproperties/globalProperty",[globalProperty:it.property ])}'"></i>
-        	</td>
-		</tr>
-		<% } %>
-	</tbody>
-</table>
+<script type="text/javascript">
+    angular.bootstrap("#manage-system-settings", [ "manageSystemSettings" ])
+</script>
