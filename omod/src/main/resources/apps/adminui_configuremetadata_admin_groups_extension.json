@@ -37,5 +37,14 @@
         "type": "group",
         "label": "adminui.providers.title",
         "icon": "icon-user"
+    },
+
+	{
+        "id": "${project.parent.groupId}.${project.parent.artifactId}.manageforms.group",
+		"extensionPointId": "org.openmrs.module.adminui.adminGroups",
+    	"type": "group",
+        "label": "adminui.formentryapp.manageforms.group.label",
+        "icon": "icon-paste"
     }
+    
 ]
