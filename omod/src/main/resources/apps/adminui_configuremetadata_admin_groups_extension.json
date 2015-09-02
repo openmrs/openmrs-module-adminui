@@ -44,7 +44,7 @@
 		"extensionPointId": "org.openmrs.module.adminui.adminGroups",
     	"type": "group",
         "label": "adminui.formentryapp.manageforms.group.label",
-        "icon": "icon-paste"
+        "icon": "icon-file-alt"
     }
     
 ]
