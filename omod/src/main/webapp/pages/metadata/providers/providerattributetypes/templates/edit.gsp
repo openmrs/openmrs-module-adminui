@@ -33,7 +33,7 @@
     
     <p>
         <label>${ui.message('FormField.minOccurs')}</label>
-        <input ng-model="providerAttributeType.minOccurs"/>
+        <input ng-model="providerAttributeType.minOccurs" required/>
     </p>
     <p>
         <label>${ui.message('FormField.maxOccurs')}</label>
@@ -41,7 +41,7 @@
     </p>
     <p>
         <label>${ui.message('AttributeType.datatypeClassname')}</label>
-        <select ng-model="providerAttributeType.datatypeClassname">
+        <select ng-model="providerAttributeType.datatypeClassname" required>
         	<option></option>
         	<% datatypeClassnames.each { dtcn -> %>
 	        	<option value="${dtcn}" <% if (dtcn == '{{providerAttributeType.datatypeClassname}}') { %> selected="selected" <% } %> >

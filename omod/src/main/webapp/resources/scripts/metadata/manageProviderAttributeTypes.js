@@ -103,7 +103,6 @@ angular.module("manageProviderAttributeTypes", [ "providerAttributeTypeService",
             $scope.providerAttributeType = providerAttributeType;
 
             $scope.save = function() {
-                // TODO: utility function for doing this, until RESTWS-460 is fixed
                 var toSave = {
                     uuid: $scope.providerAttributeType.uuid,
                     name: $scope.providerAttributeType.name,
