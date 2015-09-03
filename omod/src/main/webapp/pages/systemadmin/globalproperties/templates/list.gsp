@@ -6,14 +6,14 @@
     <thead>
     <tr>
         <th>${ui.message('general.name')}</th>
-        <th>${ui.message('general.description')}</th>
+        <th>${ui.message('general.value')}</th>
         <th class="adminui-action-column">${ui.message('general.action')}</th>
     </tr>
     </thead>
     <tbody>
     <tr ng-repeat="systemSetting in systemSettings" ng-if="!systemSetting.property.endsWith('.mandatory') && !systemSetting.property.endsWith('.started')">
-        <td>{{systemSetting.property}}</td>
-        <td>{{systemSetting.description}}</td>
+        <td title='{{systemSetting.description}}'>{{systemSetting.property}}</td>
+        <td>{{systemSetting.value}}</td>
         <td>
             <a ui-sref="edit({systemSettingUuid: systemSetting.uuid})">
                 <i class="icon-pencil edit-action" title="${ui.message("emr.edit")}"></i>

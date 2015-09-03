@@ -2,29 +2,17 @@
 <h2 ng-show="systemSetting.uuid">${ui.message('adminui.editSystemSetting.title')}</h2>
 
 <fieldset class="right" ng-show="systemSetting.uuid">
-    <legend>${ui.message('general.auditInfo')}</legend>
+    <legend>${ui.message('adminui.auditInfo')}</legend>
     <p>
         ${ui.message('general.uuid')}: {{ systemSetting.uuid }}
-    </p>
-    <p>
-        ${ui.message('general.createdBy')}:
-        {{ systemSetting.auditInfo.creator | omrs.display }}
-        ${ui.message('general.onDate')}
-        {{ systemSetting.auditInfo.dateCreated | serverDate }}
-    </p>
-    <p ng-show="systemSetting.changedBy">
-        ${ui.message('general.changedBy')}:
-        {{ systemSetting.auditInfo.changedBy | omrs.display }}
-        ${ui.message('general.onDate')}
-        {{ systemSetting.auditInfo.dateChanged | serverDate }}
     </p>
 </fieldset>
 
 
 <form class="simple-form-ui" name="systemSettingForm" novalidate ng-submit="save()">
-    <p ng-hide="systemSetting.property">
+    <p>
         <label>${ui.message('general.name')}</label>
-        <input ng-model="systemSetting.property" required/>
+        <input ng-model="systemSetting.property" ng-disabled="systemSetting.uuid" required/>
     </p>
     <p>
         <label>${ui.message('general.description')}</label>
@@ -32,7 +20,7 @@
     </p>
     <p>
         <label>${ui.message('general.value')}</label>
-        <input ng-model="systemSetting.value"/>
+        <textarea ng-model="systemSetting.value" cols="54" required></textarea>
     </p>
 
     <p>
