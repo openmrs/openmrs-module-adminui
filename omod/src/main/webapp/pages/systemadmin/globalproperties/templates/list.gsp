@@ -11,7 +11,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr ng-repeat="systemSetting in systemSettings">
+    <tr ng-repeat="systemSetting in systemSettings" ng-if="!systemSetting.property.endsWith('.mandatory') && !systemSetting.property.endsWith('.started')">
         <td>{{systemSetting.property}}</td>
         <td>{{systemSetting.description}}</td>
         <td>
