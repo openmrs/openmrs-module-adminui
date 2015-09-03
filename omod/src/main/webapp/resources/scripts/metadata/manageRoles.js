@@ -54,8 +54,6 @@ angular.module("manageRoles", [ "roleService", "privilegeService", "ngDialog", "
 
             $scope.purge = function(role) {
             	var adminuiRolePurgeMessage = replaceTemplate($scope.dataConfig.rolePurgeTemplateMessage, "{0}", role.name);
-            	// remove
-            	console.log("adminuiRolePurgeMessage: " + adminuiRolePurgeMessage);
                 ngDialog.openConfirm({
                     showClose: false,
                     closeByEscape: true,
@@ -64,8 +62,6 @@ angular.module("manageRoles", [ "roleService", "privilegeService", "ngDialog", "
                     controller: function($scope) {
                         $scope.role = role;
                     	$scope.adminuiRolePurgeMessage = adminuiRolePurgeMessage;
-                    	// remove
-                    	console.log("$scope.adminuiRolePurgeMessage: " + $scope.adminuiRolePurgeMessage);
                     }
                 	}).then(function() {
                     Role.delete({
@@ -204,9 +200,9 @@ angular.module("manageRoles", [ "roleService", "privilegeService", "ngDialog", "
                 $scope.role.inheritedRoles = []; // clear list
                 $scope.roles.forEach(function (val, idx){
                     if ($scope.inheritedRoles[idx])  { // inherited role selected
-                        $scope.role.inheritedRoles.push({
+                        $scope.role.inheritedRoles.push({  // add role to list 
                                 uuid: $scope.roles[idx].uuid                         
-                        });  // add role to list 
+                        });
                     }
                 });               
             }

@@ -7,6 +7,7 @@
         <input ng-hide="role.uuid" ng-model="role.name" required/>
         <p ng-show="role.uuid">{{role.name}}</p>
     </p>
+    
     <p>
         <label>${ ui.message("adminui.role.description") }</label>
         <input ng-model="role.description" required/>

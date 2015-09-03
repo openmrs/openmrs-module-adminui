@@ -37,6 +37,7 @@
     	"adminui.role.purge",
         "uicommons.generalSavedNotification"
     ]);
+    
     var dataConfig = {
     		rolePurgeTemplateMessage: "${ ui.message("adminui.role.purge") }"
     	};

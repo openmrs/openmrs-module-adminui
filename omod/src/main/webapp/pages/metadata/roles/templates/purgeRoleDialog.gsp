@@ -5,6 +5,7 @@
     <h4>
         &quot;{{ adminuiRolePurgeMessage }}&quot;
     </h4>
+    
     <br />
     <div>
         <button class="confirm right" ng-click="confirm(reason)">${ ui.message("uicommons.confirm") }</button>
