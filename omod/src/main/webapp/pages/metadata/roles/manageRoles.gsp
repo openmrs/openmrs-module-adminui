@@ -12,6 +12,8 @@
     ui.includeJavascript("uicommons", "filters/serverDate.js")
 
     ui.includeJavascript("uicommons", "ngDialog/ngDialog.js")
+    
+    ui.includeJavascript("uicommons", "styleguide/index.css")
     ui.includeCss("uicommons", "ngDialog/ngDialog.min.css")
 	ui.includeCss("adminui", "adminui.css")
 
@@ -32,8 +34,12 @@
     	"adminui.role.getPrivileges.error",
     	"adminui.role.save.success",
     	"adminui.role.save.error",
+    	"adminui.role.purge",
         "uicommons.generalSavedNotification"
     ]);
+    var dataConfig = {
+    		rolePurgeTemplateMessage: "${ ui.message("adminui.role.purge") }"
+    	};
 </script>
 
 <div id="manage-roles">

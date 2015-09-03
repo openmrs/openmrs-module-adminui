@@ -3,7 +3,7 @@
 </div>
 <div class="dialog-content">
     <h4>
-        ${ui.message('uicommons.delete')} &quot;{{ role.name }}&quot;?
+        &quot;{{ adminuiRolePurgeMessage }}&quot;
     </h4>
     <br />
     <div>

@@ -4,7 +4,8 @@
 <form class="simple-form-ui" name="roleForm" novalidate ng-submit="save()">
     <p>
         <label>${ ui.message("adminui.role.role") }</label>
-        <input ng-disabled="role.uuid" ng-model="role.name" ng-class="{ adminuiDisabled: role.uuid }" required/>
+        <input ng-hide="role.uuid" ng-model="role.name" required/>
+        <p ng-show="role.uuid">{{role.name}}</p>
     </p>
     <p>
         <label>${ ui.message("adminui.role.description") }</label>
@@ -60,11 +61,11 @@
         <table>
             <tbody>
                 <tr ng-repeat="(idx, val) in privileges" ng-hide="idx % 2">
-                    <td ng-class="{adminuiDisabled: inheritedPrivilegeFlags[idx] }">
+                    <td ng-class="{disabled: inheritedPrivilegeFlags[idx] }">
                         <input type="checkbox" ng-disabled="inheritedPrivilegeFlags[idx]" ng-model="privilegeFlags[idx]">
                         {{privileges[idx].name}}
                     </td>
-                    <td ng-hide="!privileges[idx + 1]" ng-class="{ adminuiDisabled: inheritedPrivilegeFlags[idx + 1] }">
+                    <td ng-hide="!privileges[idx + 1]" ng-class="{ disabled: inheritedPrivilegeFlags[idx + 1] }">
                         <input type="checkbox" ng-disabled="inheritedPrivilegeFlags[idx + 1]" ng-model="privilegeFlags[idx + 1]">
                         {{privileges[idx + 1].name}}
                     </td>
