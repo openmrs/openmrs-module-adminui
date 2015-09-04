@@ -90,7 +90,7 @@ public class AccountPageController {
 	                   @SpringBean("messageSourceService") MessageSourceService messageSourceService,
 	                   @SpringBean("adminAccountService") AccountService accountService,
 	                   @SpringBean("adminService") AdministrationService administrationService,
-	                   @SpringBean("accountValidator") AdminUiAccountValidator accountValidator,
+	                   @SpringBean("adminUiAccountValidator") AdminUiAccountValidator accountValidator,
 	                   @SpringBean("providerManagementService") ProviderManagementService providerManagementService,
 	                   PageModel model, HttpServletRequest request) {
 		
