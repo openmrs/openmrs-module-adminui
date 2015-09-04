@@ -20,42 +20,49 @@
     </p>
 </fieldset>
 
-
-<form name="visitAttributeTypeForm" novalidate ng-submit="save()">
+<form name="visitAttributeTypeForm" novalidate ng-submit="save()" class="simple-form-ui">
     <p>
-        <label>${ui.message('general.name')}</label>
+        <label>${ui.message('general.name')}<span class="adminui-text-red">*</span></label>
         <input ng-model="visitAttributeType.name" required/>
+        <span ng-repeat="item in error.fieldErrors.name" class="field-error">{{item.message}}</span>
     </p>
     <p>
         <label>${ui.message('general.description')}</label>
         <input ng-model="visitAttributeType.description" />
+        <span ng-repeat="item in error.fieldErrors.description" class="field-error">{{item.message}}</span>
     </p>
     <p>
-        <label>${ui.message('adminui.minOccurs')}</label>
+        <label>${ui.message('adminui.minOccurs')}<span class="adminui-text-red">*</span></label>
         <input type="number" ng-model="visitAttributeType.minOccurs" required/>
+        <span ng-repeat="item in error.fieldErrors.minOccurs" class="field-error">{{item.message}}</span>
     </p>
     <p>
         <label>${ui.message('adminui.maxOccurs')}</label>
         <input type="number" ng-model="visitAttributeType.maxOccurs" />
+        <span ng-repeat="item in error.fieldErrors.maxOccurs" class="field-error">{{item.message}}</span>
     </p>
     <p>
-        <label>${ui.message('adminui.datatype')}</label>
-        <select ng-model="visitAttributeType.datatypeClassname" ng-options="item.datatypeClassname as item.display for item in customDatatypes" required />
+        <label>${ui.message('adminui.datatype')}<span class="adminui-text-red">*</span></label>
+        <select ng-model="visitAttributeType.datatypeClassname" 
+        	ng-options="customDatatype.datatypeClassname as customDatatype.display for customDatatype in customDatatypes" 
+        	ng-change="updateHandlerClassnames(true)" ng-init="updateHandlerClassnames(false)" required />
     </p>
 	<p>
-        <label>${ui.message('adminui.datatypeConfiguration')}</label>
-        <textarea ng-model="visitAttributeType.datatypeConfig" />
+        <label>${ui.message('adminui.datatypeConfig')}</label>
+        <textarea ng-model="visitAttributeType.datatypeConfig" rows="3" cols="54" />
+        <span ng-repeat="item in error.fieldErrors.datatypeConfig" class="field-error">{{item.message}}</span>
     </p>
     <p>
-        <label>${ui.message('adminui.handler')}</label>
-        <select ng-model="visitAttributeType.preferredHandlerClassname" ng-init="visitAttributeType.preferredHandlerClassname = options[0]">
+        <label>${ui.message('adminui.preferredHandler')}</label>
+        <select ng-model="visitAttributeType.preferredHandlerClassname"
+			ng-options="handlerClassname for handlerClassname in handlerClassnames">
         	<option value="">${ui.message('general.default')}</option>
-        	<option ng-repeat="handlerClassname in visitAttributeType.datatypeClassname" value="{{handlerClassname}}">{{handlerClassname}}</option>
-        </select>	
+        </select>
     </p>
     <p>
-        <label>${ui.message('adminui.handlerConfiguration')}</label>
-        <textarea ng-model="visitAttributeType.handlerConfig" />
+        <label>${ui.message('adminui.handlerConfig')}</label>
+        <textarea ng-model="visitAttributeType.handlerConfig" rows="3" cols="54" />
+        <span ng-repeat="item in error.fieldErrors.handlerConfig" class="field-error">{{item.message}}</span>
     </p>
 
     <p>

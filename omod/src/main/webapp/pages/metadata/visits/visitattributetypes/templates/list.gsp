@@ -24,6 +24,9 @@
             <a ng-show="visitAttributeType.retired" ng-click="unretire(visitAttributeType)">
                 <i class="icon-reply edit-action" title="${ui.message("uicommons.unretire")}"></i>
             </a>
+            <a ng-click="purge(visitAttributeType)">
+                <i class="icon-trash delete-action" title="${ui.message("general.purge")}"></i>
+            </a>
         </td>
     </tr>
     </tbody>

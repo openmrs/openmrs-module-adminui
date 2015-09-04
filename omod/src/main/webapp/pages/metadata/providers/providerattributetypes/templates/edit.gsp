@@ -52,6 +52,7 @@
     </p>
     <p>
         <label>${ui.message('AttributeType.datatypeConfig')}</label>
+        <span class="error">{{formError}}</span>
         <textarea ng-model="providerAttributeType.datatypeConfig" cols="54"></textarea>
     </p>
     <p>

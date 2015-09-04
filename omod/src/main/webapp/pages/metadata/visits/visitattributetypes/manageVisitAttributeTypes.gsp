@@ -15,6 +15,7 @@
     ui.includeCss("uicommons", "ngDialog/ngDialog.min.css")
 	
     ui.includeJavascript("adminui", "metadata/manageVisitAttributeTypes.js")
+    ui.includeCss("adminui", "adminui.css")
 %>
 
 <script type="text/javascript">

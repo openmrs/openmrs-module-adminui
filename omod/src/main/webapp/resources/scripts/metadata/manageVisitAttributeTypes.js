@@ -18,10 +18,13 @@ angular.module("manageVisitAttributeTypes", [ "visitAttributeTypeService", "cust
                 resolve: {
                     visitAttributeType: function($stateParams, VisitAttributeType) {
                         if ($stateParams.visitAttributeTypeUuid) {
-                            return VisitAttributeType.get({ uuid: $stateParams.visitAttributeTypeUuid, v: "full" });
+                            return VisitAttributeType.get({ uuid: $stateParams.visitAttributeTypeUuid, v: "full" }).$promise;
                         }
                         return {};
-                    }
+                    },
+                	customDatatypes: function(CustomDatatypeService) {
+                		return CustomDatatypeService.getCustomDatatypes({ v: "full" });
+                	}
                 },
                 controller: "EditVisitAttributeTypeController"
             });
@@ -34,9 +37,7 @@ angular.module("manageVisitAttributeTypes", [ "visitAttributeTypeService", "cust
             }
 
             function loadVisitAttributeTypes() {
-                // TODO standard function for failure of REST call
                 VisitAttributeType.query({ v: "default", includeAll: true }).$promise.then(function(response) {
-                    // TODO handle multiple pages of results in a standard way
                     $scope.visitAttributeTypes = sortWithRetiredLast(response.results);
                 });
             }
@@ -56,18 +57,39 @@ angular.module("manageVisitAttributeTypes", [ "visitAttributeTypeService", "cust
                         reason: reason
                     }).$promise.then(function() {
                         loadVisitAttributeTypes();
+                        emr.successMessage(emr.message("adminui.retired"));
                     });
                 });
             }
 
             $scope.unretire = function(visitAttributeType) {
-                // will fail until RESTWS-456
                 VisitAttributeType.save({
                     uuid: visitAttributeType.uuid,
                     retired: false
                 }).$promise.then(function() {
                     loadVisitAttributeTypes();
+                    emr.successMessage(emr.message("adminui.restored"));
                 })
+            }
+            
+            $scope.purge = function(visitAttributeType) {
+                ngDialog.openConfirm({
+                    showClose: false,
+                    closeByEscape: true,
+                    closeByDocument: true,
+                    template: "templates/purgeVisitAttributeTypeDialog.page",
+                    controller: function($scope) {
+                        $scope.visitAttributeType = visitAttributeType;
+                    }
+                }).then(function() {
+                	VisitAttributeType.delete({
+                        uuid: visitAttributeType.uuid,
+                        purge: ""
+                    }).$promise.then(function() {
+                    	loadVisitAttributeTypes();
+                        emr.successMessage(emr.message("adminui.purged"));
+                    })
+                });
             }
 
             $scope.edit = function(visitAttributeType) {
@@ -77,24 +99,48 @@ angular.module("manageVisitAttributeTypes", [ "visitAttributeTypeService", "cust
             loadVisitAttributeTypes();
         }])
 
-    .controller("EditVisitAttributeTypeController", [ "$scope", "$state", "VisitAttributeType", "visitAttributeType", "CustomDatatype",
-        function($scope, $state, VisitAttributeType, visitAttributeType, CustomDatatype) {
-            $scope.visitAttributeType = visitAttributeType;
-            if (!$scope.visitAttributeType.minOccurs) {
-            	$scope.visitAttributeType.minOccurs = 0;
-            }
+    .controller("EditVisitAttributeTypeController", [ "$scope", "$state", "VisitAttributeType", "visitAttributeType", "customDatatypes",
+        function($scope, $state, VisitAttributeType, visitAttributeType, customDatatypes) {
+			$scope.customDatatypes = customDatatypes;	
+			$scope.updateHandlerClassnames = function(reset) {
+	        	for (i = 0; i < $scope.customDatatypes.length; i++) {
+	        		if ($scope.customDatatypes[i].datatypeClassname == $scope.visitAttributeType.datatypeClassname) {
+	        			$scope.handlerClassnames = customDatatypes[i].handlerClassnames;
+	        			
+	        			if (reset) {
+	        				$scope.visitAttributeType.preferredHandlerClassname = "";
+	        			}
+	        			break;
+	        		}
+	        	}
+	        }
+			
+	    	$scope.visitAttributeType = visitAttributeType;
+	        if (!$scope.visitAttributeType.minOccurs) {
+	        	$scope.visitAttributeType.minOccurs = 0;
+	        }
             
-            CustomDatatype.query({ v: "full"}).$promise.then(function(response) {
-                $scope.customDatatypes = response.results;
-            });
-            
-            $scope.save = function() {
-            	$scope.visitAttributeType.datatypeClassname = $scope.visitAttributeType.datatypeClassname.datatypeClassname;
-                VisitAttributeType.save($scope.visitAttributeType).$promise.then(function() {
+            $scope.save = function() {   
+            	var toSave = {
+	                uuid: $scope.visitAttributeType.uuid,
+	                name: $scope.visitAttributeType.name,
+	                description: $scope.visitAttributeType.description,
+	                minOccurs: $scope.visitAttributeType.minOccurs,
+	                maxOccurs: $scope.visitAttributeType.maxOccurs,
+	                datatypeClassname: $scope.visitAttributeType.datatypeClassname || null,
+	                datatypeConfig: $scope.visitAttributeType.datatypeConfig,
+	                preferredHandlerClassname: $scope.visitAttributeType.preferredHandlerClassname || null,
+	                handlerConfig: $scope.visitAttributeType.handlerConfig
+                };
+
+                var successMessageCode = ($scope.visitAttributeType.uuid) ? "adminui.savedChanges" : "adminui.saved";
+                VisitAttributeType.save(toSave).$promise.then(function() {
                     $state.go("list");
-                    emr.successMessage(emr.message("uicommons.generalSavedNotification"));
-                }, function() {
-                    // TODO handle server-side errors
+                    emr.successMessage(emr.message(successMessageCode));
+                }, function(error) {
+                	$scope.error = error.data.error;
                 })
             }
+            
+            
         }]);
