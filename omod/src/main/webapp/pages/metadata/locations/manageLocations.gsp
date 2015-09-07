@@ -37,8 +37,8 @@
 			</td>
 
             <td>
-                <% it.tags.each{ tag-> %>
-					${ ui.format(tag.name)+','}
+                <% it.tags.eachWithIndex { tag, index -> %>
+					${ ui.format(tag.name)} <% if (index < it.tags.size() - 1) { %> , <% } %>
 				<% } %>
             </td>
 
