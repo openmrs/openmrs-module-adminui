@@ -243,7 +243,7 @@ jq(document).ready(function() {
                             </p>
 
                             <p><label>Password</label>
-                                <input type='password' id='user"1_password' name='user1_password'>
+                                <input type='password' id='user1_password' name='user1_password'>
                             </p>
 
                             <p><label>Confirm Password</label>
