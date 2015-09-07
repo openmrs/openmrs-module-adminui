@@ -31,11 +31,11 @@ angular.module("manageRoles", [ "roleService", "privilegeService", "ngDialog", "
         function($scope, $state, Role, ngDialog) {
     		
             function loadRoles() {
-                 Role.query({ v: "default", includeAll: true }).$promise.then(function(response) {
+            	Role.query({ v: "default", includeAll: true }).$promise.then(function(response) {
                     // TODO handle multiple pages of results in a standard way
                     $scope.roles = response.results;
-                }, function() {
-                    emr.errorMessage(emr.message("adminui.role.purge.success"));
+                }, function(response) {
+                    emr.errorMessage(emr.message("adminui.role.getRoles.error"));
                 })
             }
 
@@ -45,7 +45,7 @@ angular.module("manageRoles", [ "roleService", "privilegeService", "ngDialog", "
             
             $scope.load = function() {
             	$scope.dataConfig = dataConfig;
-            	loadRoles();
+               	loadRoles();
             }
 
             $scope.edit = function(role) {
@@ -69,9 +69,14 @@ angular.module("manageRoles", [ "roleService", "privilegeService", "ngDialog", "
                         purge: ""
                     })
                     .$promise.then(function() {
+                        idx = $scope.roles.length - 1;
+                        while(idx--){
+                            if ($scope.roles[idx].uuid === role.uuid)  { 
+                                $scope.roles.splice(idx, 1);
+                            }
+                        }
                         emr.successMessage(emr.message("adminui.role.purge.success"));
-                    	loadRoles();
-                    }, function() {
+                    }, function(response) {
                         emr.errorMessage(emr.message("adminui.role.purge.error"));
                     });
                 });
@@ -141,11 +146,11 @@ angular.module("manageRoles", [ "roleService", "privilegeService", "ngDialog", "
                                                 
                         loadInheritedPrivileges();
 
-                    }, function() {
+                    }, function(response) {
                         emr.errorMessage(emr.message("adminui.role.getPrivileges.error"));
                     });
                     
-                }, function() {
+                }, function(response) {
                     emr.errorMessage(emr.message("adminui.role.getRoles.error"));
                 })
             }
@@ -190,7 +195,7 @@ angular.module("manageRoles", [ "roleService", "privilegeService", "ngDialog", "
             function loadInheritedRoles() {                
                 if ($scope.roles != null) {                                         
                 	$scope.roles.forEach(function(val, idx) { 
-	                    $scope.inheritedRoles[idx] = isInArray($scope.role.inheritedRoles, val);	                    
+	                    $scope.inheritedRoles[idx] = isInArray($scope.role.allInheritedRoles, val);	                    
                     });   
                 }
             }
@@ -224,12 +229,6 @@ angular.module("manageRoles", [ "roleService", "privilegeService", "ngDialog", "
             	$scope.dataConfig = dataConfig;
             	loadRole();
             }
-            
-            // update inherited privileges when list of inherited roles changes
-            $scope.selectInheritedRole = function() {
-            	updateInheritedRoles();
-                loadInheritedPrivileges();
-            }
 
             $scope.save = function() {
             	updateInheritedRoles();
@@ -244,7 +243,7 @@ angular.module("manageRoles", [ "roleService", "privilegeService", "ngDialog", "
                 }).$promise.then(function() {
                     emr.successMessage(emr.message("adminui.role.save.success"));
                     $state.go("list");
-                }, function() {
+                }, function(response) {
                     emr.errorMessage(emr.message("adminui.role.save.error"));
                 })
             }
