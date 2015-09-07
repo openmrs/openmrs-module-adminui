@@ -146,7 +146,8 @@
             label: ui.format(it),
             formFieldName: "locTags",
             value: it.id,
-            checked: location.tags && location.tags.contains(it)
+            checked: location.tags && location.tags.contains(it),
+            valueIsNotBoolean: true
         ])}
 
     <% } %>
