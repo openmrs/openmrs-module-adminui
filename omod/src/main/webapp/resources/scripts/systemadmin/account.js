@@ -28,6 +28,15 @@ jq(function() {
     jq('input.confirm').click(function(){
 
         if (!jq(this).attr("disabled")) {
+        	
+        	var password = jq("#user1_password").val();
+        	var confirmPassword = jq("#user1_confirmPassword").val();
+        	
+        	if (confirmPassword && password != confirmPassword) {
+        		emr.errorAlert("error.password.match");
+        		return;
+        	}
+        	
             jq(this).closest("form").submit();
         }
 

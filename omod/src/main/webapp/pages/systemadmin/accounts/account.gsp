@@ -31,6 +31,11 @@
         { label: "${ ui.message((createAccount) ? 'adminui.addAccount.label' : 'adminui.editAccount.label')}" }
 
     ];
+    
+    emr.loadMessages([
+        "error.password.match"
+    ]);
+    
 </script>
 
 <script type="text/javascript">
@@ -322,7 +327,7 @@ jq(document).ready(function() {
 
     <div id>
         <input type="button" class="cancel" value="${ ui.message("general.cancel") }" onclick="window.location='/${ contextPath }/adminui/systemadmin/accounts/manageAccounts.page'" />
-        <input type="submit" class="confirm" id="save-button" value="${ ui.message("general.save") }"  />
+        <input type="button" class="confirm" id="save-button" value="${ ui.message("general.save") }"  />
     </div>
 
 </form>
