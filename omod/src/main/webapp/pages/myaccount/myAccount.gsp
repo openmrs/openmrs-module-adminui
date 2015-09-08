@@ -17,12 +17,16 @@
             ${ ui.message("adminui.myAccount.changePassword.label") }
         </div>
     </a>
+    <%
+    /* We actually don't use these anywhere to reset a user's password
     <a class="button app big" href="${ ui.pageLink("adminui", "myaccount/changeSecretQuestion") }">
         <div class="task">
             <i class="icon-unlock"></i>
             ${ ui.message("adminui.myAccount.changeSecretQuestion.label") }
         </div>
     </a>
+    */
+    %>
     <a class="button app big" href="${ ui.pageLink("adminui", "myaccount/changeDefaults") }">
         <div class="task">
             <i class="icon-unlock"></i>
