@@ -3,7 +3,7 @@
 </div>
 <div class="dialog-content">
     <h4>
-        ${ui.message('uicommons.delete')} &quot;{{ visitAttributeType.name }}&quot;?
+        {{ '${ui.message("adminui.purge")}'.replace('{0}', visitAttributeType.name) }}
     </h4>
     <br />
     <div>
