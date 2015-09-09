@@ -19,10 +19,10 @@
 <table id="list-locations" cellspacing="0" cellpadding="2">
 	<thead>
 		<tr>
-			<th>${ ui.message("adminui.location.name")}</th>
-			<th>${ ui.message("adminui.location.description") }</th>
+			<th>${ ui.message("general.name")}</th>
+			<th>${ ui.message("general.description") }</th>
 			<th>${ ui.message("adminui.location.tags") }</th>
-            <th></th>
+            <th>${ ui.message("general.action") }</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -43,14 +43,26 @@
             </td>
 
 			<td>
-	            <i class="icon-pencil edit-action" title="${ ui.message("general.edit") }"
-				   onclick="location.href='${ui.pageLink("adminui", "metadata/locations/location",[locationId: it.id])}'"></i>
+				<% if (!it.retired) { %>
+		            <i class="icon-pencil edit-action" title="${ ui.message("general.edit") }"
+					   onclick="location.href='${ui.pageLink("adminui", "metadata/locations/location",[locationId: it.id])}'">
+					</i>
+				<% } %>
+				
+				<% if (!it.retired) { %>
+                	<i class="icon-remove delete-action" title="${ui.message("emr.delete")}"></i>
+	            <% } %>
+	            
+	            <% if (it.retired) { %>
+	                <i class="icon-reply edit-action" title="${ui.message("general.restore")}"></i>
+	            <% } %>
+	           
+	            <i class="icon-trash delete-action" title="${ui.message("general.purge")}"></i>
         	</td>
 		</tr>
 		<% } %>
 	</tbody>
 </table>
-
 
 <% if ( (locations != null) && (locations.size() > 0) ) { %>
 ${ ui.includeFragment("uicommons", "widget/dataTable", [ object: "#list-locations",
