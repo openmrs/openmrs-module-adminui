@@ -29,16 +29,11 @@ public class AccountServiceComponentTest extends BaseModuleContextSensitiveTest 
 	
 	private UserService userService;
 	
-	//private ProviderService providerService;
-	
 	private ProviderManagementService providerManagementService;
-	
-	//private EmrApiProperties emrApiProperties;
 	
 	@Before
 	public void setup() {
 		userService = Context.getUserService();
-		//providerService = Context.getProviderService();
 		accountService = Context.getService(AccountService.class);
 		providerManagementService = Context.getService(ProviderManagementService.class);
 	}

@@ -12,10 +12,8 @@ package org.openmrs.module.adminui.account;
 import java.util.List;
 import java.util.Map;
 
-import org.openmrs.Person;
 import org.openmrs.Role;
 import org.openmrs.User;
-import org.openmrs.module.adminui.AdminUiActivator;
 
 public interface AccountService {
 	
@@ -24,7 +22,7 @@ public interface AccountService {
 	 *
 	 * @param account
 	 * @param userPasswordMap
-     * @return
+	 * @return
 	 */
 	void saveAccount(Account account, Map<User, String> userPasswordMap);
 	
@@ -35,8 +33,8 @@ public interface AccountService {
 	List<Account> getAllAccounts();
 	
 	/**
-	 * Gets all Capabilities, i.e roles with the {@link org.openmrs.module.adminui.AdminUiConstants#ROLE_PREFIX_CAPABILITY}
-	 * prefix
+	 * Gets all Capabilities, i.e roles with the
+	 * {@link org.openmrs.module.adminui.AdminUiConstants#ROLE_PREFIX_CAPABILITY} prefix
 	 *
 	 * @return a list of Roles
 	 * @should return all roles with the capability prefix
@@ -50,14 +48,5 @@ public interface AccountService {
 	 * @should return all roles with the privilege level prefix
 	 */
 	List<Role> getAllPrivilegeLevels();
-	
-	/**
-	 * Gets an account for the Specified person object
-	 *
-	 * @return
-	 * @should return the account for the specified person if they are associated to a user
-	 * @should return the account for the specified person if they are associated to a provider
-	 */
-	Account getAccountByPerson(Person person);
 	
 }

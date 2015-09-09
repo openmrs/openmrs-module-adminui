@@ -10,8 +10,6 @@
 package org.openmrs.module.adminui.account;
 
 import static org.junit.Assert.assertThat;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.argThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -21,18 +19,25 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.openmrs.Person;
 import org.openmrs.Provider;
 import org.openmrs.Role;
 import org.openmrs.User;
+import org.openmrs.api.AdministrationService;
 import org.openmrs.api.PersonService;
 import org.openmrs.api.ProviderService;
 import org.openmrs.api.UserService;
+import org.openmrs.api.context.Context;
 import org.openmrs.module.adminui.AdminUiConstants;
 import org.openmrs.module.adminui.TestUtils;
-import org.openmrs.module.emrapi.EmrApiProperties;
 import org.openmrs.module.providermanagement.api.ProviderManagementService;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
+@RunWith(PowerMockRunner.class)
+@PrepareForTest(Context.class)
 public class AccountServiceTest {
 	
 	private AccountServiceImpl accountService;
@@ -45,21 +50,24 @@ public class AccountServiceTest {
 	
 	private ProviderManagementService providerManagementService;
 	
-	private EmrApiProperties emrApiProperties;
+	private AdministrationService adminService;
 	
 	@Before
 	public void setup() {
+		PowerMockito.mockStatic(Context.class);
 		userService = mock(UserService.class);
 		personService = mock(PersonService.class);
 		providerService = mock(ProviderService.class);
 		providerManagementService = mock(ProviderManagementService.class);
-		emrApiProperties = mock(EmrApiProperties.class);
+		adminService = mock(AdministrationService.class);
 		
 		accountService = new AccountServiceImpl();
 		accountService.setUserService(userService);
 		accountService.setPersonService(personService);
 		accountService.setProviderService(providerService);
-		accountService.setEmrApiProperties(emrApiProperties);
+		accountService.setAdminService(adminService);
+		when(Context.getUserService()).thenReturn(userService);
+		when(Context.getProviderService()).thenReturn(providerService);
 	}
 	
 	/**
@@ -87,49 +95,17 @@ public class AccountServiceTest {
 		Person personA = new Person();
 		provider2.setPerson(personA);
 		Person personB = new Person();
+		String unknownProviderUuid = "unknown";
 		Provider unknownProvider = new Provider();
 		unknownProvider.setPerson(personB);
 		
-		when(emrApiProperties.getUnknownProvider()).thenReturn(unknownProvider);
+		when(adminService.getGlobalProperty("emr.unknownProvider")).thenReturn(unknownProviderUuid);
+		when(providerService.getProviderByUuid(unknownProviderUuid)).thenReturn(unknownProvider);
+		when(providerService.getUnknownProvider()).thenReturn(unknownProvider);
 		when(userService.getAllUsers()).thenReturn(Arrays.asList(user1, user2, user3, daemonUser));
 		when(providerService.getAllProviders()).thenReturn(Arrays.asList(provider1, provider2, unknownProvider));
 		
 		Assert.assertEquals(3, accountService.getAllAccounts().size());
-	}
-	
-	/**
-	 * @verifies return the account for the specified person if they are associated to a user
-	 * @see AccountService#getAccountByPerson(Person)
-	 */
-	@Test
-	public void getAccountByPerson_shouldReturnTheAccountForTheSpecifiedPersonIfTheyAreAssociatedToAUser() throws Exception {
-		User user = new User();
-		Person person = new Person();
-		person.setPersonId(1);
-		user.setPerson(person);
-		when(userService.getUsersByPerson(argThat(TestUtils.equalsMatcher(person)), any(Boolean.class))).thenReturn(
-		    Arrays.asList(user));
-		Account account = accountService.getAccountByPerson(person);
-		Assert.assertNotNull(account);
-		Assert.assertEquals(person, account.getPerson());
-	}
-	
-	/**
-	 * @verifies return the account for the specified person if they are associated to a provider
-	 * @see AccountService#getAccountByPerson(Person)
-	 */
-	@Test
-	public void getAccountByPerson_shouldReturnTheAccountForTheSpecifiedPersonIfTheyAreAssociatedToAProvider()
-	    throws Exception {
-		Person person = new Person();
-		person.setPersonId(1);
-		Provider provider = new Provider();
-		provider.setPerson(person);
-		when(providerService.getProvidersByPerson(argThat(TestUtils.equalsMatcher(person)), any(Boolean.class))).thenReturn(
-		    Arrays.asList(provider));
-		Account account = accountService.getAccountByPerson(person);
-		Assert.assertNotNull(account);
-		Assert.assertEquals(person, account.getPerson());
 	}
 	
 	/**

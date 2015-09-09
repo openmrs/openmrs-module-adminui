@@ -14,16 +14,17 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.openmrs.Person;
 import org.openmrs.Provider;
 import org.openmrs.Role;
 import org.openmrs.User;
+import org.openmrs.api.AdministrationService;
 import org.openmrs.api.PersonService;
 import org.openmrs.api.ProviderService;
 import org.openmrs.api.UserService;
 import org.openmrs.api.impl.BaseOpenmrsService;
 import org.openmrs.module.adminui.AdminUiConstants;
-import org.openmrs.module.emrapi.EmrApiProperties;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
@@ -35,7 +36,7 @@ public class AccountServiceImpl extends BaseOpenmrsService implements AccountSer
 	
 	private ProviderService providerService;
 	
-	private EmrApiProperties emrApiProperties;
+	private AdministrationService adminService;
 	
 	/**
 	 * @param userService the userService to set
@@ -52,17 +53,17 @@ public class AccountServiceImpl extends BaseOpenmrsService implements AccountSer
 	}
 	
 	/**
-	 * @param emrApiProperties
-	 */
-	public void setEmrApiProperties(EmrApiProperties emrApiProperties) {
-		this.emrApiProperties = emrApiProperties;
-	}
-	
-	/**
 	 * @param personService the personService to set
 	 */
 	public void setPersonService(PersonService personService) {
 		this.personService = personService;
+	}
+	
+	/**
+	 * @param adminService the adminService to set
+	 */
+	public void setAdminService(AdministrationService adminService) {
+		this.adminService = adminService;
 	}
 	
 	/**
@@ -106,10 +107,18 @@ public class AccountServiceImpl extends BaseOpenmrsService implements AccountSer
 			}
 		}
 		
-		Provider unknownProvider = emrApiProperties.getUnknownProvider();
+		List<Provider> unknownProviders = new ArrayList<Provider>();
+		String unknownProviderUuid = adminService.getGlobalProperty("emr.unknownProvider");
+		if (StringUtils.isNotBlank(unknownProviderUuid)) {
+			unknownProviders.add(providerService.getProviderByUuid(unknownProviderUuid));
+		}
+		//Include also the unknown provider from core
+		if (providerService.getUnknownProvider() != null) {
+			unknownProviders.add(providerService.getUnknownProvider());
+		}
 		for (Provider provider : providerService.getAllProviders()) {
-			//skip the baked-in unknown provider
-			if (provider.equals(unknownProvider)) {
+			//skip the unknown providers
+			if (unknownProviders.contains(provider)) {
 				continue;
 			}
 			
@@ -162,15 +171,6 @@ public class AccountServiceImpl extends BaseOpenmrsService implements AccountSer
 				privilegeLevels.add(candidate);
 		}
 		return privilegeLevels;
-	}
-	
-	/**
-	 * @see org.openmrs.module.adminui.account.AccountService#getAccountByPerson(org.openmrs.Person)
-	 */
-	@Override
-	@Transactional(readOnly = true)
-	public Account getAccountByPerson(Person person) {
-		return new Account(person);
 	}
 	
 }

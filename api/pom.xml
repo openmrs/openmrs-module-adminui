@@ -72,36 +72,7 @@
 
         <dependency>
             <groupId>org.openmrs.module</groupId>
-            <artifactId>emrapi-api</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.openmrs.module</groupId>
             <artifactId>uiframework-api</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.openmrs.module</groupId>
-            <artifactId>reporting-api</artifactId>
-            <type>jar</type>
-            <version>${reportingVersion}</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.openmrs.module</groupId>
-            <artifactId>calculation-api</artifactId>
-            <type>jar</type>
-            <version>${calculationVersion}</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.openmrs.module</groupId>
-            <artifactId>serialization.xstream-api</artifactId>
-            <type>jar</type>
-            <version>${serialization.xstreamVersion}</version>
-            <scope>test</scope>
         </dependency>
 		
 	</dependencies>

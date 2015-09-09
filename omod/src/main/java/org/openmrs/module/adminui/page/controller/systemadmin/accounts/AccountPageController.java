@@ -29,10 +29,10 @@ import org.openmrs.User;
 import org.openmrs.api.APIException;
 import org.openmrs.api.AdministrationService;
 import org.openmrs.messagesource.MessageSourceService;
+import org.openmrs.module.adminui.AdminUiConstants;
 import org.openmrs.module.adminui.account.Account;
 import org.openmrs.module.adminui.account.AccountService;
 import org.openmrs.module.adminui.account.AdminUiAccountValidator;
-import org.openmrs.module.emrapi.EmrApiConstants;
 import org.openmrs.module.providermanagement.Provider;
 import org.openmrs.module.providermanagement.ProviderRole;
 import org.openmrs.module.providermanagement.api.ProviderManagementService;
@@ -64,10 +64,10 @@ public class AccountPageController {
 		Account account;
 		
 		if (person == null) {
-			account = accountService.getAccountByPerson(new Person());
+			account = new Account(new Person());
 			
 		} else {
-			account = accountService.getAccountByPerson(person);
+			account = new Account(person);
 			if (account == null) {
 				throw new APIException("Failed to find user account matching person with id:" + person.getPersonId());
 			}
@@ -167,8 +167,8 @@ public class AccountPageController {
 		model.addAttribute("capabilities", accountService.getAllCapabilities());
 		List<Role> privilegeLevels = accountService.getAllPrivilegeLevels();
 		model.addAttribute("privilegeLevels", privilegeLevels);
-		String privilegeLevelPrefix = EmrApiConstants.ROLE_PREFIX_PRIVILEGE_LEVEL;
-		String rolePrefix = EmrApiConstants.ROLE_PREFIX_CAPABILITY;
+		String privilegeLevelPrefix = AdminUiConstants.ROLE_PREFIX_PRIVILEGE_LEVEL;
+		String rolePrefix = AdminUiConstants.ROLE_PREFIX_CAPABILITY;
 		model.addAttribute("privilegeLevelPrefix", privilegeLevelPrefix);
 		model.addAttribute("rolePrefix", rolePrefix);
 		model.addAttribute("allowedLocales", administrationService.getAllowedLocales());
