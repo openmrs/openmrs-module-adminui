@@ -27,15 +27,13 @@ angular.module("manageSystemSettings", [ "systemSettingService", "ngDialog", "ui
             });
     }])
 
-    .controller("ManageSystemSettingsController", [ "$scope", "$state", "SystemSetting", "ngDialog",
-        function($scope, $state, SystemSetting, ngDialog) {
+    .controller("ManageSystemSettingsController", [ "$scope", "$state", "SystemSetting", "ngDialog", "SystemSettingService", 
+        function($scope, $state, SystemSetting, ngDialog, SystemSettingService) {
     	
             function loadSystemSettings() {
-                // TODO standard function for failure of REST call
-            	SystemSetting.query({ v: "default", includeAll: true }).$promise.then(function(response) {
-                    // TODO handle multiple pages of results in a standard way
-                    $scope.systemSettings = response.results;
-                });
+            	SystemSettingService.getSystemSettings({ v: "default", includeAll: true }).then(function (result) {
+            		$scope.systemSettings = result;
+            	});
             }
 
             $scope.edit = function(systemSetting) {
