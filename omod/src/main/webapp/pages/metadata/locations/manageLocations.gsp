@@ -28,15 +28,15 @@
 	<tbody>
 		<% locations.each{  %>
 	 	<tr>
-	 		<td>
+	 		<td <% if (it.retired) { %> class="retired" <% } %> >
 				${ ui.format(it.name)}
 			</td>
 
-			<td>
+			<td <% if (it.retired) { %> class="retired" <% } %>>
 				${ ui.format(it.description) }
 			</td>
 
-            <td>
+            <td <% if (it.retired) { %> class="retired" <% } %>>
                 <% it.tags.eachWithIndex { tag, index -> %>
 					${ ui.format(tag.name)} <% if (index < it.tags.size() - 1) { %> , <% } %>
 				<% } %>
@@ -47,17 +47,15 @@
 		            <i class="icon-pencil edit-action" title="${ ui.message("general.edit") }"
 					   onclick="location.href='${ui.pageLink("adminui", "metadata/locations/location",[locationId: it.id])}'">
 					</i>
+					
+					<i class="icon-remove delete-action" title="${ui.message("emr.delete")}" onclick="retireLocation('${ it.name }', ${ it.id})"></i>
 				<% } %>
 				
-				<% if (!it.retired) { %>
-                	<i class="icon-remove delete-action" title="${ui.message("emr.delete")}"></i>
-	            <% } %>
-	            
 	            <% if (it.retired) { %>
-	                <i class="icon-reply edit-action" title="${ui.message("general.restore")}"></i>
+	                <i class="icon-reply edit-action" title="${ui.message("general.restore")}" onclick="unRetireLocation(${ it.id})"></i>
 	            <% } %>
-	           
-	            <i class="icon-trash delete-action" title="${ui.message("general.purge")}"></i>
+
+	            <i class="icon-trash delete-action" title="${ui.message("general.purge")}" class="right" onclick="purgeLocation('${ it.name }', ${ it.id})"></i>
         	</td>
 		</tr>
 		<% } %>
@@ -77,3 +75,96 @@ ${ ui.includeFragment("uicommons", "widget/dataTable", [ object: "#list-location
         ]
 ]) }
 <% } %>
+
+<div id="adminui-retire-location-dialog" class="dialog" style="display: none">
+    <div class="dialog-header">
+        <h3>${ ui.message("adminui.location.retire") }</h3>
+    </div>
+    <div class="dialog-content">
+        <h4>
+	        <span id="retireLocationMessage"/>
+	    </h4>
+        <form method="POST" action="manageLocations.page">
+        	<p>
+            	<input type="text" id="reason" name="reason" placeholder="${ ui.message("emr.optional") }"/>
+            </p>
+            <br/>
+            <input type="hidden" id="locationId" name="locationId"/>
+            <input type="hidden" name="action" value="retire"/>
+            <button class="confirm right" type="submit">${ ui.message("general.yes") }</button>
+            <button class="cancel">${ ui.message("general.no") }</button>
+        </form>
+    </div>
+</div>
+
+<div style="display: none">
+	<form id="adminui-unretire-location-form" method="POST" action="manageLocations.page">
+	    <input type="hidden" id="locationId" name="locationId"/>
+	    <input type="hidden" name="action" value="unretire"/>
+    </form>
+</div>
+
+<div id="adminui-purge-location-dialog" class="dialog" style="display: none">
+    <div class="dialog-header">
+        <h3>${ ui.message("adminui.location.purge") }</h3>
+    </div>
+    <div class="dialog-content">
+        <ul>
+            <li class="info">
+                <span id="purgeLocationMessage"/>
+            </li>
+        </ul>
+        <form method="POST" action="manageLocations.page">
+            <input type="hidden" id="locationId" name="locationId"/>
+            <input type="hidden" name="action" value="purge"/>
+            <button class="confirm right" type="submit">${ ui.message("general.yes") }</button>
+            <button class="cancel">${ ui.message("general.no") }</button>
+        </form>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+	var retireLocationDialog = null;
+	var purgeLocationDialog = null;
+
+	jq(document).ready( function() {
+	    
+	    retireLocationDialog = emr.setupConfirmationDialog({
+	        selector: '#adminui-retire-location-dialog',
+	        actions: {
+	            cancel: function() {
+	            	retireLocationDialog.close();
+	            }
+	        }
+	    });
+	    
+	    purgeLocationDialog = emr.setupConfirmationDialog({
+	        selector: '#adminui-purge-location-dialog',
+	        actions: {
+	            cancel: function() {
+	            	purgeLocationDialog.close();
+	            }
+	        }
+	    });
+	
+	});
+
+	function retireLocation(name, id) {
+	    jq("#adminui-retire-location-dialog #locationId").val(id);
+	    jq("#retireLocationMessage").text('${ ui.message("adminui.retire") }'.replace('{0}', name));
+	    retireLocationDialog.show();
+	}
+	
+	function unRetireLocation(id) {
+	    jq("#adminui-unretire-location-form #locationId").val(id);
+	    jq("#adminui-unretire-location-form").submit();
+	}
+	
+	function purgeLocation(name, id) {
+	    jq("#adminui-purge-location-dialog #locationId").val(id);
+	    jq("#purgeLocationMessage").text('${ ui.message("adminui.purge") }'.replace('{0}', name));
+	    purgeLocationDialog.show();
+	}
+	
+</script>

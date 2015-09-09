@@ -152,24 +152,12 @@
 
     <% } %>
 
-    <div>
-        <input type="button" class="cancel" value='${ui.message("general.cancel")}' onclick='window.location="/${ contextPath }/adminui/metadata/locations/manageLocations.page"' />
-        <input type="submit" class="confirm" name="save" id="save-button" value="${ui.message("general.save")}"/>
-    </div>
+    
     </fieldset>
-
-    <% if(!createLocation) { %>
-            <div>
-                <fieldset>
-                    ${ui.includeFragment("uicommons", "field/text", [
-                        label        : ui.message("general.retireReason"),
-                        formFieldName: "retireReason",
-                        id           : "retireReason",
-                        initialValue : (location.retireReason ?: '')
-                    ])}
-                    <input type="submit" class="button" name="retire" id="retire-button" value="${ui.message("adminui.location.retire")}"/>
-                </fieldset>
-            </div>
-    <% } %>
+    
+    <div>
+        <input type="button" class="cancel left" value='${ui.message("general.cancel")}' onclick='window.location="/${ contextPath }/adminui/metadata/locations/manageLocations.page"' />
+        <input type="submit" class="confirm right" name="save" id="save-button" value="${ui.message("general.save")}"/>
+    </div>
 
 </form>
