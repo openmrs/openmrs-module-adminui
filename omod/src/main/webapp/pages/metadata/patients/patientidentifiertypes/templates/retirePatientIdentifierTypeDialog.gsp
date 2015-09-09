@@ -1,12 +1,12 @@
 <div class="dialog-header">
-    <h3>Retire Patient Identifier Type</h3>
+    <h3>${ui.message('adminui.patientIdentifierType.retire.title')}</h3>
 </div>
 <div class="dialog-content">
     <h4>
-        Retire &quot;{{ patientIdentifierType.name }}&quot;?
+        {{ '${ui.message("adminui.retire")}'.replace('{0}', patientIdentifierType.name) }}
     </h4>
     <p>
-        Reason: <input type="text" ng-model="reason" placeholder="${ ui.message("emr.optional") }"/>
+        ${ui.message("general.reason")}: <input type="text" ng-model="reason" placeholder="${ ui.message("emr.optional") }"/>
     </p>
     <br/>
     <div>

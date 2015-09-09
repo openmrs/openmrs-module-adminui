@@ -3,10 +3,10 @@
 </div>
 <div class="dialog-content">
     <h4>
-        Retire &quot;{{ providerAttributeType.name }}&quot;?
+        {{ '${ui.message("adminui.retire")}'.replace('{0}', providerAttributeType.name) }}
     </h4>
     <p>
-        Reason: <input type="text" ng-model="reason" placeholder="${ ui.message("emr.optional") }"/>
+        ${ui.message("general.reason")}: <input type="text" ng-model="reason" placeholder="${ ui.message("emr.optional") }"/>
     </p>
     <br/>
     <div>

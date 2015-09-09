@@ -3,7 +3,7 @@
 </div>
 <div class="dialog-content">
     <h4>
-        ${ui.message('uicommons.delete')} &quot;{{ encounterRole.name }}&quot;?
+        {{ '${ui.message("adminui.purge")}'.replace('{0}', encounterRole.name) }}
     </h4>
     <br />
     <div>
