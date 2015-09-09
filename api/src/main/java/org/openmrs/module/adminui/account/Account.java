@@ -26,7 +26,7 @@ import org.openmrs.Role;
 import org.openmrs.User;
 import org.openmrs.api.APIException;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.emrapi.EmrApiConstants;
+import org.openmrs.module.adminui.AdminUiConstants;
 import org.openmrs.util.OpenmrsUtil;
 import org.openmrs.web.user.UserProperties;
 
@@ -130,7 +130,7 @@ public class Account {
 	public Role getPrivilegeLevel(User user) {
 		if (user != null && user.getRoles() != null) {
 			for (Role r : user.getRoles()) {
-				if (r.getRole().startsWith(EmrApiConstants.ROLE_PREFIX_PRIVILEGE_LEVEL)) {
+				if (r.getRole().startsWith(AdminUiConstants.ROLE_PREFIX_PRIVILEGE_LEVEL)) {
 					return r;
 				}
 			}
@@ -142,7 +142,7 @@ public class Account {
 		Set<Role> capabilities = new HashSet<Role>();
 		if (user != null && user.getRoles() != null) {
 			for (Role role : user.getRoles()) {
-				if (role.getRole().startsWith(EmrApiConstants.ROLE_PREFIX_CAPABILITY)) {
+				if (role.getRole().startsWith(AdminUiConstants.ROLE_PREFIX_CAPABILITY)) {
 					capabilities.add(role);
 				}
 			}
