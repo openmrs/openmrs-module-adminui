@@ -27,17 +27,16 @@ angular.module("manageEncounterRoles", [ "encounterRoleService", "ngDialog", "ui
             });
     }])
 
-    .controller("ManageEncounterRolesController", [ "$scope", "$state", "EncounterRole", "ngDialog",
-        function($scope, $state, EncounterRole, ngDialog) {
+    .controller("ManageEncounterRolesController", [ "$scope", "$state", "EncounterRole", "EncounterRoleService", "ngDialog",
+        function($scope, $state, EncounterRole, EncounterRoleService, ngDialog) {
             function sortWithRetiredLast(list) {
                 return _.sortBy(list, "retired");
             }
 
             function loadEncounterRoles() {
                 // TODO standard function for failure of REST call
-                EncounterRole.query({ v: "default", includeAll: true }).$promise.then(function(response) {
-                    // TODO handle multiple pages of results in a standard way
-                    $scope.encounterRoles = sortWithRetiredLast(response.results);
+                EncounterRoleService.getEncounterRoles({ v: "default", includeAll: true }).then(function(results) {
+                    $scope.encounterRoles = sortWithRetiredLast(results);
                 });
             }
 

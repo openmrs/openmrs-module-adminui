@@ -27,17 +27,16 @@ angular.module("manageEncounterTypes", [ "encounterTypeService", "ngDialog", "ui
             });
     }])
 
-    .controller("ManageEncounterTypesController", [ "$scope", "$state", "EncounterType", "ngDialog",
-        function($scope, $state, EncounterType, ngDialog) {
+    .controller("ManageEncounterTypesController", [ "$scope", "$state", "EncounterType", "EncounterTypeService", "ngDialog",
+        function($scope, $state, EncounterType, EncounterTypeService, ngDialog) {
             function sortWithRetiredLast(list) {
                 return _.sortBy(list, "retired");
             }
 
             function loadEncounterTypes() {
                 // TODO standard function for failure of REST call
-                EncounterType.query({ v: "default", includeAll: true }).$promise.then(function(response) {
-                    // TODO handle multiple pages of results in a standard way
-                    $scope.encounterTypes = sortWithRetiredLast(response.results);
+            	EncounterTypeService.getEncounterTypes({ v: "default", includeAll: true }).then(function(results) {
+                    $scope.encounterTypes = sortWithRetiredLast(results);
                 });
             }
 
