@@ -34,17 +34,10 @@ angular.module("manageRoles", [ "roleService", "privilegeService", "ngDialog", "
             	Role.query({ v: "default", includeAll: true }).$promise.then(function(response) {
                     // TODO handle multiple pages of results in a standard way
                     $scope.roles = response.results;
-                }, function(response) {
-                    emr.errorMessage(emr.message("adminui.role.getRoles.error"));
-                })
-            }
-
-            function replaceTemplate(template, pattern, replacement) {
-        		return template.replace(pattern, replacement);
+                });
             }
             
             $scope.load = function() {
-            	$scope.dataConfig = dataConfig;
                	loadRoles();
             }
 
@@ -53,7 +46,6 @@ angular.module("manageRoles", [ "roleService", "privilegeService", "ngDialog", "
             }
 
             $scope.purge = function(role) {
-            	var adminuiRolePurgeMessage = replaceTemplate($scope.dataConfig.rolePurgeTemplateMessage, "{0}", role.name);
                 ngDialog.openConfirm({
                     showClose: false,
                     closeByEscape: true,
@@ -61,23 +53,15 @@ angular.module("manageRoles", [ "roleService", "privilegeService", "ngDialog", "
                     template: "templates/purgeRoleDialog.page",
                     controller: function($scope) {
                         $scope.role = role;
-                    	$scope.adminuiRolePurgeMessage = adminuiRolePurgeMessage;
                     }
                 	}).then(function() {
                     Role.delete({
                 		uuid: role.uuid,
                         purge: ""
                     })
-                    .$promise.then(function() {
-                        idx = $scope.roles.length - 1;
-                        while(idx--){
-                            if ($scope.roles[idx].uuid === role.uuid)  { 
-                                $scope.roles.splice(idx, 1);
-                            }
-                        }
+                    .$promise.then(function() {                        
                         emr.successMessage(emr.message("adminui.role.purge.success"));
-                    }, function(response) {
-                        emr.errorMessage(emr.message("adminui.role.purge.error"));
+                        loadRoles();
                     });
                 });
             }
@@ -146,13 +130,8 @@ angular.module("manageRoles", [ "roleService", "privilegeService", "ngDialog", "
                                                 
                         loadInheritedPrivileges();
 
-                    }, function(response) {
-                        emr.errorMessage(emr.message("adminui.role.getPrivileges.error"));
                     });
-                    
-                }, function(response) {
-                    emr.errorMessage(emr.message("adminui.role.getRoles.error"));
-                })
+                });
             }
  
             function loadPrivilegeFlags() {
@@ -226,7 +205,6 @@ angular.module("manageRoles", [ "roleService", "privilegeService", "ngDialog", "
             }
             
             $scope.load = function() {
-            	$scope.dataConfig = dataConfig;
             	loadRole();
             }
 
@@ -243,8 +221,6 @@ angular.module("manageRoles", [ "roleService", "privilegeService", "ngDialog", "
                 }).$promise.then(function() {
                     emr.successMessage(emr.message("adminui.role.save.success"));
                     $state.go("list");
-                }, function(response) {
-                    emr.errorMessage(emr.message("adminui.role.save.error"));
-                })
+                });
             }
     }]);

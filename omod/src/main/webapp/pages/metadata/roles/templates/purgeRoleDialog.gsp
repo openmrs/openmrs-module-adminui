@@ -2,9 +2,7 @@
     <h3>${ui.message('adminui.role.purge.title')}</h3>
 </div>
 <div class="dialog-content">
-    <h4>
-        &quot;{{ adminuiRolePurgeMessage }}&quot;
-    </h4>
+    <h4><%= ui.message("adminui.role.purge", "'{{ role.name }}'") %></h4>  
     
     <br />
     <div>
