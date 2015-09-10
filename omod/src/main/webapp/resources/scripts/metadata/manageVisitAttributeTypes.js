@@ -105,7 +105,7 @@ angular.module("manageVisitAttributeTypes", [ "visitAttributeTypeService", "cust
 			$scope.updateHandlerClassnames = function(reset) {
 	        	for (i = 0; i < $scope.customDatatypes.length; i++) {
 	        		if ($scope.customDatatypes[i].datatypeClassname == $scope.visitAttributeType.datatypeClassname) {
-	        			$scope.handlerClassnames = customDatatypes[i].handlerClassnames;
+	        			$scope.handlers = customDatatypes[i].handlers;
 	        			
 	        			if (reset) {
 	        				$scope.visitAttributeType.preferredHandlerClassname = "";

@@ -55,7 +55,7 @@
     <p>
         <label>${ui.message('adminui.preferredHandler')}</label>
         <select ng-model="visitAttributeType.preferredHandlerClassname"
-			ng-options="handlerClassname for handlerClassname in handlerClassnames">
+			ng-options="handler.handlerClassname as handler.display for handler in handlers">
         	<option value="">${ui.message('general.default')}</option>
         </select>
     </p>
