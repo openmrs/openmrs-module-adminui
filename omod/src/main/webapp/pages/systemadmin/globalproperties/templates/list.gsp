@@ -2,6 +2,17 @@
 <br/>
 <br/>
 
+<style type="text/css">
+	table td {
+	    max-width: 100px;
+	    overflow: hidden;
+	    text-overflow: ellipsis;
+	    white-space: nowrap;
+	    padding-top: 0px;
+	    padding-bottom: 0px;
+	}
+</style>
+
 <table>
     <thead>
     <tr>
