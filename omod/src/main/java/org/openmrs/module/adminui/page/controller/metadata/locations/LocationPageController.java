@@ -44,16 +44,21 @@ public class LocationPageController {
      * @param locationId
      * @param locationService
      */
-    public void get(PageModel model, @RequestParam(value = "locationId", required = false) Integer locationId,
+    public void get(PageModel model, @RequestParam(value = "locationId", required = false) Location location,
                     @SpringBean("locationService") LocationService locationService) {
 
-        Location location = new Location();
-        if (locationId != null) {
-            location = locationService.getLocation(Integer.valueOf(locationId));
+        List<Location> locations = locationService.getAllLocations(false);
+        
+        //if editing a location, it should not be in the parent list
+        if (location != null) {
+        	locations.remove(location);
+        }
+        else {
+        	location = new Location();
         }
 
         model.addAttribute("location", location);
-        model.addAttribute("existingLocations", locationService.getAllLocations());
+        model.addAttribute("existingLocations", locations);
         model.addAttribute("locationTags", locationService.getAllLocationTags());
         model.addAttribute("attributeTypes", locationService.getAllLocationAttributeTypes());
     }

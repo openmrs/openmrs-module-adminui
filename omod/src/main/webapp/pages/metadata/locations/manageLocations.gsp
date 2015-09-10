@@ -1,5 +1,7 @@
 <%
     ui.decorateWith("appui", "standardEmrPage")
+    
+    ui.includeCss("adminui", "adminui.css")
 %>
 
 <script type="text/javascript">
@@ -22,7 +24,7 @@
 			<th>${ ui.message("general.name")}</th>
 			<th>${ ui.message("general.description") }</th>
 			<th>${ ui.message("adminui.location.tags") }</th>
-            <th>${ ui.message("general.action") }</th>
+            <th class="adminui-action-column">${ ui.message("general.action") }</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -52,7 +54,7 @@
 				<% } %>
 				
 	            <% if (it.retired) { %>
-	                <i class="icon-reply edit-action" title="${ui.message("general.restore")}" onclick="unRetireLocation(${ it.id})"></i>
+	                <i class="icon-reply edit-action" title="${ui.message("general.restore")}" onclick="restoreLocation(${ it.id})"></i>
 	            <% } %>
 
 	            <i class="icon-trash delete-action" title="${ui.message("general.purge")}" class="right" onclick="purgeLocation('${ it.name }', ${ it.id})"></i>
@@ -98,9 +100,9 @@ ${ ui.includeFragment("uicommons", "widget/dataTable", [ object: "#list-location
 </div>
 
 <div style="display: none">
-	<form id="adminui-unretire-location-form" method="POST" action="manageLocations.page">
+	<form id="adminui-restore-location-form" method="POST" action="manageLocations.page">
 	    <input type="hidden" id="locationId" name="locationId"/>
-	    <input type="hidden" name="action" value="unretire"/>
+	    <input type="hidden" name="action" value="restore"/>
     </form>
 </div>
 
@@ -156,9 +158,9 @@ ${ ui.includeFragment("uicommons", "widget/dataTable", [ object: "#list-location
 	    retireLocationDialog.show();
 	}
 	
-	function unRetireLocation(id) {
-	    jq("#adminui-unretire-location-form #locationId").val(id);
-	    jq("#adminui-unretire-location-form").submit();
+	function restoreLocation(id) {
+	    jq("#adminui-restore-location-form #locationId").val(id);
+	    jq("#adminui-restore-location-form").submit();
 	}
 	
 	function purgeLocation(name, id) {

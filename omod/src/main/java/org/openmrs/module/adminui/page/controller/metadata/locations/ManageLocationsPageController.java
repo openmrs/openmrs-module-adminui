@@ -14,8 +14,11 @@ import java.util.List;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.openmrs.Location;
 import org.openmrs.api.LocationService;
+import org.openmrs.api.context.Context;
 import org.openmrs.module.uicommons.UiCommonsConstants;
 import org.openmrs.module.uicommons.util.InfoErrorMessageUtil;
 import org.openmrs.ui.framework.annotation.SpringBean;
@@ -23,6 +26,8 @@ import org.openmrs.ui.framework.page.PageModel;
 import org.springframework.web.bind.annotation.RequestParam;
 
 public class ManageLocationsPageController {
+	
+	protected final Log log = LogFactory.getLog(getClass());
 	
 	/**
 	 * @param model
@@ -49,11 +54,11 @@ public class ManageLocationsPageController {
 				else if ("retire".equals(action)) {
 					message = "adminui.retired";
 					if (StringUtils.isBlank(reason)) {
-						reason = "AdminUI Module";
+						reason = Context.getMessageSourceService().getMessage("general.default.retireReason");
 					}
 					locationService.retireLocation(location, reason);
 				}
-				else if ("unretire".equals(action)) {
+				else if ("restore".equals(action)) {
 					message = "adminui.restored";
 					locationService.unretireLocation(location);
 				}
@@ -61,7 +66,8 @@ public class ManageLocationsPageController {
 				InfoErrorMessageUtil.flashInfoMessage(session, message);			
 			}
 			catch (Exception e) {
-				session.setAttribute(UiCommonsConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE, e.getMessage());
+				log.error(e.getMessage(), e);
+				session.setAttribute(UiCommonsConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE, "adminui." + action + ".fail");	
 			}
 		}
 		
