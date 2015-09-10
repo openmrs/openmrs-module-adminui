@@ -27,17 +27,16 @@ angular.module("manageProviderAttributeTypes", [ "providerAttributeTypeService",
             });
     }])
 
-    .controller("ManageProviderAttributeTypesController", [ "$scope", "$state", "ProviderAttributeType", "ngDialog",
-        function($scope, $state, ProviderAttributeType, ngDialog) {
+    .controller("ManageProviderAttributeTypesController", [ "$scope", "$state", "ProviderAttributeType", "ProviderAttributeTypeService", "ngDialog",
+        function($scope, $state, ProviderAttributeType, ProviderAttributeTypeService, ngDialog) {
             function sortWithRetiredLast(list) {
                 return _.sortBy(list, "retired");
             }
 
             function loadProviderAttributeTypes() {
                 // TODO standard function for failure of REST call
-            	ProviderAttributeType.query({ v: "default", includeAll: true }).$promise.then(function(response) {
-                    // TODO handle multiple pages of results in a standard way
-                    $scope.providerAttributeTypes = sortWithRetiredLast(response.results);
+            	ProviderAttributeTypeService.getProviderAttributeTypes({ v: "default", includeAll: true }).then(function(results) {
+                    $scope.providerAttributeTypes = sortWithRetiredLast(results);
                 });
             }
 

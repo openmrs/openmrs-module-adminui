@@ -27,13 +27,12 @@ angular.module("manageRoles", [ "roleService", "privilegeService", "ngDialog", "
             });
     }])
 
-    .controller("ManageRolesController", [ "$scope", "$state", "Role", "ngDialog", 
-        function($scope, $state, Role, ngDialog) {
+    .controller("ManageRolesController", [ "$scope", "$state", "Role", "RoleService", "ngDialog", 
+        function($scope, $state, Role, RoleService, ngDialog) {
     		
             function loadRoles() {
-                 Role.query({ v: "default", includeAll: true }).$promise.then(function(response) {
-                    // TODO handle multiple pages of results in a standard way
-                    $scope.roles = response.results;
+                 RoleService.getRoles({ v: "default", includeAll: true }).then(function(results) {
+                    $scope.roles = results;
                 }, function() {
                     emr.errorMessage(emr.message("adminui.role.purge.success"));
                 })

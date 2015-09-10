@@ -30,15 +30,15 @@ angular.module("manageVisitAttributeTypes", [ "visitAttributeTypeService", "cust
             });
     }])
 
-    .controller("ManageVisitAttributeTypesController", [ "$scope", "$state", "VisitAttributeType", "ngDialog",
-        function($scope, $state, VisitAttributeType, ngDialog) {
+    .controller("ManageVisitAttributeTypesController", [ "$scope", "$state", "VisitAttributeType", "VisitAttributeTypeService", "ngDialog",
+        function($scope, $state, VisitAttributeType, VisitAttributeTypeService, ngDialog) {
             function sortWithRetiredLast(list) {
                 return _.sortBy(list, "retired");
             }
 
             function loadVisitAttributeTypes() {
-                VisitAttributeType.query({ v: "default", includeAll: true }).$promise.then(function(response) {
-                    $scope.visitAttributeTypes = sortWithRetiredLast(response.results);
+                VisitAttributeTypeService.getVisitAttributeTypes({ v: "default", includeAll: true }).then(function(results) {
+                    $scope.visitAttributeTypes = sortWithRetiredLast(results);
                 });
             }
 

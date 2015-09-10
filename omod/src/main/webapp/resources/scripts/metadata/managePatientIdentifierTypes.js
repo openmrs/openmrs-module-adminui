@@ -27,17 +27,16 @@ angular.module("managePatientIdentifierTypes", [ "patientIdentifierTypeService",
             });
     }])
 
-    .controller("ManagePatientIdentifierTypesController", [ "$scope", "$state", "PatientIdentifierType", "ngDialog",
-        function($scope, $state, PatientIdentifierType, ngDialog) {
+    .controller("ManagePatientIdentifierTypesController", [ "$scope", "$state", "PatientIdentifierType", "PatientIdentifierTypeService", "ngDialog",
+        function($scope, $state, PatientIdentifierType, PatientIdentifierTypeService, ngDialog) {
             function sortWithRetiredLast(list) {
                 return _.sortBy(list, "retired");
             }
 
             function loadPatientIdentifierTypes() {
                 // TODO standard function for failure of REST call
-            	PatientIdentifierType.query({ v: "default", includeAll: true }).$promise.then(function(response) {
-                    // TODO handle multiple pages of results in a standard way
-                    $scope.patientIdentifierTypes = sortWithRetiredLast(response.results);
+            	PatientIdentifierTypeService.getPatientIdentifierTypes({ v: "default", includeAll: true }).then(function(results) {
+                    $scope.patientIdentifierTypes = sortWithRetiredLast(results);
                 });
             }
 
