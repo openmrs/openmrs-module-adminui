@@ -39,9 +39,18 @@
 	<bean class="org.openmrs.ui.framework.StandardModuleUiConfiguration">
 		<property name="moduleId" value="${project.parent.artifactId}"/>
 	</bean>
-	
-	<!-- Annotation based controllers -->
-	<bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping"/>
- 
-		
+
+    <bean id="changePasswordPageController" class="${project.parent.groupId}.${project.parent.artifactId}.page.controller.myaccount.ChangePasswordPageController" />
+
+    <bean id="adminiuiUrlMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+        <property name="order">
+            <value>10</value>
+        </property>
+        <property name="mappings">
+            <props>
+                <prop key="/admin/users/changePassword.form">changePasswordPageController</prop>
+            </props>
+        </property>
+    </bean>
+
 </beans>

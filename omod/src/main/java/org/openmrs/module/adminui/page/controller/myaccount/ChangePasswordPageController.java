@@ -12,6 +12,9 @@ package org.openmrs.module.adminui.page.controller.myaccount;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.openmrs.User;
 import org.openmrs.api.APIException;
 import org.openmrs.api.InvalidCharactersPasswordException;
 import org.openmrs.api.PasswordException;
@@ -20,17 +23,33 @@ import org.openmrs.api.UserService;
 import org.openmrs.api.WeakPasswordException;
 import org.openmrs.api.context.Context;
 import org.openmrs.api.db.DAOException;
+import org.openmrs.messagesource.MessageSourceService;
 import org.openmrs.module.uicommons.UiCommonsConstants;
 import org.openmrs.module.uicommons.util.InfoErrorMessageUtil;
 import org.openmrs.ui.framework.annotation.SpringBean;
 import org.openmrs.ui.framework.page.PageModel;
 import org.openmrs.util.OpenmrsConstants;
 import org.openmrs.util.OpenmrsUtil;
+import org.openmrs.web.user.UserProperties;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 public class ChangePasswordPageController {
+	
+	protected final Log log = LogFactory.getLog(getClass());
+	
+	@RequestMapping(method = RequestMethod.GET)
+	public String overrideGetChangePasswordPage() {
+		return "forward:/adminui/myaccount/changePassword.page";
+	}
+	
+	@RequestMapping(method = RequestMethod.POST)
+	public String overridePostChangePassword() {
+		return "forward:/adminui/myaccount/changePassword.page";
+	}
 	
 	public void get(PageModel model) {
 		setModelAttributes(model);
@@ -43,13 +62,15 @@ public class ChangePasswordPageController {
 	
 	public String post(PageModel model, @SpringBean("userService") UserService userService,
 	                   @RequestParam("oldPassword") String oldPassword, @RequestParam("newPassword") String newPassword,
-	                   @RequestParam("confirmPassword") String confirmPassword, HttpServletRequest request) {
+	                   @RequestParam("confirmPassword") String confirmPassword,
+	                   @SpringBean("messageSourceService") MessageSourceService mss, HttpServletRequest request) {
+		
 		BindingResult errors = new BeanPropertyBindingResult(userService, "userService");
 		PasswordException exception = null;
+		User user = Context.getAuthenticatedUser();
 		
 		try {
-			OpenmrsUtil.validatePassword(Context.getAuthenticatedUser().getUsername(), newPassword, Context
-			        .getAuthenticatedUser().getSystemId());
+			OpenmrsUtil.validatePassword(user.getUsername(), newPassword, user.getSystemId());
 		}
 		catch (ShortPasswordException e) {
 			errors.reject(e.getMessage());
@@ -74,59 +95,70 @@ public class ChangePasswordPageController {
 			passChars[0] = Context.getAdministrationService().getGlobalProperty(OpenmrsConstants.GP_PASSWORD_MINIMUM_LENGTH);
 			setModelAttributes(model);
 			if (exception instanceof ShortPasswordException) {
-				request.getSession().setAttribute(
-				    UiCommonsConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE,
-				    Context.getMessageSourceService().getMessage("adminui.account.changePassword.password.short", passChars,
-				        Context.getLocale()));
+				request.getSession().setAttribute(UiCommonsConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE,
+				    mss.getMessage("adminui.account.changePassword.password.short", passChars, Context.getLocale()));
 			} else if (exception instanceof WeakPasswordException) {
 				request.getSession().setAttribute(UiCommonsConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE,
-				    Context.getMessageSourceService().getMessage("error.password.weak"));
+				    mss.getMessage("error.password.weak"));
 			} else {
-				request.getSession().setAttribute(
-				    UiCommonsConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE,
-				    Context.getMessageSourceService().getMessage("adminui.account.changePassword.fail") + "<br />"
-				            + exception.getLocalizedMessage());
+				request.getSession().setAttribute(UiCommonsConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE,
+				    mss.getMessage("adminui.account.changePassword.fail") + "<br />" + exception.getLocalizedMessage());
 			}
 			
 			return "myaccount/changePassword";
 		} else {
 			if (!StringUtils.equals(newPassword, confirmPassword)) {
-				request.getSession().setAttribute(
-				    UiCommonsConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE,
-				    Context.getMessageSourceService().getMessage(
-				        "adminui.account.changePassword.newAndConfirmPassword.should.match"));
+				request.getSession().setAttribute(UiCommonsConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE,
+				    mss.getMessage("adminui.account.changePassword.newAndConfirmPassword.should.match"));
 			} else {
 				try {
+					String nextPage = "redirect:/index.htm";
+					UserProperties userProperties = new UserProperties(user.getUserProperties());
 					userService.changePassword(oldPassword, newPassword);
-					InfoErrorMessageUtil.flashInfoMessage(request.getSession(), Context.getMessageSourceService()
-					        .getMessage("adminui.changePassword.success"));
+					if (userProperties.isSupposedToChangePassword()) {
+						userProperties.setSupposedToChangePassword(false);
+						try {
+							//Why does hibernate see this as a different user instance?
+							//Reload so that we have the instance in the cache
+							user = userService.getUser(user.getUserId());
+							userService.saveUser(user, null);
+						}
+						catch (Exception e) {
+							log.warn("Failed to set forcePassword user property to false", e);
+							throw new PasswordException("admin.changePassword.error.newPasswordSaved");
+						}
+					} else {
+						nextPage = "myaccount/myAccount";
+					}
+					
+					InfoErrorMessageUtil.flashInfoMessage(request.getSession(),
+					    mss.getMessage("adminui.changePassword.success"));
+					
 					Context.refreshAuthenticatedUser();
 					
-					return "myaccount/myAccount";
+					return nextPage;
 				}
 				catch (DAOException e) {
-					failedToChangePassword(request, e);
+					failedToChangePassword(request, e, mss);
 				}
 				catch (APIException e) {
-					failedToChangePassword(request, e);
+					failedToChangePassword(request, e, mss);
 				}
 			}
+			
 			setModelAttributes(model);
 			
 			return "myaccount/changePassword";
 		}
 	}
 	
-	private void failedToChangePassword(HttpServletRequest request, Exception e) {
+	private void failedToChangePassword(HttpServletRequest request, Exception e, MessageSourceService mss) {
 		String failureMSg = null;
 		
 		if (e instanceof DAOException) {
-			failureMSg = Context.getMessageSourceService().getMessage("adminui.changePassword.failed.oldMissmatch");
+			failureMSg = mss.getMessage("adminui.changePassword.failed.oldMissmatch");
 		}
-		request.getSession()
-		        .setAttribute(
-		            UiCommonsConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE,
-		            Context.getMessageSourceService().getMessage("adminui.account.changePassword.fail") + "<br />"
-		                    + failureMSg != null ? failureMSg : e.getLocalizedMessage());
+		request.getSession().setAttribute(UiCommonsConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE,
+		    mss.getMessage("adminui.account.changePassword.fail") + "<br />" + failureMSg != null ? failureMSg : "");
 	}
 }
