@@ -9,6 +9,8 @@
  */
 package org.openmrs.module.adminui.page.controller.metadata.locations;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -23,6 +25,7 @@ import org.openmrs.module.uicommons.UiCommonsConstants;
 import org.openmrs.module.uicommons.util.InfoErrorMessageUtil;
 import org.openmrs.ui.framework.annotation.SpringBean;
 import org.openmrs.ui.framework.page.PageModel;
+import org.openmrs.web.taglib.LocationAndDepth;
 import org.springframework.web.bind.annotation.RequestParam;
 
 public class ManageLocationsPageController {
@@ -34,8 +37,10 @@ public class ManageLocationsPageController {
 	 * @param locationService
 	 */
     public void get(PageModel model, @SpringBean("locationService") LocationService locationService) {
-        List<Location> locations = locationService.getAllLocations();
-    	model.addAttribute("locations", locations);
+    	List<LocationAndDepth> locationAndDepths = new ArrayList<LocationAndDepth>();
+		List<Location> locations = locationService.getRootLocations(true);
+		populateLocationAndDepthList(locationAndDepths, locations, 0);
+    	model.addAttribute("locations", locationAndDepths);
     }
     
     public String post(@RequestParam("locationId") Location location,
@@ -72,5 +77,16 @@ public class ManageLocationsPageController {
 		}
 		
 		return "redirect:adminui/metadata/locations/manageLocations.page";
+	}
+    
+    private void populateLocationAndDepthList(List<LocationAndDepth> locationAndDepths, 
+    		Collection<Location> locations, int depth) {
+    	
+		for (Location location : locations) {
+			locationAndDepths.add(new LocationAndDepth(depth, location));
+			if (location.getChildLocations() != null && location.getChildLocations().size() > 0) {
+				populateLocationAndDepthList(locationAndDepths, location.getChildLocations(), depth + 1);
+			}	
+		}
 	}
 }

@@ -4,6 +4,15 @@
     ui.includeCss("adminui", "adminui.css")
 %>
 
+<style type="text/css">
+	table td {
+	    max-width: 100px;
+	    overflow: hidden;
+	    text-overflow: ellipsis;
+	    white-space: nowrap;
+	}
+</style>
+
 <script type="text/javascript">
     var breadcrumbs = [
 		{ icon: "icon-home", link: '/' + OPENMRS_CONTEXT_PATH + '/index.htm' },
@@ -30,34 +39,37 @@
 	<tbody>
 		<% locations.each{  %>
 	 	<tr>
-	 		<td <% if (it.retired) { %> class="retired" <% } %> >
-				${ ui.format(it.name)}
+	 		<td <% if (it.location.retired) { %> class="retired" <% } %> >
+	 			<% for (i = 1; i <= it.depth; i++) { %>
+	 				&nbsp;&nbsp;
+	 			<% } %>
+				${ ui.format(it.location.name)}
 			</td>
 
-			<td <% if (it.retired) { %> class="retired" <% } %>>
-				${ ui.format(it.description) }
+			<td <% if (it.location.retired) { %> class="retired" <% } %>>
+				${ ui.format(it.location.description) }
 			</td>
 
-            <td <% if (it.retired) { %> class="retired" <% } %>>
-                <% it.tags.eachWithIndex { tag, index -> %>
-					${ ui.format(tag.name)} <% if (index < it.tags.size() - 1) { %> , <% } %>
+            <td <% if (it.location.retired) { %> class="retired" <% } %>>
+                <% it.location.tags.eachWithIndex { tag, index -> %>
+					${ ui.format(tag.name)} <% if (index < it.location.tags.size() - 1) { %> , <% } %>
 				<% } %>
             </td>
 
 			<td>
-				<% if (!it.retired) { %>
+				<% if (!it.location.retired) { %>
 		            <i class="icon-pencil edit-action" title="${ ui.message("general.edit") }"
-					   onclick="location.href='${ui.pageLink("adminui", "metadata/locations/location",[locationId: it.id])}'">
+					   onclick="location.href='${ui.pageLink("adminui", "metadata/locations/location",[locationId: it.location.id])}'">
 					</i>
 					
-					<i class="icon-remove delete-action" title="${ui.message("emr.delete")}" onclick="retireLocation('${ it.name }', ${ it.id})"></i>
+					<i class="icon-remove delete-action" title="${ui.message("emr.delete")}" onclick="retireLocation('${ it.location.name }', ${ it.location.id})"></i>
 				<% } %>
 				
-	            <% if (it.retired) { %>
-	                <i class="icon-reply edit-action" title="${ui.message("general.restore")}" onclick="restoreLocation(${ it.id})"></i>
+	            <% if (it.location.retired) { %>
+	                <i class="icon-reply edit-action" title="${ui.message("general.restore")}" onclick="restoreLocation(${ it.location.id})"></i>
 	            <% } %>
 
-	            <i class="icon-trash delete-action" title="${ui.message("general.purge")}" class="right" onclick="purgeLocation('${ it.name }', ${ it.id})"></i>
+	            <i class="icon-trash delete-action" title="${ui.message("general.purge")}" class="right" onclick="purgeLocation('${ it.location.name }', ${ it.location.id})"></i>
         	</td>
 		</tr>
 		<% } %>
