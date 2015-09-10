@@ -10,7 +10,6 @@
 package org.openmrs.module.adminui.page.controller.systemadmin.accounts;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +27,7 @@ import org.openmrs.Role;
 import org.openmrs.User;
 import org.openmrs.api.APIException;
 import org.openmrs.api.AdministrationService;
+import org.openmrs.api.UserService;
 import org.openmrs.messagesource.MessageSourceService;
 import org.openmrs.module.adminui.AdminUiConstants;
 import org.openmrs.module.adminui.account.Account;
@@ -39,7 +39,6 @@ import org.openmrs.module.providermanagement.api.ProviderManagementService;
 import org.openmrs.module.uicommons.UiCommonsConstants;
 import org.openmrs.module.uicommons.util.InfoErrorMessageUtil;
 import org.openmrs.ui.framework.SimpleObject;
-import org.openmrs.ui.framework.UiFrameworkUtil;
 import org.openmrs.ui.framework.UiUtils;
 import org.openmrs.ui.framework.annotation.BindParams;
 import org.openmrs.ui.framework.annotation.MethodParam;
@@ -58,14 +57,12 @@ public class AccountPageController {
 	
 	protected final Log log = LogFactory.getLog(getClass());
 	
-	public Account getAccount(@RequestParam(value = "personId", required = false) Person person,
-	                          @SpringBean("adminAccountService") AccountService accountService) {
+	public Account getAccount(@RequestParam(value = "personId", required = false) Person person) {
 		
 		Account account;
 		
 		if (person == null) {
 			account = new Account(new Person());
-			
 		} else {
 			account = new Account(person);
 			if (account == null) {
@@ -89,7 +86,9 @@ public class AccountPageController {
 	    throws IOException {
 		
 		setModelAttributes(model, account, null, accountService, administrationService, providerManagementService, uu);
-		setJsonFormData(model, account, null);
+		if (account.getPerson().getPersonId() == null) {
+			setJsonFormData(model, account, null);
+		}
 	}
 	
 	/**
@@ -105,6 +104,7 @@ public class AccountPageController {
 	 */
 	public String post(PageModel model, @MethodParam("getAccount") @BindParams Account account, @BindParams User user,
 	                   @BindParams Provider provider, @BindParams OtherAccountData otherAccountData,
+	                   @SpringBean("userService") UserService userService,
 	                   @SpringBean("messageSourceService") MessageSourceService messageSourceService,
 	                   @SpringBean("adminAccountService") AccountService accountService,
 	                   @SpringBean("adminService") AdministrationService administrationService,
@@ -114,9 +114,14 @@ public class AccountPageController {
 		
 		Errors errors = new BeanPropertyBindingResult(account, "account");
 		if (otherAccountData.getAddUserAccount()) {
-			user.addRole(otherAccountData.getPrivilegeLevel());
-			for (Role capability : otherAccountData.getCapabilities()) {
-				user.addRole(capability);
+			//The StringToRoleConverter emrapi for some reason is taking precedence over the
+			//one in uiframework module and it doesn't get role by uuid, so we have to do this
+			user.addRole(userService.getRoleByUuid(request.getParameter("privilegeLevel")));
+			String[] uuids = request.getParameterValues("capabilities");
+			if (uuids != null) {
+				for (String uuid : uuids) {
+					user.addRole(userService.getRoleByUuid(uuid));
+				}
 			}
 			
 			String forcePassword = otherAccountData.getForceChangePassword() ? "true" : "false";
@@ -148,7 +153,9 @@ public class AccountPageController {
 		
 		sendErrorMessage(errors, model, messageSourceService, request);
 		
-		setJsonFormData(model, account, otherAccountData);
+		if (account.getPerson().getPersonId() == null) {
+			setJsonFormData(model, account, otherAccountData);
+		}
 		
 		return "systemadmin/accounts/account";
 		
@@ -159,9 +166,20 @@ public class AccountPageController {
 	                               ProviderManagementService providerManagementService, UiUtils uu) throws IOException {
 		
 		model.addAttribute("account", account);
+		Boolean forcePasswordChange = null;
 		if (otherAccountData == null) {
 			otherAccountData = new OtherAccountData();
+			if (account.getPerson().getPersonId() == null) {
+				//Default value when creating a new account otherwise we need to read the DB for each user
+				forcePasswordChange = true;
+			}
+		} else {
+			//other account data is not null only when we are sending
+			//the user back to the form, so we need to get what they
+			//had previously selected
+			forcePasswordChange = otherAccountData.getForceChangePassword();
 		}
+		
 		model.addAttribute("otherAccountData", otherAccountData);
 		List<Role> capabilities = accountService.getAllCapabilities();
 		model.addAttribute("capabilities", accountService.getAllCapabilities());
@@ -174,9 +192,6 @@ public class AccountPageController {
 		model.addAttribute("allowedLocales", administrationService.getAllowedLocales());
 		List<ProviderRole> providerRoles = providerManagementService.getAllProviderRoles(false);
 		model.addAttribute("providerRoles", providerRoles);
-		String dateTimePattern = ((SimpleDateFormat) UiFrameworkUtil
-		        .getDateTimeFormat(administrationService, uu.getLocale())).toPattern();
-		model.addAttribute("dateTimePattern", dateTimePattern);
 		
 		Map<String, Integer> propertyMaxLengthMap = new HashMap<String, Integer>();
 		propertyMaxLengthMap.put("familyName",
@@ -212,10 +227,18 @@ public class AccountPageController {
 		for (User user : account.getUserAccounts()) {
 			SimpleObject simpleUser = new SimpleObject();
 			simpleUser.put("username", user.getUsername());
+			simpleUser.put("systemId", user.getSystemId());
 			simpleUser.put("privilegeLevel", account.getPrivilegeLevel(user) != null ? account.getPrivilegeLevel(user)
 			        .getUuid() : "");
 			SimpleObject userProperties = new SimpleObject();
-			userProperties.put(OpenmrsConstants.USER_PROPERTY_CHANGE_PASSWORD, account.isSupposedToChangePassword(user));
+			boolean force;
+			if (forcePasswordChange != null) {
+				force = forcePasswordChange;
+			} else {
+				//Default to force password change for a new account to be added otherwise get DB value
+				force = (user.getUserId() == null) ? true : account.isSupposedToChangePassword(user);
+			}
+			userProperties.put(OpenmrsConstants.USER_PROPERTY_CHANGE_PASSWORD, force);
 			simpleUser.put("userProperties", userProperties);
 			simpleUser.put("retired", user.getRetired());
 			
@@ -290,7 +313,8 @@ public class AccountPageController {
 				simpleUser.put("username", u.getUsername());
 				simpleUser.put("privilegeLevel", account.getPrivilegeLevel(u).getUuid());
 				SimpleObject userProperties = new SimpleObject();
-				userProperties.put(OpenmrsConstants.USER_PROPERTY_CHANGE_PASSWORD, account.isSupposedToChangePassword(u));
+				userProperties
+				        .put(OpenmrsConstants.USER_PROPERTY_CHANGE_PASSWORD, otherAccountData.getForceChangePassword());
 				simpleUser.put("userProperties", userProperties);
 				SimpleObject simpleUserCapabilities = new SimpleObject();
 				for (Role cap : account.getCapabilities(u)) {

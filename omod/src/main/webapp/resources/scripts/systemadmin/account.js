@@ -28,12 +28,15 @@ jq(function(){
     });
 });
 
-function initAccountDetails(p, u, pr, addUser, addProvider, messagesMap){
+function initAccountDetails(p, u, pr, addUser, addProvider){
     personAccount = p;
     userAccount = u;
     providerAccount = pr;
     addUserAccount = addUser;
     addProviderAccount = addProvider;
+}
+
+function setMessages(messagesMap){
     messages = messagesMap;
 }
 
@@ -54,8 +57,14 @@ angular.module("adminui.createAccount", ["adminui.should-match"])
             $scope.person = personAccount;
             $scope.uuidUserMap = {};
             //The way the ng-model attributes are set up in userFormFields.gsp, the model
-            //name is uuidUserMap[''] since this is a new account and suer uuid is blank
+            //name is uuidUserMap[''] since this is a new account and user uuid is blank
             $scope.uuidUserMap[''] = userAccount;
+            if(!$scope.uuidUserMap[''].userProperties) {
+                //By default force password when creating a new account
+                $scope.uuidUserMap[''].userProperties = {};
+                $scope.uuidUserMap[''].userProperties.forcePassword = true;
+            }
+
             $scope.uuidProviderMap = {};
             $scope.uuidProviderMap[''] = providerAccount;
         }

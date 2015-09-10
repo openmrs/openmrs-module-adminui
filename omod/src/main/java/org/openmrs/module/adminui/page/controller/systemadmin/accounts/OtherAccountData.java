@@ -24,9 +24,9 @@ public class OtherAccountData {
 	
 	private String secretAnswer;
 	
-	private boolean addProviderAccount;
+	private boolean addProviderAccount = false;
 	
-	private boolean addUserAccount;
+	private boolean addUserAccount = false;
 	
 	private Role privilegeLevel;
 	

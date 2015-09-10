@@ -36,9 +36,12 @@
     emr.loadMessages([
         "error.password.match"
     ]);
+    <% if(createAccount) { %>
+        initAccountDetails(${personJson}, ${userJson}, ${providerJson}, ${otherAccountData.addUserAccount},
+            ${otherAccountData.addProviderAccount});
+    <% } %>
 
-    initAccountDetails(${personJson}, ${userJson}, ${providerJson}, ${otherAccountData.addUserAccount},
-                       ${otherAccountData.addProviderAccount}, ${messages});
+    setMessages(${messages});
 </script>
 
 <h2>${ ui.message((createAccount) ? 'adminui.addAccount.label' : 'adminui.editAccount.label')}</h2>
@@ -62,7 +65,7 @@
 
     <div id="account-audit-info" class="right adminui-auditInfo"
          ng-controller="AccountAuditInfoController" ng-init="createAuditInfo='${createAuditInfo}';
-            changeAuditInfo='${changeAuditInfo}'; personUuid='${account.person.uuid}'; dateTimePattern='${dateTimePattern}'">
+            changeAuditInfo='${changeAuditInfo}'; personUuid='${account.person.uuid}'">
 
         <fieldset class="right">
             <legend>${ui.message('adminui.auditInfo')}</legend>

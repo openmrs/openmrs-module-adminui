@@ -40,12 +40,12 @@ angular.module("adminui.userDetails", ["userService", "ngDialog", "adminui.shoul
             $scope.getTabLabel = function(userUuid){
                 var u = $scope.uuidUserMap[userUuid];
                 var label = "";
-                if(u && u.username){
-                    if(u.username) {
-                        label += u.username;
+                if(u){
+                    if(u.username && jq.trim(u.username) != '') {
+                        label = u.username;
                     }
-                    if(u.systemId) {
-                        label += (" ("+u.systemId+")");
+                    else {
+                        label = u.systemId;
                     }
                 }
                 return label;

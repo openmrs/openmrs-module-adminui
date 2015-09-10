@@ -122,13 +122,11 @@
     </table>
 </div>
 
-<% if(!showPasswordFields) { %>
 <p>
     <input id="adminui-forceChangePassword" type="checkbox" name="forceChangePassword" value="true"
     <% if (changePassword) { %> checked='checked'<% } %>
        ng-model="uuidUserMap['${userUuid}'].userProperties.forcePassword" />${ ui.message("adminui.account.user.forcePasswordChange") }
 </p>
-<% } %>
 
 <label>${ ui.message('adminui.account.capabilities') }</label>
 <table class="adminui-capabilities" cellspacing="0" cellpadding="0">
