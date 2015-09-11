@@ -37,7 +37,7 @@
     def privilegeLevelAttributes = ["ng-model": "uuidUserMap['"+userUuid+"'].privilegeLevel"]
     privilegeLevelAttributes[requiredAttribute] = requiredAttributeValue
 
-    def passwordAttributes = ["ng-maxlength": propertyMaxLengthMap['password'], "ng-minlength": passwordMinLength]
+    def passwordAttributes = ["ng-minlength": passwordMinLength]
     if(showPasswordFields){
         passwordAttributes[requiredAttribute] = requiredAttributeValue;
     }

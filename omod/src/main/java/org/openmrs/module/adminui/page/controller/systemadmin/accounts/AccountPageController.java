@@ -103,8 +103,7 @@ public class AccountPageController {
 	 * @return
 	 */
 	public String post(PageModel model, @MethodParam("getAccount") @BindParams Account account, @BindParams User user,
-	                   @BindParams Provider provider, @BindParams OtherAccountData otherAccountData,
-	                   @SpringBean("userService") UserService userService,
+	                   @BindParams OtherAccountData otherAccountData, @SpringBean("userService") UserService userService,
 	                   @SpringBean("messageSourceService") MessageSourceService messageSourceService,
 	                   @SpringBean("adminAccountService") AccountService accountService,
 	                   @SpringBean("adminService") AdministrationService administrationService,
@@ -130,6 +129,9 @@ public class AccountPageController {
 			account.addUserAccount(user);
 		}
 		if (otherAccountData.getAddProviderAccount()) {
+			Provider provider = new Provider();
+			provider.setIdentifier(request.getParameter("identifier"));
+			provider.setProviderRole(providerManagementService.getProviderRoleByUuid(request.getParameter("providerRole")));
 			account.addProviderAccount(provider);
 		}
 		

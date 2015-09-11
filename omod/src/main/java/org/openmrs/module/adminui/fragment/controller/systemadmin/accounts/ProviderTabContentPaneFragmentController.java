@@ -9,11 +9,13 @@
  */
 package org.openmrs.module.adminui.fragment.controller.systemadmin.accounts;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.openmrs.OpenmrsObject;
 import org.openmrs.api.ProviderService;
 import org.openmrs.module.providermanagement.Provider;
+import org.openmrs.module.providermanagement.api.ProviderManagementService;
 import org.openmrs.ui.framework.UiUtils;
-import org.openmrs.ui.framework.annotation.BindParams;
 import org.openmrs.ui.framework.annotation.SpringBean;
 import org.openmrs.ui.framework.fragment.action.FailureResult;
 import org.openmrs.ui.framework.fragment.action.FragmentActionResult;
@@ -30,10 +32,12 @@ public class ProviderTabContentPaneFragmentController {
 	public void get() {
 	}
 	
-	public FragmentActionResult process(@RequestParam(value = "uuid", required = false) @BindParams Provider provider,
+	public FragmentActionResult process(@RequestParam(value = "uuid", required = false) Provider provider,
 	                                    @RequestParam(value = "action", required = false) String action,
 	                                    @RequestParam(value = "reason", required = false) String reason,
-	                                    @SpringBean("providerService") ProviderService providerService, UiUtils ui) {
+	                                    @SpringBean("providerService") ProviderService providerService,
+	                                    @SpringBean("providerManagementService") ProviderManagementService providerManagementService,
+	                                    HttpServletRequest request, UiUtils ui) {
 		
 		try {
 			String successMessage = "adminui.savedChanges";
@@ -44,22 +48,25 @@ public class ProviderTabContentPaneFragmentController {
 				successMessage = "adminui.restored";
 				providerService.unretireProvider(provider);
 			} else {
+				provider.setIdentifier(request.getParameter("identifier"));
+				provider.setProviderRole(providerManagementService.getProviderRoleByUuid(request
+				        .getParameter("providerRole")));
 				if (provider.getProviderId() == null) {
 					successMessage = "adminui.saved";
 				}
 				Errors errors = new BeanPropertyBindingResult(provider, "provider");
 				ValidateUtil.validate(provider, errors);
-                //A person should have exactly on account with a given provide role
-                for (OpenmrsObject o : providerService.getProvidersByPerson(provider.getPerson())) {
-                    Provider otherProvider = (Provider) o;
-                    if (provider.equals(otherProvider)) {
-                        continue;//same provider, skip
-                    }
-                    if (provider.getProviderRole().equals(otherProvider.getProviderRole())) {
+				//A person should have exactly on account with a given provide role
+				for (OpenmrsObject o : providerService.getProvidersByPerson(provider.getPerson())) {
+					Provider otherProvider = (Provider) o;
+					if (provider.equals(otherProvider)) {
+						continue;//same provider, skip
+					}
+					if (provider.getProviderRole().equals(otherProvider.getProviderRole())) {
 						errors.rejectValue("providerRole", "adminui.provider.error.other.alreadyHasRole");
-                        break;
-                    }
-                }
+						break;
+					}
+				}
 				
 				if (errors.hasErrors()) {
 					return new FailureResult(errors);
