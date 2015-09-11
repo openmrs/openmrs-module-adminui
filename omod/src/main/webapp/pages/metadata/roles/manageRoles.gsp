@@ -1,52 +1,12 @@
-<%
-    ui.decorateWith("appui", "standardEmrPage")
-
-    ui.includeJavascript("uicommons", "angular.min.js")
-    ui.includeJavascript("uicommons", "angular-resource.min.js")
-    ui.includeJavascript("uicommons", "angular-ui/angular-ui-router.min.js")
-    ui.includeJavascript("uicommons", "angular-app.js")
-    ui.includeJavascript("uicommons", "angular-common.js")
-    ui.includeJavascript("uicommons", "services/roleService.js")
-    ui.includeJavascript("uicommons", "services/privilegeService.js")
-    ui.includeJavascript("uicommons", "filters/display.js")
-    ui.includeJavascript("uicommons", "filters/serverDate.js")
-
-    ui.includeJavascript("uicommons", "ngDialog/ngDialog.js")
-    
-    ui.includeJavascript("uicommons", "styleguide/index.css")
-    ui.includeCss("uicommons", "ngDialog/ngDialog.min.css")
-	ui.includeCss("adminui", "adminui.css")
-
-    ui.includeJavascript("adminui", "metadata/colTable.js")
-    ui.includeJavascript("adminui", "metadata/manageRoles.js")
-%>
-
-<script type="text/javascript">
-    var breadcrumbs = [
-        { icon: "icon-home", link: '/' + OPENMRS_CONTEXT_PATH + '/index.htm' },
-        { label: "${ ui.message('adminui.app.configureMetadata.label')}", link: '${ui.pageLink("adminui", "metadata/configureMetadata")}'},
-        { label: "${ ui.message("adminui.manageRoles.title")}" }
-    ];
-    emr.loadMessages([
-    	"adminui.role.purge.success",
-    	"adminui.role.purge.error",
-    	"adminui.role.getRoles.error",
-    	"adminui.role.getPrivileges.error",
-    	"adminui.role.save.success",
-    	"adminui.role.save.error",
-    	"adminui.role.purge",
-        "uicommons.generalSavedNotification"
-    ]);
-    
-    var dataConfig = {
-    		rolePurgeTemplateMessage: "${ ui.message("adminui.role.purge") }"
-    	};
-</script>
-
-<div id="manage-roles">
-    <ui-view  onload="load()" ></ui-view>
+<div class="dialog-header">
+    <h3>${ui.message('adminui.role.purge.title')}</h3>
 </div>
-
-<script type="text/javascript">
-    angular.bootstrap("#manage-roles", [ "manageRoles" ])
-</script>
+<div class="dialog-content">
+    <h4><%= ui.message("adminui.role.purge", "'{{ role.name }}'") %></h4>  
+    
+    <br />
+    <div>
+        <button class="confirm right" ng-click="confirm(reason)">${ ui.message("uicommons.confirm") }</button>
+        <button class="cancel" ng-click="closeThisDialog()">${ ui.message("uicommons.cancel") }</button>
+    </div>
+</div>
