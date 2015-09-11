@@ -13,7 +13,7 @@
 <div id="tasks">
     <a class="button app big" href="${ ui.pageLink("adminui", "myaccount/changePassword") }">
         <div class="task">
-            <i class="icon-unlock"></i>
+            <i class="icon-lock"></i>
             ${ ui.message("adminui.myAccount.changePassword.label") }
         </div>
     </a>
@@ -29,8 +29,8 @@
     %>
     <a class="button app big" href="${ ui.pageLink("adminui", "myaccount/changeDefaults") }">
         <div class="task">
-            <i class="icon-unlock"></i>
-            ${ ui.message("adminui.myAccount.changeDefaults.label") }
+            <i class="icon-cog"></i>
+            ${ ui.message("adminui.myAccount.defaultSettings.label") }
         </div>
     </a>
 </div>

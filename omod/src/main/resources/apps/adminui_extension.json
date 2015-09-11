@@ -13,7 +13,7 @@
         "label": "adminui.manageAccounts.label",
         "requiredPrivilege": "Add Users",
         "url": "adminui/systemadmin/accounts/manageAccounts.page",
-        "icon": "icon-cog",
+        "icon": "icon-group",
         "order": 20
     },
     {

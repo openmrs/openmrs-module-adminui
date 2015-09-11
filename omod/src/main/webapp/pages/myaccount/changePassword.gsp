@@ -1,27 +1,18 @@
 <%
-    ui.decorateWith("appui", "standardEmrPage", [ title: ui.message("adminui.changePassword") ])
+    ui.decorateWith("appui", "standardEmrPage")
 
-    ui.includeJavascript("uicommons", "navigator/validators.js", Integer.MAX_VALUE - 19)
-    ui.includeJavascript("uicommons", "navigator/navigator.js", Integer.MAX_VALUE - 20)
-    ui.includeJavascript("uicommons", "navigator/navigatorHandlers.js", Integer.MAX_VALUE - 21)
-    ui.includeJavascript("uicommons", "navigator/navigatorModels.js", Integer.MAX_VALUE - 21)
-    ui.includeJavascript("uicommons", "navigator/exitHandlers.js", Integer.MAX_VALUE - 22);
-    ui.includeJavascript("adminui", "myaccount/changePassword.js")
+    ui.includeJavascript("uicommons", "angular.min.js")
+    ui.includeJavascript("uicommons", "angular-app.js")
+    ui.includeJavascript("adminui", "directives/shouldMatch.js")
+
+    ui.includeCss("adminui", "adminui.css")
 
 %>
 
 ${ ui.includeFragment("uicommons", "validationMessages")}
 
 <script type="text/javascript">
-    //This variable is defined in changePassword.js
-    passwordMinLength = ${ passwordMinLength };
 
-    //emrMessages is in uicommons's validationMessages.gsp
-    if(passwordMinLength != undefined) {
-	    emrMessages.minLength = '${ui.message("adminui.account.changePassword.password.short", passwordMinLength)}';
-	    emrMessages.matchedInput = '${ui.message("adminui.account.changePassword.newAndConfirmPassword.should.match", passwordMinLength)}';
-	}
-	
     var breadcrumbs = [
         { icon: "icon-home", link: '/' + OPENMRS_CONTEXT_PATH + '/index.htm' },
         { label: "${ ui.message("adminui.app.myAccount.label")}", link: '${ui.pageLink("adminui", "myaccount/myAccount")}' },
@@ -29,57 +20,66 @@ ${ ui.includeFragment("uicommons", "validationMessages")}
 
     ];
 
-    jQuery(function(){
-        KeyboardController();
-    });
+    angular.module("changePassword", ["adminui.should-match"]);
 
 </script>
 
-<h3>${ui.message("adminui.myAccount.changePassword.label")}</h3>
+<h2>${ui.message("adminui.myAccount.changePassword.label")}</h2>
 
-<form class="simple-form-ui" method="post">
-    <section id="passwordDetails">
-        <span class="title">${ui.message("adminui.account.password.details")}</span>
-        <fieldset>
-            <legend>${ ui.message("adminui.account.oldAndNewPassword") }</legend>
-            ${ ui.includeFragment("uicommons", "field/passwordField", [
-                    id: "oldPassword",
-                    label: ui.message("adminui.account.oldPassword"),
-                    formFieldName: "oldPassword",
-                    classes: ["required"]
-            ]) }
+<div id="adminui-changePassword" ng-app="changePassword">
 
-            ${ ui.includeFragment("uicommons", "field/passwordField", [
-                    id: "newPassword",
-                    label: ui.message("adminui.account.newPassword"),
-                    formFieldName: "newPassword",
-                    classes: ["required", "min-length", "matched-input"],
-                    "matched-field-id": "confirmPassword",
-                    regex: /^.{${passwordMinLength},}$/
-            ]) }
+<form name="changePasswordForm" class="simple-form-ui" method="post" action="" novalidate>
 
-            ${ ui.includeFragment("uicommons", "field/passwordField", [
-                    id: "confirmPassword",
-                    label: ui.message("adminui.account.confirmPassword"),
-                    formFieldName: "confirmPassword",
-                    classes: ["required", "matched-input"],
-                    "matched-field-id": "newPassword"
-            ]) }
-        </fieldset>
+    ${ ui.includeFragment("uicommons", "field/passwordField", [
+            id: "oldPassword",
+            label: ui.message("adminui.account.oldPassword")+"<span class='adminui-text-red'>*</span>",
+            formFieldName: "oldPassword",
+            otherAttributes: ["ng-model": "oldPassword", required:""]
+    ]) }
+    <span class="field-error" ng-show="changePasswordForm.oldPassword.\$dirty
+            && changePasswordForm.oldPassword.\$invalid">
+        <span ng-show="changePasswordForm.oldPassword.\$error.required">
+            ${ui.message("adminui.field.required")}
+        </span>
+    </span>
 
-    </section>
+    ${ ui.includeFragment("uicommons", "field/passwordField", [
+            id: "newPassword",
+            label: ui.message("adminui.account.newPassword")+"<span class='adminui-text-red'>*</span>",
+            formFieldName: "newPassword",
+            otherAttributes: ["ng-model": "newPassword", required:"", "ng-minlength": passwordMinLength]
+    ]) }
+    <span class="field-error" ng-show="changePasswordForm.newPassword.\$dirty
+            && changePasswordForm.newPassword.\$invalid">
+        <span ng-show="changePasswordForm.newPassword.\$error.required">
+            ${ui.message("adminui.field.required")}
+        </span>
+        <span ng-show="changePasswordForm.newPassword.\$error.minlength">
+            ${ui.message("adminui.field.require.minChars", passwordMinLength)}
+        </span>
+    </span>
 
-    <div id="confirmation">
-        <span class="title">${ui.message("adminui.confirm")}</span>
-        <div id="confirmationQuestion">
-            ${ui.message('registrationapp.confirm')}
-            <p style="display: inline">
-                <input type="submit" class="confirm right" value="${ui.message("adminui.confirm")}" />
-            </p>
-            <p style="display: inline">
-                <input id="cancelSubmission" class="cancel" type="button" value="${ui.message("general.cancel")}" />
-            </p>
-        </div>
-    </div>
+    ${ ui.includeFragment("uicommons", "field/passwordField", [
+            id: "confirmPassword",
+            label: ui.message("User.confirm")+"<span class='adminui-text-red'>*</span>",
+            formFieldName: "confirmPassword",
+            otherAttributes: ["ng-model": "confirmPassword", "should-match": "newPassword"]
+    ]) }
+
+    <span class="field-error" ng-show="changePasswordForm.confirmPassword.\$dirty
+            && changePasswordForm.confirmPassword.\$invalid">
+        ${ui.message("adminui.account.changePassword.newAndConfirmPassword.dontMatch")}
+    </span>
+
+    <br>
+    <br>
+    <p>
+        <input type="button" id="cancel-button" class="cancel" value="${ui.message("general.cancel")}"
+               onclick="window.location='${ui.pageLink("adminui", "myaccount/myAccount")}'" />
+        <input type="submit" class="confirm" name="save" id="save-button" value="${ui.message("general.save")}"
+               ng-disabled="changePasswordForm.\$invalid" />
+    </p>
 
 </form>
+
+</div>

@@ -21,7 +21,7 @@ ${ui.includeFragment("uicommons", "validationMessages")}
             label: "${ ui.message("adminui.app.myAccount.label")}",
             link: '${ui.pageLink("adminui", "myaccount/myAccount")}'
         },
-        {label: "${ ui.message("adminui.myAccount.defaults.label")}"}
+        {label: "${ ui.message("adminui.myAccount.defaultSettings.label")}"}
 
     ];
 
