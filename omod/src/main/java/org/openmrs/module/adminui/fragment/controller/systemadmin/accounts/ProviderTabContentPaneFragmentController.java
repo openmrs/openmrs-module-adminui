@@ -12,6 +12,7 @@ package org.openmrs.module.adminui.fragment.controller.systemadmin.accounts;
 import javax.servlet.http.HttpServletRequest;
 
 import org.openmrs.OpenmrsObject;
+import org.openmrs.api.PersonService;
 import org.openmrs.api.ProviderService;
 import org.openmrs.module.providermanagement.Provider;
 import org.openmrs.module.providermanagement.api.ProviderManagementService;
@@ -35,6 +36,7 @@ public class ProviderTabContentPaneFragmentController {
 	public FragmentActionResult process(@RequestParam(value = "uuid", required = false) Provider provider,
 	                                    @RequestParam(value = "action", required = false) String action,
 	                                    @RequestParam(value = "reason", required = false) String reason,
+	                                    @SpringBean("personService") PersonService personService,
 	                                    @SpringBean("providerService") ProviderService providerService,
 	                                    @SpringBean("providerManagementService") ProviderManagementService providerManagementService,
 	                                    HttpServletRequest request, UiUtils ui) {
@@ -48,6 +50,10 @@ public class ProviderTabContentPaneFragmentController {
 				successMessage = "adminui.restored";
 				providerService.unretireProvider(provider);
 			} else {
+				if (provider == null) {
+					provider = new Provider();
+					provider.setPerson(personService.getPersonByUuid(request.getParameter("person")));
+				}
 				provider.setIdentifier(request.getParameter("identifier"));
 				provider.setProviderRole(providerManagementService.getProviderRoleByUuid(request
 				        .getParameter("providerRole")));
@@ -56,7 +62,7 @@ public class ProviderTabContentPaneFragmentController {
 				}
 				Errors errors = new BeanPropertyBindingResult(provider, "provider");
 				ValidateUtil.validate(provider, errors);
-				//A person should have exactly on account with a given provide role
+				//A person should have exactly one account with a given provide role
 				for (OpenmrsObject o : providerService.getProvidersByPerson(provider.getPerson())) {
 					Provider otherProvider = (Provider) o;
 					if (provider.equals(otherProvider)) {
