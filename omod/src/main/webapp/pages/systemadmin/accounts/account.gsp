@@ -97,7 +97,7 @@
                onclick="window.location='${ui.pageLink("adminui", "systemadmin/accounts/manageAccounts")}'" />
         <% if(createAccount) { %>
         <input type="submit" class="confirm" id="save-button" value="${ ui.message("general.save") }"
-               ng-disableds="accountForm.\$invalid || (!addUserAccount && !addProviderAccount)" />
+               ng-disabled="accountForm.\$invalid || (!addUserAccount && !addProviderAccount)" />
         <% } %>
     </div>
 <% if(createAccount) { %>
