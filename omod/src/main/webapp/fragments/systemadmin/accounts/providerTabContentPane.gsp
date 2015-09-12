@@ -32,9 +32,10 @@
             ng-click="cancel('${uuid}'<% if(!provider.providerId) { %>, true<% } %>)">
             ${ ui.message("general.cancel") }
         </button>
-        <button id="adminui-provider-save" type="button" class="confirm"
+        <button id="adminui-provider-save${uuid}" type="button" class="confirm"
             ng-click="save('${uuid}'<% if(!provider.providerId) { %>, '${account.person.uuid}'<% } %>)"
-            ng-disabled="providerDetailsForm['identifier${uuid}'].\$invalid || providerDetailsForm['providerRole${uuid}'].\$invalid">
+            ng-disabled="providerDetailsForm['identifier${uuid}'].\$invalid
+             || providerDetailsForm['providerRole${uuid}'].\$invalid || saving">
             ${ ui.message("general.save") }
         </button>
     </div>

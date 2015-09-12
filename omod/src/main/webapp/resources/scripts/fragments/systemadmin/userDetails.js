@@ -21,6 +21,7 @@ angular.module("adminui.userDetails", ["userService", "ngDialog", "adminui.shoul
     .controller("UserDetailsController", ["$scope", "ngDialog" ,"User",
         function($scope, ngDialog, User) {
             $scope.inEditMode = false;
+            $scope.saving = false;
             $scope.uuidUserMap = uuidAndUserMap;
             $scope.originalState = angular.copy($scope.uuidUserMap);
             $scope.privilegeLevels = privilegeLevels;
@@ -103,6 +104,7 @@ angular.module("adminui.userDetails", ["userService", "ngDialog", "adminui.shoul
             }
 
             $scope.save = function(userUuid, personUuid){
+                $scope.saving = true;
                 var modelUser = $scope.uuidUserMap[userUuid];
                 var privilegesLevelAndCapabilities = [modelUser.privilegeLevel];
                 jq.each(modelUser.capabilities, function(key, value){
@@ -149,6 +151,8 @@ angular.module("adminui.userDetails", ["userService", "ngDialog", "adminui.shoul
                         //notify the audit info app so that it updates the audit info
                         angular.element('#account-audit-info').scope().$broadcast('event.auditInfo.changed');
                     }
+                }).finally(function(){
+                    $scope.saving = false;
                 });
             }
 

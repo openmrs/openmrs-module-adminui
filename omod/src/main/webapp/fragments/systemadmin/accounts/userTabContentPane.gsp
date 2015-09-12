@@ -46,12 +46,12 @@
             ng-click="cancel('${uuid}'<% if(!user.userId) { %>, true<% } %>)">
             ${ ui.message("general.cancel") }
         </button>
-        <button id="adminui-user-save" type="button" class="confirm"
+        <button id="adminui-user-save${uuid}" type="button" class="confirm"
             ng-click="save('${uuid}'<% if(!user.userId) { %>, '${account.person.uuid}'<% } %>)"
             ng-disabled="userDetailsForm['username${uuid}'].\$invalid
                         || userDetailsForm['privilegeLevel${uuid}'].\$invalid
                         || userDetailsForm['password${uuid}'].\$invalid
-                        || userDetailsForm['confirmPassword${uuid}'].\$invalid">
+                        || userDetailsForm['confirmPassword${uuid}'].\$invalid || saving">
             ${ ui.message("general.save") }
         </button>
     </div>

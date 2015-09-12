@@ -31,6 +31,7 @@ angular.module("adminui.providerDetails", ["ngDialog", "pmProviderService"])
     .controller("ProviderDetailsController", ["$scope", "ngDialog", "PmProvider",
         function($scope, ngDialog, PmProvider) {
             $scope.inEditMode = false;
+            $scope.saving = false;
             $scope.uuidProviderMap = uuidAndProviderMap;
             $scope.originalState = angular.copy($scope.uuidProviderMap);
             $scope.roles = providerRoles;
@@ -95,6 +96,7 @@ angular.module("adminui.providerDetails", ["ngDialog", "pmProviderService"])
             }
 
             $scope.save = function(providerUuid, personUuid){
+                $scope.saving = true;
                 var toSave = angular.copy($scope.uuidProviderMap[providerUuid]);
                 if(personUuid){
                     toSave['person'] = personUuid;
@@ -130,6 +132,8 @@ angular.module("adminui.providerDetails", ["ngDialog", "pmProviderService"])
                          });
                      }
                      emr.errorMessage(errorMessage);
+                }).finally(function(){
+                     $scope.saving = false;
                 });
             }
 
