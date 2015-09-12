@@ -77,7 +77,6 @@ public class ChangePasswordPageController {
 				OpenmrsUtil.validatePassword(user.getUsername(), newPassword, user.getSystemId());
 				
 				String nextPage = "redirect:/index.htm";
-				UserProperties userProperties = new UserProperties(user.getUserProperties());
 				try {
 					userService.changePassword(oldPassword, newPassword);
 				}
@@ -85,12 +84,14 @@ public class ChangePasswordPageController {
 					log.warn("Failed to change user password:", e);
 					throw new PasswordException("adminui.account.changePassword.fail.hint");
 				}
+				UserProperties userProperties = new UserProperties(user.getUserProperties());
 				if (userProperties.isSupposedToChangePassword()) {
-					userProperties.setSupposedToChangePassword(false);
 					try {
 						//Why does hibernate see this as a different user instance?
 						//Reload so that we have the instance in the cache
 						user = userService.getUser(user.getUserId());
+						userProperties = new UserProperties(user.getUserProperties());
+						userProperties.setSupposedToChangePassword(false);
 						userService.saveUser(user, null);
 					}
 					catch (Exception e) {
