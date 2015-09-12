@@ -32,16 +32,19 @@ public class AdminUiAccountValidator implements Validator {
 	/**
 	 * @see org.springframework.validation.Validator#validate(java.lang.Object,
 	 *      org.springframework.validation.Errors)
-	 * @fail reject an account with no user or provider account
+	 * @should reject an account with no user or provider account
 	 **/
 	
 	@Override
 	public void validate(Object obj, Errors errors) {
-		
 		if (obj == null || !(obj instanceof Account)) {
 			throw new IllegalArgumentException("The parameter obj should not be null and must be of type" + Account.class);
 		}
+		
 		Account account = (Account) obj;
+		if (account.getProviderAccounts().size() == 0 && account.getUserAccounts().size() == 0) {
+			errors.reject("adminui.account.userOrProvider.required");
+		}
 		
 		try {
 			errors.pushNestedPath("person");

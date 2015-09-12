@@ -91,12 +91,15 @@
         ${ ui.includeFragment("adminui", "systemadmin/accounts/providerDetails") }
     </div>
 
-    <% if(createAccount) { %>
     <div class="adminui-account-section adminui-section-padded-top">
-        <input type="button" class="cancel" value="${ ui.message("general.cancel") }" onclick="window.location='${ui.pageLink("adminui", "systemadmin/accounts/manageAccounts")}'" />
-        <input type="submit" class="confirm" id="save-button" ng-disabled="accountForm.\$invalid || (!addUserAccount && !addProviderAccount)" value="${ ui.message("general.save") }"  />
+        <input type="button" class="${createAccount ? "cancel" :"confirm"}"
+               value="${ ui.message(createAccount ? "general.cancel" : "general.done") }"
+               onclick="window.location='${ui.pageLink("adminui", "systemadmin/accounts/manageAccounts")}'" />
+        <% if(createAccount) { %>
+        <input type="submit" class="confirm" id="save-button" value="${ ui.message("general.save") }"
+               ng-disableds="accountForm.\$invalid || (!addUserAccount && !addProviderAccount)" />
+        <% } %>
     </div>
-    <% } %>
 <% if(createAccount) { %>
 </form>
 
