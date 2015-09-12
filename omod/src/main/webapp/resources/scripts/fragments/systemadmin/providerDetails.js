@@ -44,6 +44,16 @@ angular.module("adminui.providerDetails", ["ngDialog", "pmProviderService"])
                  return "\""+defaultLabel+"\"";
             }
 
+            $scope.beforeRequest = function(){
+                $scope.saving = true;
+                jq('#adminui-account-done').addClass("disabled");
+            }
+
+            $scope.afterRequest = function(){
+                $scope.saving = false;
+                jq('#adminui-account-done').removeClass("disabled");
+            }
+
             $scope.toggleOtherActions = function(value){
                 //Disable the edit,remove,add buttons in the other apps
                 var personScope = angular.element("#adminui-person-details").scope();
@@ -54,6 +64,19 @@ angular.module("adminui.providerDetails", ["ngDialog", "pmProviderService"])
                 userScope.$apply(function(){
                     userScope.inEditMode = value;
                 });
+            }
+
+            $scope.disableActionsAndOtherTabs = function(uuid){
+                $scope.toggleOtherActions(true);
+                jq('.add-action, .edit-action, .delete-action').addClass('invisible');
+                providerTabs.tabs("disable");
+                providerTabs.tabs("enable", "#"+uuid);
+            }
+
+            $scope.enableActionsAndOtherTabs = function(){
+                jq('.add-action, .edit-action, .delete-action').removeClass('invisible');
+                providerTabs.tabs("enable");
+                $scope.toggleOtherActions(false);
             }
 
             $scope.add = function(uuid){
@@ -69,11 +92,8 @@ angular.module("adminui.providerDetails", ["ngDialog", "pmProviderService"])
             }
 
             $scope.edit = function(uuid){
-                $scope.toggleOtherActions(true);
-                jq('.add-action, .edit-action, .delete-action').addClass('invisible');
+                $scope.disableActionsAndOtherTabs(uuid);
                 jq('.provider-'+uuid).toggle();
-                providerTabs.tabs("disable");
-                providerTabs.tabs("enable", "#"+uuid);
             }
 
             $scope.cancel = function(providerUuid, isNew){
@@ -96,7 +116,7 @@ angular.module("adminui.providerDetails", ["ngDialog", "pmProviderService"])
             }
 
             $scope.save = function(providerUuid, personUuid){
-                $scope.saving = true;
+                $scope.beforeRequest();
                 var toSave = angular.copy($scope.uuidProviderMap[providerUuid]);
                 if(personUuid){
                     toSave['person'] = personUuid;
@@ -114,9 +134,7 @@ angular.module("adminui.providerDetails", ["ngDialog", "pmProviderService"])
                         //update cache
                         $scope.originalState[providerUuid] = angular.copy($scope.uuidProviderMap[providerUuid]);
                         jq('.provider-'+providerUuid).toggle();
-                        jq('.add-action, .edit-action, .delete-action').removeClass('invisible');
-                        providerTabs.tabs("enable");
-                        $scope.toggleOtherActions(false);
+                        $scope.enableActionsAndOtherTabs();
                         //notify the audit info app so that it updates the audit info
                         angular.element('#account-audit-info').scope().$broadcast('event.auditInfo.changed');
                     }
@@ -133,7 +151,7 @@ angular.module("adminui.providerDetails", ["ngDialog", "pmProviderService"])
                      }
                      emr.errorMessage(errorMessage);
                 }).finally(function(){
-                     $scope.saving = false;
+                     $scope.afterRequest();
                 });
             }
 
@@ -155,6 +173,8 @@ angular.module("adminui.providerDetails", ["ngDialog", "pmProviderService"])
                         }
                     }
                 }).then(function(reason) {
+                    $scope.beforeRequest();
+                    $scope.disableActionsAndOtherTabs(providerUuid);
                     PmProvider.process({
                         uuid: providerUuid,
                         reason: reason,
@@ -168,11 +188,16 @@ angular.module("adminui.providerDetails", ["ngDialog", "pmProviderService"])
                     },
                     function (resp) {
                         emr.errorMessage(resp.data.globalErrors[0]);
+                    }).finally(function(){
+                        $scope.afterRequest();
+                        $scope.enableActionsAndOtherTabs();
                     });
                 });
             }
 
             $scope.restore = function(providerUuid) {
+                $scope.beforeRequest();
+                $scope.disableActionsAndOtherTabs(providerUuid);
                 PmProvider.process({
                     uuid: providerUuid,
                     action: "restore"
@@ -185,6 +210,9 @@ angular.module("adminui.providerDetails", ["ngDialog", "pmProviderService"])
                 },
                 function (resp) {
                     emr.errorMessage(resp.data.globalErrors[0]);
+                }).finally(function(){
+                    $scope.afterRequest();
+                    $scope.enableActionsAndOtherTabs();
                 });
             }
         }

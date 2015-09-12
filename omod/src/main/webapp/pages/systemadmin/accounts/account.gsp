@@ -92,7 +92,7 @@
     </div>
 
     <div class="adminui-account-section adminui-section-padded-top">
-        <input type="button" class="${createAccount ? "cancel" :"confirm"}"
+        <input id="adminui-account-done" type="button" class="${createAccount ? "cancel" :"confirm"}"
                value="${ ui.message(createAccount ? "general.cancel" : "general.done") }"
                onclick="window.location='${ui.pageLink("adminui", "systemadmin/accounts/manageAccounts")}'" />
         <% if(createAccount) { %>

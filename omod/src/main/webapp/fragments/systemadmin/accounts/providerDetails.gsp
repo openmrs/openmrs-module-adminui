@@ -49,14 +49,6 @@
                     <a href="#${ it.uuid }" <% if(!it.providerId) { %>
                        title="${ ui.message("adminui.account.addAnotherProviderAccount") }"<% } %>>
                         <% if(it.providerId) { %>
-                        <span>
-                            <i ng-class="{'icon-reply edit-action right':uuidProviderMap['${it.uuid}'].retired,
-                                    'icon-remove delete-action right':!uuidProviderMap['${it.uuid}'].retired,
-                                    'invisible':inEditMode}"
-                                ng-click="uuidProviderMap['${it.uuid}'].retired ? restore('${it.uuid}') : retire('${it.uuid}')"
-                                ng-attr-title="{{uuidProviderMap['${it.uuid}'].retired ? '${ui.message("general.restore")}' :
-                                '${ui.message("general.retire")}'}}"></i>
-                        </span>
                         <span ng-class="{retired: uuidProviderMap['${it.uuid}'].retired}">
                             {{getTabLabel('${it.uuid}', '${ui.message("adminui.account.provider.no.role")}')}}
                         </span>&nbsp;&nbsp;

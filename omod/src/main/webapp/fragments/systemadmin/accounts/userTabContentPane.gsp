@@ -38,6 +38,12 @@
             </td>
         </tr>
     </table>
+    <div class="adminui-section-padded-top" ng-show="!inEditMode">
+        <button type="button" value="${ui.message('general.restore')}" ng-disabled="saving"
+                ng-click="uuidUserMap['${uuid}'].retired ? restore('${uuid}') : retire('${uuid}')">
+            {{uuidUserMap['${uuid}'].retired ? '${ui.message("general.restore")}' : '${ui.message("general.retire")}'}}
+        </button>
+    </div>
 </div>
 
 <div class="user-${uuid}" ${user.userId ? "hidden" : ""}>

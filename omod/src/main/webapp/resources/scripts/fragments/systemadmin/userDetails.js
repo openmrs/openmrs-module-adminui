@@ -52,6 +52,16 @@ angular.module("adminui.userDetails", ["userService", "ngDialog", "adminui.shoul
                 return label;
             }
 
+            $scope.beforeRequest = function(){
+                $scope.saving = true;
+                jq('#adminui-account-done').addClass("disabled");
+            }
+
+            $scope.afterRequest = function(){
+                $scope.saving = false;
+                jq('#adminui-account-done').removeClass("disabled");
+            }
+
             $scope.toggleOtherActions = function(value){
                 //Disable the edit,remove,add buttons in the other apps
                 var personScope = angular.element("#adminui-person-details").scope();
@@ -62,6 +72,19 @@ angular.module("adminui.userDetails", ["userService", "ngDialog", "adminui.shoul
                 providerScope.$apply(function(){
                     providerScope.inEditMode = value;
                 });
+            }
+
+            $scope.disableActionsAndOtherTabs = function(uuid){
+                $scope.toggleOtherActions(true);
+                jq('.add-action, .edit-action, .delete-action').addClass('invisible');
+                userTabs.tabs("disable");
+                userTabs.tabs("enable", "#"+uuid);
+            }
+
+            $scope.enableActionsAndOtherTabs = function(){
+                jq('.add-action, .edit-action, .delete-action').removeClass('invisible');
+                userTabs.tabs("enable");
+                $scope.toggleOtherActions(false);
             }
 
             $scope.add = function(uuid){
@@ -77,11 +100,8 @@ angular.module("adminui.userDetails", ["userService", "ngDialog", "adminui.shoul
             }
 
             $scope.edit = function(uuid){
-                $scope.toggleOtherActions(true);
-                jq('.add-action, .edit-action, .delete-action').addClass('invisible');
+                $scope.disableActionsAndOtherTabs(uuid);
                 jq('.user-'+uuid).toggle();
-                userTabs.tabs("disable");
-                userTabs.tabs("enable", "#"+uuid);
             }
 
             $scope.cancel = function(userUuid, isNew){
@@ -104,7 +124,7 @@ angular.module("adminui.userDetails", ["userService", "ngDialog", "adminui.shoul
             }
 
             $scope.save = function(userUuid, personUuid){
-                $scope.saving = true;
+                $scope.beforeRequest();
                 var modelUser = $scope.uuidUserMap[userUuid];
                 var privilegesLevelAndCapabilities = [modelUser.privilegeLevel];
                 jq.each(modelUser.capabilities, function(key, value){
@@ -145,14 +165,12 @@ angular.module("adminui.userDetails", ["userService", "ngDialog", "adminui.shoul
                         //update cache
                         $scope.originalState[userUuid] = angular.copy($scope.uuidUserMap[userUuid]);
                         jq('.user-'+userUuid).toggle();
-                        jq('.add-action, .edit-action, .delete-action').removeClass('invisible');
-                        userTabs.tabs("enable");
-                        $scope.toggleOtherActions(false);
+                        $scope.enableActionsAndOtherTabs();
                         //notify the audit info app so that it updates the audit info
                         angular.element('#account-audit-info').scope().$broadcast('event.auditInfo.changed');
                     }
                 }).finally(function(){
-                    $scope.saving = false;
+                    $scope.afterRequest();
                 });
             }
 
@@ -169,6 +187,8 @@ angular.module("adminui.userDetails", ["userService", "ngDialog", "adminui.shoul
 
                     }
                 }).then(function(reason) {
+                    $scope.beforeRequest();
+                    $scope.disableActionsAndOtherTabs(userUuid);
                     User.delete({
                         uuid: userUuid,
                         reason: reason
@@ -178,11 +198,16 @@ angular.module("adminui.userDetails", ["userService", "ngDialog", "adminui.shoul
                         user.retired = true;
                         $scope.originalState[userUuid] = angular.copy(user);
                         angular.element('#account-audit-info').scope().$broadcast('event.auditInfo.changed');
+                    }).finally(function(){
+                        $scope.afterRequest();
+                        $scope.enableActionsAndOtherTabs();
                     });
                 });
             }
 
             $scope.restore = function(userUuid) {
+                $scope.beforeRequest();
+                $scope.disableActionsAndOtherTabs(userUuid);
                 User.save({
                     uuid: userUuid,
                     retired: false
@@ -192,6 +217,9 @@ angular.module("adminui.userDetails", ["userService", "ngDialog", "adminui.shoul
                     user.retired = false;
                     $scope.originalState[userUuid] = angular.copy(user);
                     angular.element('#account-audit-info').scope().$broadcast('event.auditInfo.changed');
+                }).finally(function(){
+                    $scope.afterRequest();
+                    $scope.enableActionsAndOtherTabs();
                 });
             }
         }

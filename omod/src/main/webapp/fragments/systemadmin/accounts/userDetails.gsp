@@ -50,12 +50,6 @@
                         <a href="#${ it.uuid }" <% if(!it.userId) { %>
                            title="${ ui.message("adminui.account.addAnotherUserAccount") }"<% } %>>
                             <% if(it.userId) { %>
-                            <i ng-class="{'icon-reply edit-action right':uuidUserMap['${it.uuid}'].retired,
-                                    'icon-remove delete-action right':!uuidUserMap['${it.uuid}'].retired,
-                                    'invisible':inEditMode}"
-                               ng-click="uuidUserMap['${it.uuid}'].retired ? restore('${it.uuid}') : retire('${it.uuid}')"
-                               ng-attr-title="{{uuidUserMap['${it.uuid}'].retired ? '${ui.message("general.restore")}' :
-                                    '${ui.message("general.retire")}'}}"></i>
                             <span ng-class="{retired: uuidUserMap['${it.uuid}'].retired}">
                                 {{getTabLabel('${it.uuid}')}}
                             </span>&nbsp;&nbsp;

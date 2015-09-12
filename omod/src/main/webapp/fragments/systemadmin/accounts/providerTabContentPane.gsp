@@ -24,6 +24,12 @@
             </td>
         </tr>
     </table>
+    <div class="adminui-section-padded-top" ng-show="!inEditMode">
+        <button type="button" value="${ui.message('general.restore')}" ng-disabled="saving"
+                ng-click="uuidProviderMap['${uuid}'].retired ? restore('${uuid}') : retire('${uuid}')">
+            {{uuidProviderMap['${uuid}'].retired ? '${ui.message("general.restore")}' : '${ui.message("general.retire")}'}}
+        </button>
+    </div>
 </div>
 
 <div class="provider-${uuid}" ${provider.providerId ? "hidden" : ""}>
