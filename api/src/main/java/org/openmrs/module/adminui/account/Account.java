@@ -14,8 +14,10 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.openmrs.Auditable;
@@ -37,6 +39,8 @@ public class Account {
 	private List<User> userAccounts;
 	
 	private List<Provider> providerAccounts;
+	
+	private Map<User, String> userPasswordMap = new HashMap<User, String>();
 	
 	public Account(Person person) {
 		this.person = person;
@@ -191,6 +195,14 @@ public class Account {
 	
 	public boolean isSupposedToChangePassword(User user) {
 		return new UserProperties(user.getUserProperties()).isSupposedToChangePassword();
+	}
+	
+	public String getPassword(User user) {
+		return userPasswordMap.get(user);
+	}
+	
+	public String setPassword(User user, String password) {
+		return userPasswordMap.put(user, password);
 	}
 	
 	private List<Auditable> getSortedAuditables() {

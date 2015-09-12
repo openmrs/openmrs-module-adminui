@@ -67,18 +67,18 @@ public class AccountServiceImpl extends BaseOpenmrsService implements AccountSer
 	}
 	
 	/**
-	 * @see AccountService#saveAccount(Account, Map)
+	 * @see AccountService#saveAccount(Account)
 	 */
 	@Override
-	public void saveAccount(Account account, Map<User, String> userPasswordMap) {
+	public void saveAccount(Account account) {
 		personService.savePerson(account.getPerson());
 		for (Provider provider : account.getProviderAccounts()) {
 			providerService.saveProvider(provider);
 		}
 		for (User user : account.getUserAccounts()) {
 			String password = null;
-			if (user.getUserId() == null) {
-				password = userPasswordMap.get(user);
+			if (user.getUserId() == null && StringUtils.isNotBlank(account.getPassword(user))) {
+				password = account.getPassword(user);
 			}
 			userService.saveUser(user, password);
 		}

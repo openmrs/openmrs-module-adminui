@@ -11,9 +11,6 @@ package org.openmrs.module.adminui.account;
 
 import static org.junit.Assert.assertNotNull;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.openmrs.User;
@@ -58,9 +55,8 @@ public class AccountServiceComponentTest extends BaseModuleContextSensitiveTest 
 		account.setGender("M");
 		account.addUserAccount(user);
 		account.addProviderAccount(provider);
-		Map<User, String> userPasswordMap = new HashMap<User, String>();
-		userPasswordMap.put(user, "Tester123");
-		accountService.saveAccount(account, userPasswordMap);
+		account.setPassword(user, "Tester123");
+		accountService.saveAccount(account);
 		
 		assertNotNull(user.getId());
 		assertNotNull(provider.getId());

@@ -139,9 +139,8 @@ public class AccountPageController {
 		
 		if (!errors.hasErrors()) {
 			try {
-				Map<User, String> userPasswordMap = new HashMap<User, String>();
-				userPasswordMap.put(user, otherAccountData.getPassword());
-				accountService.saveAccount(account, userPasswordMap);
+				account.setPassword(user, otherAccountData.getPassword());
+				accountService.saveAccount(account);
 				InfoErrorMessageUtil.flashInfoMessage(request.getSession(), "adminui.account.saved");
 				return "redirect:/adminui/systemadmin/accounts/manageAccounts.page";
 			}

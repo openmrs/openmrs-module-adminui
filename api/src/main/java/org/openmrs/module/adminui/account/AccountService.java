@@ -10,10 +10,8 @@
 package org.openmrs.module.adminui.account;
 
 import java.util.List;
-import java.util.Map;
 
 import org.openmrs.Role;
-import org.openmrs.User;
 
 public interface AccountService {
 	
@@ -21,10 +19,9 @@ public interface AccountService {
 	 * Save the account details to the database
 	 *
 	 * @param account
-	 * @param userPasswordMap
-	 * @return
+	 * @should save the account
 	 */
-	void saveAccount(Account account, Map<User, String> userPasswordMap);
+	void saveAccount(Account account);
 	
 	/**
 	 * @return
