@@ -66,8 +66,13 @@ angular.module("adminui.userDetails", ["userService", "ngDialog", "adminui.shoul
             $scope.add = function(uuid){
                 $scope.toggleOtherActions(true);
                 jq('.add-action, .edit-action, .delete-action').addClass('invisible');
-                userTabs.tabs("disable");
-                userTabs.tabs("enable", "#"+uuid);
+                //We are adding the first user account
+                if(getMapSize($scope.uuidUserMap) == 1){
+                    jq('.adminui-first-user-ele').toggle();
+                } else {
+                    userTabs.tabs("disable");
+                    userTabs.tabs("enable", "#"+uuid);
+                }
             }
 
             $scope.edit = function(uuid){
@@ -84,11 +89,15 @@ angular.module("adminui.userDetails", ["userService", "ngDialog", "adminui.shoul
                 $scope.userDetailsForm.$setPristine();
                 $scope.userDetailsForm.$setUntouched();
                 jq('.add-action, .edit-action, .delete-action').removeClass('invisible');
-                userTabs.tabs("enable");
-                if(isNew){
-                    userTabs.tabs("option", "active", 0);
-                } else{
-                    jq('.user-'+userUuid).toggle();
+                if(getMapSize($scope.uuidUserMap) == 1){
+                    jq('.adminui-first-user-ele').toggle();
+                } else {
+                    userTabs.tabs("enable");
+                    if (isNew) {
+                        userTabs.tabs("option", "active", 0);
+                    } else {
+                        jq('.user-' + userUuid).toggle();
+                    }
                 }
                 $scope.toggleOtherActions(false);
             }

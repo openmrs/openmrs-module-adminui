@@ -28,7 +28,21 @@
             </div>
             <% } %>
 
-            <% if(!createAccount) { %>
+            <% if(!createAccount && account.userAccounts.size == 1) { %>
+            <div id="adminui-first-user-details" ng-class="{'invisible':inEditMode}">
+                <div class="adminui-first-user-ele">
+                    <button id="adminui-addFirstUser" type="button" ng-click="add('${account.userAccounts[0].uuid}')">
+                    ${ui.message("adminui.account.addUser.account")}
+                    </button>
+                </div>
+                <div id="adminui-first-user" class="hidden adminui-first-user-ele">
+                    ${ui.includeFragment("adminui", "systemadmin/accounts/userTabContentPane",
+                        [user: account.userAccounts[0]])}
+                </div>
+            </div>
+            <% } %>
+
+            <% if(!createAccount && account.userAccounts.size > 1) { %>
             <div id="adminui-users">
                 <ul>
                     <% account.userAccounts.each { %>
@@ -55,7 +69,7 @@
 
                 <% account.userAccounts.each { %>
                 <div id="${it.uuid}">
-                    ${ui.includeFragment("adminui", "systemadmin/accounts/userTabContentPane", [user:it])}
+                    ${ui.includeFragment("adminui", "systemadmin/accounts/userTabContentPane", [user: it])}
                 </div>
                 <% } %>
             </div>

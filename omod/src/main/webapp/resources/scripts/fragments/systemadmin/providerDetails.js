@@ -58,8 +58,13 @@ angular.module("adminui.providerDetails", ["ngDialog", "pmProviderService"])
             $scope.add = function(uuid){
                 $scope.toggleOtherActions(true);
                 jq('.add-action, .edit-action, .delete-action').addClass('invisible');
-                providerTabs.tabs("disable");
-                providerTabs.tabs("enable", "#"+uuid);
+                //We are adding the first provider account
+                if(getMapSize($scope.uuidProviderMap) == 1){
+                    jq('.adminui-first-provider-ele').toggle();
+                } else {
+                    providerTabs.tabs("disable");
+                    providerTabs.tabs("enable", "#" + uuid);
+                }
             }
 
             $scope.edit = function(uuid){
@@ -76,11 +81,15 @@ angular.module("adminui.providerDetails", ["ngDialog", "pmProviderService"])
                 $scope.providerDetailsForm.$setPristine();
                 $scope.providerDetailsForm.$setUntouched();
                 jq('.add-action, .edit-action, .delete-action').removeClass('invisible');
-                providerTabs.tabs("enable");
-                if(isNew){
-                    providerTabs.tabs("option", "active", 0);
-                } else{
-                    jq('.provider-'+providerUuid).toggle();
+                if(getMapSize($scope.uuidProviderMap) == 1){
+                    jq('.adminui-first-provider-ele').toggle();
+                } else {
+                    providerTabs.tabs("enable");
+                    if (isNew) {
+                        providerTabs.tabs("option", "active", 0);
+                    } else {
+                        jq('.provider-' + providerUuid).toggle();
+                    }
                 }
                 $scope.toggleOtherActions(false);
             }

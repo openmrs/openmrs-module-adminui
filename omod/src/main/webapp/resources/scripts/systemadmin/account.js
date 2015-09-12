@@ -28,6 +28,19 @@ jq(function(){
     });
 });
 
+
+function getMapSize(map) {
+    var size = 0;
+    var i;
+    for(i in map) {
+        if (map.hasOwnProperty(i)){
+            size++;
+        }
+    }
+
+    return size;
+}
+
 function initAccountDetails(p, u, pr, addUser, addProvider){
     personAccount = p;
     userAccount = u;
