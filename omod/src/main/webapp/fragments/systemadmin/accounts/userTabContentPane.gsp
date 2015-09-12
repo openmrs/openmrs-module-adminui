@@ -39,7 +39,7 @@
         </tr>
     </table>
     <div class="adminui-section-padded-top" ng-show="!inEditMode">
-        <button type="button" value="${ui.message('general.restore')}" ng-disabled="saving"
+        <button type="button" value="${ui.message('general.restore')}" ng-disabled="requesting"
                 ng-click="uuidUserMap['${uuid}'].retired ? restore('${uuid}') : retire('${uuid}')">
             {{uuidUserMap['${uuid}'].retired ? '${ui.message("general.restore")}' : '${ui.message("general.retire")}'}}
         </button>
@@ -57,7 +57,7 @@
             ng-disabled="userDetailsForm['username${uuid}'].\$invalid
                         || userDetailsForm['privilegeLevel${uuid}'].\$invalid
                         || userDetailsForm['password${uuid}'].\$invalid
-                        || userDetailsForm['confirmPassword${uuid}'].\$invalid || saving">
+                        || userDetailsForm['confirmPassword${uuid}'].\$invalid || requesting">
             ${ ui.message("general.save") }
         </button>
     </div>

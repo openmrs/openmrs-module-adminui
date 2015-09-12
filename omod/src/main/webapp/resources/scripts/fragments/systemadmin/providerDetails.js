@@ -31,7 +31,7 @@ angular.module("adminui.providerDetails", ["ngDialog", "pmProviderService"])
     .controller("ProviderDetailsController", ["$scope", "ngDialog", "PmProvider",
         function($scope, ngDialog, PmProvider) {
             $scope.inEditMode = false;
-            $scope.saving = false;
+            $scope.requesting = false;
             $scope.uuidProviderMap = uuidAndProviderMap;
             $scope.originalState = angular.copy($scope.uuidProviderMap);
             $scope.roles = providerRoles;
@@ -45,12 +45,12 @@ angular.module("adminui.providerDetails", ["ngDialog", "pmProviderService"])
             }
 
             $scope.beforeRequest = function(){
-                $scope.saving = true;
+                $scope.requesting = true;
                 jq('#adminui-account-done').addClass("disabled");
             }
 
             $scope.afterRequest = function(){
-                $scope.saving = false;
+                $scope.requesting = false;
                 jq('#adminui-account-done').removeClass("disabled");
             }
 

@@ -21,7 +21,7 @@ angular.module("adminui.userDetails", ["userService", "ngDialog", "adminui.shoul
     .controller("UserDetailsController", ["$scope", "ngDialog" ,"User",
         function($scope, ngDialog, User) {
             $scope.inEditMode = false;
-            $scope.saving = false;
+            $scope.requesting = false;
             $scope.uuidUserMap = uuidAndUserMap;
             $scope.originalState = angular.copy($scope.uuidUserMap);
             $scope.privilegeLevels = privilegeLevels;
@@ -53,12 +53,12 @@ angular.module("adminui.userDetails", ["userService", "ngDialog", "adminui.shoul
             }
 
             $scope.beforeRequest = function(){
-                $scope.saving = true;
+                $scope.requesting = true;
                 jq('#adminui-account-done').addClass("disabled");
             }
 
             $scope.afterRequest = function(){
-                $scope.saving = false;
+                $scope.requesting = false;
                 jq('#adminui-account-done').removeClass("disabled");
             }
 
