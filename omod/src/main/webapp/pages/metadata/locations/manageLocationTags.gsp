@@ -20,7 +20,7 @@
  <table id="list-tags" cellspacing="0" cellpadding="2">
 	<thead>
 		<tr>
-			<th>${ ui.message("general.name")}</th>
+			<th class="adminui-name-column">${ ui.message("general.name")}</th>
 			<th>${ ui.message("general.description") }</th>
 			<th class="adminui-action-column">${ ui.message("general.action") }</th>
 		</tr>
@@ -28,9 +28,9 @@
 	<tbody>
 		<% locationTags.each{  %>
 	 	<tr>
-	 		<td ${it.retired ? 'class="retired"' : ''}>${ ui.format(it.name) }</td>
-			<td ${it.retired ? 'class="retired"' : ''}>${ ui.format(it.description) }</td>
-			<td>
+	 		<td valign="top" ${it.retired ? 'class="retired"' : ''}>${ ui.format(it.name) }</td>
+			<td valign="top" ${it.retired ? 'class="retired"' : ''}>${ ui.format(it.description) }</td>
+			<td valign="top">
                 <form id="adminui-restore-form-${it.id}" method="POST">
                     <i class="icon-pencil edit-action${it.retired ? ' invisible' : ''}" title="${ ui.message("general.edit") }"
                        onclick="location.href='${ui.pageLink("adminui", "metadata/locations/locationTag",[locationTagId: it.id])}'"></i>
