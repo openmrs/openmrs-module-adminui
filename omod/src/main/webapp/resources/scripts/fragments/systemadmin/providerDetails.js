@@ -46,12 +46,10 @@ angular.module("adminui.providerDetails", ["ngDialog", "pmProviderService"])
 
             $scope.beforeRequest = function(){
                 $scope.requesting = true;
-                jq('#adminui-account-done').addClass("disabled");
             }
 
             $scope.afterRequest = function(){
                 $scope.requesting = false;
-                jq('#adminui-account-done').removeClass("disabled");
             }
 
             $scope.toggleOtherActions = function(value){

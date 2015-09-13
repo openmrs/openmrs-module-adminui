@@ -3,6 +3,7 @@ angular.module("adminui.personDetails", ["personService"])
     .controller("EditPersonDetailsController", ["$scope", "Person",
         function($scope, Person) {
             $scope.inEditMode = false;
+            $scope.requesting = false;
             $scope.person = {};
 
             $scope.init = function(personUuid, gender, personNameUuid, familyName, givenName, male, female){
@@ -11,10 +12,18 @@ angular.module("adminui.personDetails", ["personService"])
                 $scope.person.personNameUuid = personNameUuid;
                 $scope.person.familyName = familyName;
                 $scope.person.givenName = givenName;
-                $scope.genders = {M: male, F: female}
+                $scope.genders = {M: male, F: female};
 
                 //cache the original state so that we can use it to reset later on cancel
                 $scope.originalState = angular.copy($scope.person);
+            }
+
+            $scope.beforeRequest = function(){
+                $scope.requesting = true;
+            }
+
+            $scope.afterRequest = function(){
+                $scope.requesting = false;
             }
 
             $scope.toggleOtherActions = function(value){
@@ -35,6 +44,7 @@ angular.module("adminui.personDetails", ["personService"])
             }
 
             $scope.save = function() {
+                $scope.beforeRequest();
                 var personToSave = {
                     uuid: $scope.person.personUuid,
                     gender: $scope.person.gender,
@@ -52,6 +62,8 @@ angular.module("adminui.personDetails", ["personService"])
                     angular.element('#account-audit-info').scope().$broadcast('event.auditInfo.changed');
                     jq('.adminui-account-person-details').toggle();
                     emr.successMessage(messages["savedChanges"]);
+                }).finally(function(){
+                    $scope.afterRequest();
                 })
             }
 

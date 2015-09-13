@@ -146,6 +146,16 @@ public class AccountPageController {
 			}
 			catch (Exception e) {
 				errors.reject("adminui.account.error.save.fail");
+				//If the person, provider or user account had been flushed we need to unset the ids because
+				//they actually don't exist in the DB otherwise the logic in the GSP will see the ids and
+				//think we are editing and things will break
+				account.getPerson().setId(null);
+				if (otherAccountData.getAddProviderAccount()) {
+					account.getProviderAccounts().get(0).setProviderId(null);
+				}
+				if (otherAccountData.getAddUserAccount()) {
+					account.getUserAccounts().get(0).setUserId(null);
+				}
 			}
 		}
 		

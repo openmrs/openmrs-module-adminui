@@ -47,7 +47,7 @@
                 <button id="adminui-person-cancel" type="button" class="cancel" ng-click="cancel()">
                     ${ ui.message("general.cancel") }
                 </button>
-                <button ng-disabled="personDetailsForm.\$invalid" id="adminui-person-save" type="submit" class="confirm">
+                <button ng-disabled="personDetailsForm.\$invalid || requesting" id="adminui-person-save" type="submit" class="confirm">
                     ${ ui.message("general.save") }
                 </button>
             </div>
