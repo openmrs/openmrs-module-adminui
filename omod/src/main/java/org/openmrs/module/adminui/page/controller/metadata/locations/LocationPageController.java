@@ -59,7 +59,6 @@ public class LocationPageController {
         
         //remove descendant locations
         Set<Location> descendants = getDescendants(location.getChildLocations());
-        System.out.println("????????" + descendants);
         for (Location loc : descendants) {
         	locations.remove(loc);
         }
