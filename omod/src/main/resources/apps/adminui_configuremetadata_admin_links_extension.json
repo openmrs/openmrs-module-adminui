@@ -48,18 +48,6 @@
     },
 
     {
-        "id": "${project.parent.groupId}.${project.parent.artifactId}.locationHierarchy.link",
-        "extensionPointId": "${project.parent.groupId}.${project.parent.artifactId}.adminLinks",
-        "type": "link",
-        "label": "adminui.locationHierarchy.label",
-        "url": "adminui/metadata/locations/locationHierarchy.page",
-        "requiredPrivilege": "Get Locations",
-        "extensionParams":{
-            "group": "org.openmrs.module.adminui.locations.group"
-        }
-    },
-
-    {
         "id": "${project.parent.groupId}.${project.parent.artifactId}.encounters",
         "extensionPointId": "${project.parent.groupId}.${project.parent.artifactId}.adminLinks",
         "type": "link",
