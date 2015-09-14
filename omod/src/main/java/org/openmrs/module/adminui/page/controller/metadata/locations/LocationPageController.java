@@ -56,11 +56,31 @@ public class LocationPageController {
         else {
         	location = new Location();
         }
+        
+        //remove descendant locations
+        Set<Location> descendants = getDescendants(location.getChildLocations());
+        System.out.println("????????" + descendants);
+        for (Location loc : descendants) {
+        	locations.remove(loc);
+        }
 
         model.addAttribute("location", location);
         model.addAttribute("existingLocations", locations);
         model.addAttribute("locationTags", locationService.getAllLocationTags());
         model.addAttribute("attributeTypes", locationService.getAllLocationAttributeTypes());
+    }
+    
+    private Set<Location> getDescendants(Set<Location> childLocations) {
+    	Set<Location> locations = new HashSet<Location>();
+    	
+    	if (childLocations != null) {
+    		locations.addAll(childLocations);
+	    	for (Location location : childLocations) {
+	    		locations.addAll(getDescendants(location.getChildLocations()));
+	    	}
+    	}
+    	
+    	return locations;
     }
 
     /**
