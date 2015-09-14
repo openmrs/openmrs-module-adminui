@@ -43,11 +43,11 @@
 	 			<% for (i = 1; i <= it.depth; i++) { %>
 	 				&nbsp;&nbsp;
 	 			<% } %>
-				${ ui.format(it.location.name)}
+				${ it.location.name }
 			</td>
 
 			<td <% if (it.location.retired) { %> class="retired" <% } %>>
-				${ ui.format(it.location.description) }
+				${ it.location.description }
 			</td>
 
             <td <% if (it.location.retired) { %> class="retired" <% } %>>
