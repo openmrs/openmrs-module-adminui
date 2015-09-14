@@ -2,8 +2,9 @@
     <h3>${ui.message('adminui.role.purge.title')}</h3>
 </div>
 <div class="dialog-content">
-    <h4><%= ui.message("adminui.role.purge", "'{{ role.name }}'") %></h4>  
-    
+    <h4>  
+        {{ '${ui.message("adminui.purge")}'.replace('{0}', role.name) }}
+	</h4>
     <br />
     <div>
         <button class="confirm right" ng-click="confirm(reason)">${ ui.message("uicommons.confirm") }</button>

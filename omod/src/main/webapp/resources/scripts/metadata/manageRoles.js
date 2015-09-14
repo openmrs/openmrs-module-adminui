@@ -27,12 +27,12 @@ angular.module("manageRoles", [ "roleService", "privilegeService", "ngDialog", "
             });
     }])
 
-    .controller("ManageRolesController", [ "$scope", "$state", "Role", "RoleService", "ngDialog", 
-        function($scope, $state, Role, RoleService, ngDialog) {
+    .controller("ManageRolesController", [ "$scope", "Role", "ngDialog", 
+        function($scope, Role, ngDialog) {
     		
             function loadRoles() {
-                 RoleService.getRoles({ v: "default", includeAll: true }).then(function(results) {
-                    $scope.roles = results;
+                Role.query({ v: "full", includeAll: true }).$promise.then(function(response) {
+                    $scope.roles = response.results;
                 }, function() {
                     emr.errorMessage(emr.message("adminui.role.purge.success"));
                 })
@@ -111,7 +111,7 @@ angular.module("manageRoles", [ "roleService", "privilegeService", "ngDialog", "
                     }
                     
                     // remove self and bases from inheritable roles
-                    idx = $scope.roles.length - 1;
+                    var idx = $scope.roles.length - 1;
                     while(idx--){
                         if ($scope.roles[idx].uuid === $scope.role.uuid 
                         		|| isInArray($scope.dependantRoles, $scope.roles[idx]))  { 
