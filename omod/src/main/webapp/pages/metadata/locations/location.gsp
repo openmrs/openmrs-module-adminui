@@ -155,7 +155,7 @@
 		            valueIsNotBoolean: true
 		        ])}
 	        </td>
-	        <% if ((index + 1) % 4 == 0) { %> </tr> <tr> <% } %>
+	        <% if ((index + 1) % 2 == 0) { %> </tr> <tr> <% } %>
     	<% } %>
     	</tr>
 	</table>

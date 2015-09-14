@@ -76,20 +76,6 @@
 	</tbody>
 </table>
 
-<% if ( (locations != null) && (locations.size() > 0) ) { %>
-${ ui.includeFragment("uicommons", "widget/dataTable", [ object: "#list-locations",
-        options: [
-                bFilter: true,
-                bJQueryUI: true,
-                bLengthChange: false,
-                iDisplayLength: 10,
-                sPaginationType: '\"full_numbers\"',
-                bSort: false,
-                sDom: '\'ft<\"fg-toolbar ui-toolbar ui-corner-bl ui-corner-br ui-helper-clearfix datatables-info-and-pg \"ip>\''
-        ]
-]) }
-<% } %>
-
 <div id="adminui-retire-location-dialog" class="dialog" style="display: none">
     <div class="dialog-header">
         <h3>${ ui.message("adminui.location.retire") }</h3>
