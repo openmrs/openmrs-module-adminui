@@ -16,10 +16,8 @@ import org.openmrs.User;
 import org.openmrs.module.adminui.account.Account;
 import org.openmrs.ui.framework.SimpleObject;
 import org.openmrs.ui.framework.UiUtils;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestParam;
 
-@Controller
 public class AccountDetailsFragmentController {
 	
 	public SimpleObject getAuditInfo(@RequestParam(value = "uuid") Person person, UiUtils ui) {
