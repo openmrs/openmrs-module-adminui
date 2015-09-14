@@ -6,6 +6,7 @@
     ui.includeJavascript("uicommons", "angular-ui/angular-ui-router.min.js")
     ui.includeJavascript("uicommons", "angular-app.js")
     ui.includeJavascript("uicommons", "angular-common.js")
+    ui.includeJavascript("uicommons", "angular-common-error.js")
     ui.includeJavascript("uicommons", "services/roleService.js")
     ui.includeJavascript("uicommons", "services/privilegeService.js")
     ui.includeJavascript("uicommons", "filters/display.js")
@@ -17,7 +18,6 @@
     ui.includeCss("uicommons", "ngDialog/ngDialog.min.css")
 	ui.includeCss("adminui", "adminui.css")
 
-    ui.includeJavascript("adminui", "metadata/colTable.js")
     ui.includeJavascript("adminui", "metadata/manageRoles.js")
 %>
 
@@ -37,10 +37,6 @@
     	"adminui.role.purge",
         "uicommons.generalSavedNotification"
     ]);
-    
-    var dataConfig = {
-    		rolePurgeTemplateMessage: "${ ui.message("adminui.role.purge") }"
-    	};
 </script>
 
 <div id="manage-roles">
