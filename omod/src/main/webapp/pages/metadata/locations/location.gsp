@@ -145,18 +145,19 @@
 
 	<table class="adminui-capabilities" cellspacing="0" cellpadding="0">
 		<tr>
-	    	<% locationTags.each{ %>
-	    		<td>
-			        ${ ui.includeFragment("uicommons", "field/checkbox", [
-			            label: ui.format(it),
-			            formFieldName: "locTags",
-			            value: it.id,
-			            checked: location.tags && location.tags.contains(it),
-			            valueIsNotBoolean: true
-			        ])}
-		        </td>
-	    	<% } %>
-	    </tr>
+    	<% locationTags.eachWithIndex { tag, index -> %>
+			<td>
+		        ${ ui.includeFragment("uicommons", "field/checkbox", [
+		            label: tag.name,
+		            formFieldName: "locTags",
+		            value: tag.id,
+		            checked: location.tags && location.tags.contains(tag),
+		            valueIsNotBoolean: true
+		        ])}
+	        </td>
+	        <% if ((index + 1) % 4 == 0) { %> </tr> <tr> <% } %>
+    	<% } %>
+    	</tr>
 	</table>
     
     </fieldset>
