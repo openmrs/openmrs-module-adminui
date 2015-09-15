@@ -42,19 +42,19 @@ angular.module("manageRoles", [ "roleService", "privilegeService", "ngDialog", "
 
             $scope.purge = function(role) {
                 ngDialog.openConfirm({
-                    showClose: false,
-                    closeByEscape: true,
-                    closeByDocument: true,
-                    template: "templates/purgeRoleDialog.page",
-                    controller: function($scope) {
-                        $scope.role = role;
-                    }
+                        showClose: false,
+                        closeByEscape: true,
+                        closeByDocument: true,
+                        template: "templates/purgeRoleDialog.page",
+                        controller: function($scope) {
+                            $scope.role = role;
+                        }
                 	}).then(function() {
-                    Role.delete({
-                		uuid: role.uuid,
-                        purge: ""
-                    })
-                    .$promise.then(function() {                        
+                        Role.delete({
+                		    uuid: role.uuid,
+                            purge: ""
+                        })
+                    .$promise.then(function() {
                         emr.successMessage(emr.message("adminui.role.purge.success"));
                         loadRoles();
                     });
