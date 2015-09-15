@@ -3,7 +3,7 @@
 </div>
 <div class="dialog-content">
     <h4>  
-        {{ '${ui.message("adminui.purge")}'.replace('{0}', role.name) }}
+        {{ '${ui.message("adminui.purge")}'.replace('{0}', '"'+role.name+'"') }}
 	</h4>
     <br />
     <div>

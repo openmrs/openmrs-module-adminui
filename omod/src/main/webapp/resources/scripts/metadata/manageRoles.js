@@ -27,19 +27,13 @@ angular.module("manageRoles", [ "roleService", "privilegeService", "ngDialog", "
             });
     }])
 
-    .controller("ManageRolesController", [ "$scope", "Role", "ngDialog", 
-        function($scope, Role, ngDialog) {
-    		
+    .controller("ManageRolesController", [ "$scope", "$state", "Role", "ngDialog", "RoleService",
+        function($scope, $state, Role, ngDialog, RoleService) {
+
             function loadRoles() {
-                Role.query({ v: "full", includeAll: true }).$promise.then(function(response) {
-                    $scope.roles = response.results;
-                }, function() {
-                    emr.errorMessage(emr.message("adminui.role.purge.success"));
-                })
-            }
-            
-            $scope.load = function() {
-               	loadRoles();
+                RoleService.getRoles({ v: "full", includeAll: true }).then(function(results) {
+                    $scope.roles = results;
+                });
             }
 
             $scope.edit = function(role) {
@@ -66,16 +60,17 @@ angular.module("manageRoles", [ "roleService", "privilegeService", "ngDialog", "
                     });
                 });
             }
+
+            loadRoles();
         }])
 
-    .controller("EditRoleController", [ "$scope", "$state", "Role", "role", "Privilege",
-        function($scope, $state, Role, role, Privilege) {
+    .controller("EditRoleController", [ "$scope", "$state", "Role", "role", "RoleService", "PrivilegeService",
+        function($scope, $state, Role, role, RoleService, PrivilegeService) {
 
             $scope.role = role;
             
             // test whether an object is contained within an array
-            function isInArray(myArray, myValue)
-            {
+            function isInArray(myArray, myValue){
             	var inArray = false;
                 if (myArray != null) {
                     myArray.forEach(function (val, idx){
@@ -88,10 +83,10 @@ angular.module("manageRoles", [ "roleService", "privilegeService", "ngDialog", "
             }
             
             // load roles with indication of those contained in current role inherited roles
-            function loadRole() {
-                Role.query({ v: "full", includeAll: true }).$promise.then(function(response) {
-                    // TODO handle multiple pages of results in a standard way
-                    $scope.roles = response.results;
+            function loadRoles() {
+                RoleService.getRoles({ v: "full", includeAll: true }).then(function(results) {
+                    //Remove the role we are editing
+                    $scope.roles = _.without(results, _.findWhere(results, {uuid: $scope.role.uuid}));
                     
                     // load dependant roles
                 	$scope.dependantRoles = []; 
@@ -120,12 +115,11 @@ angular.module("manageRoles", [ "roleService", "privilegeService", "ngDialog", "
                     }
                     
                     $scope.inheritedRoles = Array($scope.roles.length);
-                    loadInheritedRoles();  
+                    loadInheritedRoles();
 
                     // load privileges with indication of those contained in current role      
-                    Privilege.query({ v: "default", includeAll: true }).$promise.then(function(response) {
-                        // TODO handle multiple pages of results in a standard way
-                        $scope.privileges = response.results;          
+                    PrivilegeService.getPrivileges({ v: "default", includeAll: true }).then(function(results) {
+                        $scope.privileges = results;
                         $scope.inheritedPrivilegeFlags = Array($scope.privileges.length);
                         $scope.privilegeFlags = Array($scope.privileges.length);
                                                 
@@ -134,11 +128,11 @@ angular.module("manageRoles", [ "roleService", "privilegeService", "ngDialog", "
                     });
                 });
             }
- 
+
             function loadPrivilegeFlags() {
                 if ($scope.privileges != null) {
-                    $scope.privileges.forEach(function(val, idx) { 
-                        $scope.inheritedPrivilegeFlags[idx] = false; 
+                    $scope.privileges.forEach(function(val, idx) {
+                        $scope.inheritedPrivilegeFlags[idx] = false;
                         $scope.privilegeFlags[idx] = false;
                     	if (isInArray($scope.inheritedPrivileges, val)) {
                             $scope.inheritedPrivilegeFlags[idx] = true; // ok, because inheritedPrivileges take precendence
@@ -168,14 +162,14 @@ angular.module("manageRoles", [ "roleService", "privilegeService", "ngDialog", "
                             }
                         });
                     });
-                } 
+                }
                 loadPrivilegeFlags();
             }
 
             function loadInheritedRoles() {                
                 if ($scope.roles != null) {                                         
-                	$scope.roles.forEach(function(val, idx) { 
-	                    $scope.inheritedRoles[idx] = isInArray($scope.role.allInheritedRoles, val);	                    
+                	$scope.roles.forEach(function(val, idx) {
+	                    $scope.inheritedRoles[idx] = isInArray($scope.role.allInheritedRoles, val);
                     });   
                 }
             }
@@ -204,10 +198,6 @@ angular.module("manageRoles", [ "roleService", "privilegeService", "ngDialog", "
                     }
                 });
             }
-            
-            $scope.load = function() {
-            	loadRole();
-            }
 
             $scope.save = function() {
             	updateInheritedRoles();
@@ -224,4 +214,6 @@ angular.module("manageRoles", [ "roleService", "privilegeService", "ngDialog", "
                     $state.go("list");
                 });
             }
+
+            loadRoles();
     }]);

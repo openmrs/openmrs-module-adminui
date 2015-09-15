@@ -14,7 +14,6 @@
 
     ui.includeJavascript("uicommons", "ngDialog/ngDialog.js")
     
-    ui.includeJavascript("uicommons", "styleguide/index.css")
     ui.includeCss("uicommons", "ngDialog/ngDialog.min.css")
 	ui.includeCss("adminui", "adminui.css")
 
@@ -40,7 +39,7 @@
 </script>
 
 <div id="manage-roles">
-    <ui-view  onload="load()" ></ui-view>
+    <ui-view />
 </div>
 
 <script type="text/javascript">

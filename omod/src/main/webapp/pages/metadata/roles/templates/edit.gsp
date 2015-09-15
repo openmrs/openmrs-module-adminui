@@ -38,15 +38,11 @@
         <table>
             <tbody>
                 <tr ng-repeat="(idx, val) in roles" ng-hide="idx % 2">
-                    <td >
-                        <input type="checkbox" ng-model="inheritedRoles[idx]"
-        					ng-click="selectInheritedRole()">
-                        {{roles[idx].name}}
+                    <td>
+                        <input type="checkbox" ng-model="inheritedRoles[idx]"> {{roles[idx].name}}
                     </td>
                     <td ng-hide="!roles[idx + 1]" >
-                        <input type="checkbox" ng-model="inheritedRoles[idx + 1]"
-        					ng-click="selectInheritedRole()">
-                        {{roles[idx + 1].name}}
+                        <input type="checkbox" ng-model="inheritedRoles[idx + 1]"> {{roles[idx + 1].name}}
                     </td>
                 </tr>
             </tbody>
