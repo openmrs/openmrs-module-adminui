@@ -63,8 +63,8 @@ public class ChangeDefaultsPageController {
         return "myaccount/myAccount";
     }
     
-    public UserDefaults getUserDefaults(@RequestParam("defaultLocale") String defaultLocale,
-    		@RequestParam("proficientLocales") String proficientLocales) {
+    public UserDefaults getUserDefaults(@RequestParam(value = "defaultLocale", required = false) String defaultLocale,
+    		@RequestParam(value = "proficientLocales", required = false) String proficientLocales) {
     	
     	return new UserDefaults(defaultLocale, proficientLocales);
     }
@@ -72,7 +72,7 @@ public class ChangeDefaultsPageController {
     public class UserDefaults {
 
         private String defaultLocale;
-        private String proficientLocales;
+        private String proficientLocales = "";
 
         public UserDefaults() {
         }
