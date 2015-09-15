@@ -16,7 +16,7 @@ function initUserDetails(uuidAndUser, userPrivLevels, userCapabilities, yes, no)
     yesOrNo[false] = no;
 }
 
-angular.module("adminui.userDetails", ["userService", "ngDialog", "adminui.should-match"])
+angular.module("adminui.userDetails", ["userService", "ngDialog", "adminui.should-match", "uicommons.common.error"])
 
     .controller("UserDetailsController", ["$scope", "ngDialog" ,"User",
         function($scope, ngDialog, User) {

@@ -103,7 +103,7 @@ angular.module("adminui.accountAuditInfo", ["accountService", "ngSanitize"])
                         $scope.changeAuditInfo = msg.replace("{0}", changedBy).replace("{1}", dateChanged);
                     }
                 }, function(){
-                    emr.errorAlert(messages['auditInfoFail']);
+                    emr.errorMessage(messages['auditInfoFail']);
                 });
             });
         }

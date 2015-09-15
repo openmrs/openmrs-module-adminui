@@ -5,6 +5,7 @@
     ui.includeJavascript("uicommons", "angular-resource.min.js")
     ui.includeJavascript("uicommons", "angular-app.js")
     ui.includeJavascript("uicommons", "angular-common.js")
+    ui.includeJavascript("uicommons", "angular-common-error.js")
     ui.includeJavascript("uicommons", "angular-sanitize.min.js")
     ui.includeJavascript("uicommons", "services/personService.js")
     ui.includeJavascript("uicommons", "services/providerService.js")

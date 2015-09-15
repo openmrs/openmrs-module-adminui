@@ -1,4 +1,4 @@
-angular.module("manageProviderAttributeTypes", [ "providerAttributeTypeService", "ngDialog", "ui.router", "uicommons.filters" ])
+angular.module("manageProviderAttributeTypes", [ "providerAttributeTypeService", "ngDialog", "ui.router", "uicommons.filters", "uicommons.common.error"])
 
     .config([ "$stateProvider", "$urlRouterProvider", function($stateProvider, $urlRouterProvider) {
         $urlRouterProvider.otherwise("/list");

@@ -6,6 +6,7 @@
     ui.includeJavascript("uicommons", "angular-ui/angular-ui-router.min.js")
     ui.includeJavascript("uicommons", "angular-app.js")
     ui.includeJavascript("uicommons", "angular-common.js")
+    ui.includeJavascript("uicommons", "angular-common-error.js")
     ui.includeJavascript("uicommons", "services/encounterTypeService.js")
     ui.includeJavascript("uicommons", "filters/display.js")
     ui.includeJavascript("uicommons", "filters/serverDate.js")

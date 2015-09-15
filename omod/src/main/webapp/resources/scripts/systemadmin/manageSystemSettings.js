@@ -1,4 +1,4 @@
-angular.module("manageSystemSettings", [ "systemSettingService", "ngDialog", "ui.router", "uicommons.filters" ])
+angular.module("manageSystemSettings", [ "systemSettingService", "ngDialog", "ui.router", "uicommons.filters", "uicommons.common.error"])
 
     .config([ "$stateProvider", "$urlRouterProvider", function($stateProvider, $urlRouterProvider) {
         $urlRouterProvider.otherwise("/list");
