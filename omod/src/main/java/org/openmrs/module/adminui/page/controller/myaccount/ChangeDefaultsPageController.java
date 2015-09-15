@@ -9,19 +9,22 @@
  */
 package org.openmrs.module.adminui.page.controller.myaccount;
 
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.openmrs.User;
 import org.openmrs.api.UserService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.uicommons.UiCommonsConstants;
 import org.openmrs.module.uicommons.util.InfoErrorMessageUtil;
 import org.openmrs.ui.framework.annotation.BindParams;
+import org.openmrs.ui.framework.annotation.MethodParam;
 import org.openmrs.ui.framework.annotation.SpringBean;
 import org.openmrs.ui.framework.page.PageModel;
 import org.openmrs.util.OpenmrsConstants;
 import org.springframework.validation.BindingResult;
-
-import javax.servlet.http.HttpServletRequest;
-import java.util.Map;
+import org.springframework.web.bind.annotation.RequestParam;
 
 public class ChangeDefaultsPageController {
 
@@ -35,7 +38,7 @@ public class ChangeDefaultsPageController {
         pageModel.addAttribute("locales", Context.getAdministrationService().getPresentationLocales());
     }
 
-    public String post(PageModel model, @BindParams UserDefaults userDefaults,
+    public String post(PageModel model, @MethodParam("getUserDefaults") @BindParams UserDefaults userDefaults,
                        BindingResult errors,
                        @SpringBean("userService") UserService userService,
                        HttpServletRequest request) {
@@ -58,6 +61,12 @@ public class ChangeDefaultsPageController {
         model.addAttribute("userDefaults", userDefaults);
         model.addAttribute("locales", Context.getAdministrationService().getPresentationLocales());
         return "myaccount/myAccount";
+    }
+    
+    public UserDefaults getUserDefaults(@RequestParam("defaultLocale") String defaultLocale,
+    		@RequestParam("proficientLocales") String proficientLocales) {
+    	
+    	return new UserDefaults(defaultLocale, proficientLocales);
     }
 
     public class UserDefaults {
