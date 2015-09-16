@@ -35,6 +35,7 @@ ${ ui.includeFragment("uicommons", "validationMessages")}
             ]) }
             ${ ui.includeFragment("uicommons", "field/text", [
                     id: "secret-question",
+                    initialValue: "$secretQuestion",
                     label: ui.message("adminui.account.secretQuestion"),
                     formFieldName: "question",
                     classes: ["required"]
@@ -57,7 +58,7 @@ ${ ui.includeFragment("uicommons", "validationMessages")}
     <div id="confirmation">
         <span class="title">${ui.message("adminui.confirm")}</span>
         <div id="confirmationQuestion">
-            ${ui.message('adminui.confirmSubmission')}
+            ${ui.message('registrationapp.confirm')}
             <p style="display: inline">
                 <input type="submit" class="confirm right" value="${ui.message("adminui.confirm")}" />
             </p>
