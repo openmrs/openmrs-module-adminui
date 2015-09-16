@@ -11,6 +11,7 @@ package org.openmrs.module.adminui.page.controller.metadata.locations;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.LocationTag;
@@ -44,6 +45,15 @@ public class LocationTagPageController {
 		
 		Errors errors = new BeanPropertyBindingResult(locationTag, "locationTag");
 		ValidateUtil.validate(locationTag, errors);
+		//This check should be in LocationTagValidator in core
+		if (StringUtils.isNotBlank(locationTag.getName())) {
+			LocationTag duplicate = locationService.getLocationTagByName(locationTag.getName());
+			if (duplicate != null) {
+				if (locationTag.getLocationTagId() == null || !locationTag.equals(duplicate)) {
+					errors.rejectValue("name", "LocationTag.error.name.duplicate");
+				}
+			}
+		}
 		
 		if (!errors.hasErrors()) {
 			try {
