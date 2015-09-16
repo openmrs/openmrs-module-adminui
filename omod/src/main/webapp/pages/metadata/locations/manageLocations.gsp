@@ -47,12 +47,12 @@
 			</td>
 
 			<td <% if (it.location.retired) { %> class="retired" <% } %>>
-				${ it.location.description }
+				${ it.location.description ?: '' }
 			</td>
 
             <td <% if (it.location.retired) { %> class="retired" <% } %>>
                 <% it.location.tags.eachWithIndex { tag, index -> %>
-					${ ui.format(tag.name)} <% if (index < it.location.tags.size() - 1) { %> , <% } %>
+					${ ui.format(tag)} <% if (index < it.location.tags.size() - 1) { %> , <% } %>
 				<% } %>
             </td>
 

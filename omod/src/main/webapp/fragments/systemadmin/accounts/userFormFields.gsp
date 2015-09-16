@@ -129,24 +129,22 @@
 </p>
 
 <label>${ ui.message('adminui.account.capabilities') }</label>
-<table class="adminui-capabilities" cellspacing="0" cellpadding="0">
+<table class="adminui-display-table" cellspacing="0" cellpadding="0">
     <%/* Group the them into 2 columns */%>
-    <% def index = 0 %>
-    <% capabilities.each{ %>
+    <% capabilities.eachWithIndex{ cap, index -> %>
     <%
-        def str = ui.format(it);
+        def str = ui.format(cap);
         def label = str.substring(str.indexOf(rolePrefix)+rolePrefix.length());
     %>
     ${index % 2 == 0 ? '<tr>' : ''}
         <td valign="top">
-            <input id="adminui-capabilities-${it.role}${userUuid}" type="checkbox" name='capabilities${userUuid}'
-                ng-model="uuidUserMap['${userUuid}'].capabilities['${it.uuid}']" value="${it.uuid}"
+            <input id="adminui-capabilities-${cap.role}${userUuid}" type="checkbox" name='capabilities${userUuid}'
+                ng-model="uuidUserMap['${userUuid}'].capabilities['${cap.uuid}']" value="${cap.uuid}"
             <% if (user && account.getCapabilities(user).contains(it)) { %> checked='checked'<% } %> /> ${label}
         </td>
     <% if(index % 2 != 0 || index == (capabilities.size - 1)) { %>
     ${index % 2 == 0 ? '<td valign="top"></td>' : ''}
     </tr>
     <% } %>
-    <% index++ %>
     <% } %>
 </table>

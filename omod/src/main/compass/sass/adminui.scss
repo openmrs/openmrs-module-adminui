@@ -86,3 +86,19 @@
 .adminui-border-bottom {
   border-bottom: 1px solid #F5F5F5 !important;
 }
+
+.adminui-display-table {
+  @extend .adminui-no-border;
+}
+
+.adminui-display-table tr {
+  @extend .adminui-no-border-no-bg-color, .adminui-text-left;
+}
+
+.adminui-display-table td {
+  @extend .adminui-no-border-no-bg-color, .adminui-text-left;
+}
+
+.adminui-section-padded-top {
+  padding-top: 20px;
+}

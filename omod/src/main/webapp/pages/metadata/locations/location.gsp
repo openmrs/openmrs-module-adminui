@@ -1,7 +1,7 @@
 <%
     ui.decorateWith("appui", "standardEmrPage")
-    
-    ui.includeCss("adminui", "systemadmin/account.css")
+
+    ui.includeCss("adminui", "adminui.css")
 
     ui.includeJavascript("adminui", "jquery.validate.js")
 
@@ -143,17 +143,14 @@
     ])}
     <% } %>
 
-	<table class="adminui-capabilities" cellspacing="0" cellpadding="0">
+    <label>${ui.message("adminui.location.tags")}</label>
+    <br>
+	<table class="adminui-display-table" cellspacing="0" cellpadding="0">
 		<tr>
     	<% locationTags.eachWithIndex { tag, index -> %>
-			<td>
-		        ${ ui.includeFragment("uicommons", "field/checkbox", [
-		            label: tag.name,
-		            formFieldName: "locTags",
-		            value: tag.id,
-		            checked: location.tags && location.tags.contains(tag),
-		            valueIsNotBoolean: true
-		        ])}
+			<td valign="top">
+		        <input type="checkbox" name="locTags" value="${tag.id}"
+                    <% if (location.tags && location.tags.contains(tag)) { %> checked='checked'<% } %>> ${ui.format(tag)}
 	        </td>
 	        <% if ((index + 1) % 2 == 0) { %> </tr> <tr> <% } %>
     	<% } %>

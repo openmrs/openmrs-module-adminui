@@ -9,8 +9,6 @@
 
 %>
 
-${ ui.includeFragment("uicommons", "validationMessages")}
-
 <script type="text/javascript">
 
     var breadcrumbs = [
@@ -71,14 +69,12 @@ ${ ui.includeFragment("uicommons", "validationMessages")}
         ${ui.message("adminui.account.changePassword.newAndConfirmPassword.dontMatch")}
     </span>
 
-    <br>
-    <br>
-    <p>
+    <div class="adminui-section-padded-top">
+        <input type="submit" class="confirm right" name="save" id="save-button" value="${ui.message("general.save")}"
+               ng-disabled="changePasswordForm.\$invalid" />
         <input type="button" id="cancel-button" class="cancel" value="${ui.message("general.cancel")}"
                onclick="window.location='${ui.pageLink("adminui", "myaccount/myAccount")}'" />
-        <input type="submit" class="confirm" name="save" id="save-button" value="${ui.message("general.save")}"
-               ng-disabled="changePasswordForm.\$invalid" />
-    </p>
+    </div>
 
 </form>
 

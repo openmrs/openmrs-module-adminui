@@ -11,6 +11,9 @@
 	    padding-top: 0px;
 	    padding-bottom: 0px;
 	}
+    .adminui-gp-action-column{
+        width:50px;
+    }
 </style>
 
 <table>
@@ -18,7 +21,7 @@
     <tr>
         <th>${ui.message('general.name')}</th>
         <th>${ui.message('general.value')}</th>
-        <th class="adminui-action-column">${ui.message('general.action')}</th>
+        <th class="adminui-gp-action-column">${ui.message('general.action')}</th>
     </tr>
     </thead>
     <tbody>
@@ -26,11 +29,11 @@
         <td title='{{systemSetting.description}}'>{{systemSetting.property}}</td>
         <td>{{systemSetting.value}}</td>
         <td>
-            <a ui-sref="edit({systemSettingUuid: systemSetting.uuid})">
-                <i class="icon-pencil edit-action" title="${ui.message("emr.edit")}"></i>
-            </a>
             <a ng-click="purge(systemSetting)" class="right">
                 <i class="icon-trash delete-action" title="${ui.message("general.purge")}"></i>
+            </a>
+            <a ui-sref="edit({systemSettingUuid: systemSetting.uuid})">
+                <i class="icon-pencil edit-action" title="${ui.message("emr.edit")}"></i>
             </a>
         </td>
     </tr>

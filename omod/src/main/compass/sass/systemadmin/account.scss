@@ -8,26 +8,10 @@
   width: 500px;
 }
 
-.adminui-section-padded-top {
-  padding-top: 20px;
-}
-
 .adminui-account-section {
    width: 980px;
 }
 
 .adminui-account-fieldset {
   width: 934px;
-}
-
-.adminui-capabilities {
-  @extend .adminui-no-border;
-}
-
-.adminui-capabilities tr {
-  @extend .adminui-no-border-no-bg-color, .adminui-text-left;
-}
-
-.adminui-capabilities td {
-  @extend .adminui-no-border-no-bg-color, .adminui-text-left;
 }
