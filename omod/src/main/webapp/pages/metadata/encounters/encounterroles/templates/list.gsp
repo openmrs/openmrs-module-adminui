@@ -5,16 +5,16 @@
 <table>
     <thead>
     <tr>
-        <th>${ui.message('general.name')}</th>
+        <th class="adminui-name-column">${ui.message('general.name')}</th>
         <th>${ui.message('general.description')}</th>
         <th class="adminui-action-column">${ui.message('general.action')}</th>
     </tr>
     </thead>
     <tbody>
     <tr ng-repeat="encounterRole in encounterRoles">
-        <td ng-class="{ retired: encounterRole.retired }">{{encounterRole.name}}</td>
-        <td ng-class="{ retired: encounterRole.retired }">{{encounterRole.description}}</td>
-        <td>
+        <td valign="top" ng-class="{ retired: encounterRole.retired }">{{encounterRole.name}}</td>
+        <td valign="top" ng-class="{ retired: encounterRole.retired }">{{encounterRole.description}}</td>
+        <td valign="top">
             <a ng-hide="encounterRole.retired" ui-sref="edit({encounterRoleUuid: encounterRole.uuid})">
                 <i class="icon-pencil edit-action" title="${ui.message("emr.edit")}"></i>
             </a>

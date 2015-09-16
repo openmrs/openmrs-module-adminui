@@ -26,9 +26,9 @@
     </thead>
     <tbody>
     <tr ng-repeat="systemSetting in systemSettings" ng-if="!systemSetting.property.endsWith('.mandatory') && !systemSetting.property.endsWith('.started')">
-        <td title='{{systemSetting.description}}'>{{systemSetting.property}}</td>
-        <td>{{systemSetting.value}}</td>
-        <td>
+        <td valign="top" title='{{systemSetting.description}}'>{{systemSetting.property}}</td>
+        <td valign="top">{{systemSetting.value}}</td>
+        <td valign="top">
             <a ng-click="purge(systemSetting)" class="right">
                 <i class="icon-trash delete-action" title="${ui.message("general.purge")}"></i>
             </a>

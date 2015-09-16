@@ -5,16 +5,16 @@
 <table id="list-roles" cellspacing="0" cellpadding="2">
     <thead>
     <tr>
-        <th>${ui.message('adminui.role.role')}</th>
+        <th class="adminui-name-column">${ui.message('adminui.role.role')}</th>
         <th>${ui.message('general.description')}</th>
-        <th>${ui.message('general.action')}</th>
+        <th class="adminui-action-column">${ui.message('general.action')}</th>
     </tr>
     </thead>
     <tbody>
     <tr ng-repeat="role in roles" >
-        <td>{{role.name}}</td>
-        <td>{{role.description}}</td>
-        <td>
+        <td valign="top">{{role.name}}</td>
+        <td valign="top">{{role.description}}</td>
+        <td valign="top">
             <a ui-sref="edit({roleUuid: role.uuid})">
                 <i class="icon-pencil edit-action" title="${ui.message("emr.edit")}"></i>
             </a>

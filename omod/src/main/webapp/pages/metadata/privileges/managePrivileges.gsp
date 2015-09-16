@@ -20,21 +20,21 @@
 <table id="list-privileges" cellspacing="0" cellpadding="2">
 	<thead>
 		<tr>
-			<th>${ ui.message("general.name") }</th>
+			<th class="adminui-name-column">${ ui.message("general.name") }</th>
 			<th>${ ui.message("general.description") }</th>
-			<th>${ ui.message("general.action") }</th>
+			<th class="adminui-action-column">${ ui.message("general.action") }</th>
 		</tr>
 	</thead>
 	<tbody>
 		<% privileges.each{  %>
 	 	<tr >
-	 		<td>
+	 		<td valign="top">
 				 ${ ui.format(it.name) }
 			</td>
-			<td>
+			<td valign="top">
                 ${ ui.format(it.description) }
             </td>
-			<td>
+			<td valign="top">
                 <form id="adminui-restore-form-${it.name}" method="POST">
                     <i class="icon-pencil edit-action${''}" title="${ ui.message("general.edit") }"
                        onclick="location.href='${ui.pageLink("adminui", "metadata/privileges/privilege",[privilegeName: it.name, action: 'edit'])}'"></i>

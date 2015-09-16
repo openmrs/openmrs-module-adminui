@@ -5,16 +5,16 @@
 <table>
     <thead>
     <tr>
-        <th>${ui.message('general.name')}</th>
+        <th class="adminui-name-column">${ui.message('general.name')}</th>
         <th>${ui.message('general.description')}</th>
         <th class="adminui-action-column">${ui.message('general.action')}</th>
     </tr>
     </thead>
     <tbody>
     <tr ng-repeat="providerAttributeType in providerAttributeTypes">
-        <td ng-class="{ retired: providerAttributeType.retired }">{{providerAttributeType.name}}</td>
-        <td ng-class="{ retired: providerAttributeType.retired }">{{providerAttributeType.description}}</td>
-        <td>
+        <td valign="top" ng-class="{ retired: providerAttributeType.retired }">{{providerAttributeType.name}}</td>
+        <td valign="top" ng-class="{ retired: providerAttributeType.retired }">{{providerAttributeType.description}}</td>
+        <td valign="top">
             <a ng-hide="providerAttributeType.retired" ui-sref="edit({providerAttributeTypeUuid: providerAttributeType.uuid})">
                 <i class="icon-pencil edit-action" title="${ui.message("emr.edit")}"></i>
             </a>

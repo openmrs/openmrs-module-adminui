@@ -23,16 +23,16 @@
 
 <form class="simple-form-ui" name="providerAttributeTypeForm" novalidate ng-submit="save()">
     <p>
-        <label>${ui.message('general.name')}</label>
+        <label>${ui.message('general.name')}<span class='adminui-text-red'>*</span></label>
         <input ng-model="providerAttributeType.name" required/>
     </p>
     <p>
         <label>${ui.message('general.description')}</label>
-        <textarea ng-model="providerAttributeType.description" cols="54" required></textarea>
+        <textarea ng-model="providerAttributeType.description" cols="54"></textarea>
     </p>
     
     <p>
-        <label>${ui.message('FormField.minOccurs')}</label>
+        <label>${ui.message('FormField.minOccurs')}<span class='adminui-text-red'>*</span></label>
         <input ng-model="providerAttributeType.minOccurs" required/>
     </p>
     <p>
@@ -40,7 +40,7 @@
         <input ng-model="providerAttributeType.maxOccurs"/>
     </p>
     <p>
-        <label>${ui.message('AttributeType.datatypeClassname')}</label>
+        <label>${ui.message('AttributeType.datatypeClassname')}<span class='adminui-text-red'>*</span></label>
         <select ng-model="providerAttributeType.datatypeClassname" required>
         	<option></option>
         	<% datatypeClassnames.each { dtcn -> %>

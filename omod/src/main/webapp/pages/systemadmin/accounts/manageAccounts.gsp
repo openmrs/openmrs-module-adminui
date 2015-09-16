@@ -29,7 +29,7 @@
     <tbody>
     <% accounts.each{  %>
     <tr>
-        <td>
+        <td valign="top">
             <% //In case of providers not linked to person records
             def name = ""
             def isLinkedToPerson = false
@@ -50,10 +50,10 @@
 
            ${name} ${!isLinkedToPerson ? "*" : ""}
         </td>
-        <td class="adminui-center">${ ui.format(it.person.gender) }</td>
-        <td class="adminui-center">${ ui.format(it.userAccounts.size) }</td>
-        <td class="adminui-center">${ ui.format(it.providerAccounts.size) }</td>
-        <td class="adminui-center">
+        <td valign="top" class="adminui-center">${ ui.format(it.person.gender) }</td>
+        <td valign="top" class="adminui-center">${ ui.format(it.userAccounts.size) }</td>
+        <td valign="top" class="adminui-center">${ ui.format(it.providerAccounts.size) }</td>
+        <td valign="top" class="adminui-center">
             <% if(isLinkedToPerson) { %>
             <i class="icon-pencil edit-action" title="${ ui.message("general.edit") }"
                onclick="location.href='${ui.pageLink("adminui", "systemadmin/accounts/account",[personId: it.person.id])}'"></i>
