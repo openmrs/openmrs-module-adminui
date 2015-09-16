@@ -20,7 +20,7 @@
         "extensionPointId": "${project.parent.groupId}.${project.parent.artifactId}.adminGroups",
         "type": "group",
         "label": "adminui.visits.title",
-        "icon": "icon-list"
+        "icon": "icon-list-alt"
     },
 
     {
@@ -44,7 +44,7 @@
         "extensionPointId": "${project.parent.groupId}.${project.parent.artifactId}.adminGroups",
         "type": "group",
         "label": "adminui.providers.title",
-        "icon": "icon-user"
+        "icon": "icon-group"
     },
 
 	{
