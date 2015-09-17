@@ -17,6 +17,7 @@ import org.openmrs.api.ProviderService;
 import org.openmrs.module.providermanagement.Provider;
 import org.openmrs.module.providermanagement.api.ProviderManagementService;
 import org.openmrs.ui.framework.UiUtils;
+import org.openmrs.ui.framework.annotation.BindParams;
 import org.openmrs.ui.framework.annotation.SpringBean;
 import org.openmrs.ui.framework.fragment.action.FailureResult;
 import org.openmrs.ui.framework.fragment.action.FragmentActionResult;
@@ -33,7 +34,7 @@ public class ProviderTabContentPaneFragmentController {
 	public void get() {
 	}
 	
-	public FragmentActionResult process(@RequestParam(value = "uuid", required = false) Provider provider,
+	public FragmentActionResult process(@RequestParam(value = "uuid", required = false) @BindParams Provider provider,
 	                                    @RequestParam(value = "action", required = false) String action,
 	                                    @RequestParam(value = "reason", required = false) String reason,
 	                                    @SpringBean("personService") PersonService personService,
@@ -50,13 +51,6 @@ public class ProviderTabContentPaneFragmentController {
 				successMessage = "adminui.restored";
 				providerService.unretireProvider(provider);
 			} else {
-				if (provider == null) {
-					provider = new Provider();
-					provider.setPerson(personService.getPersonByUuid(request.getParameter("person")));
-				}
-				provider.setIdentifier(request.getParameter("identifier"));
-				provider.setProviderRole(providerManagementService.getProviderRoleByUuid(request
-				        .getParameter("providerRole")));
 				if (provider.getProviderId() == null) {
 					successMessage = "adminui.saved";
 				}

@@ -55,7 +55,7 @@
 		<distro.artifactId>referenceapplication</distro.artifactId>
 		<distro.version>LATEST</distro.version>
         <uicommonsVersion>1.7-SNAPSHOT</uicommonsVersion>
-		<appuiVersion>1.4-SNAPSHOT</appuiVersion>
+		<appuiVersion>1.4</appuiVersion>
 		<uiframeworkVersion>3.4-SNAPSHOT</uiframeworkVersion>
 		<appframeworkVersion>2.0</appframeworkVersion>
 		<providermanagementVersion>2.2</providermanagementVersion>
