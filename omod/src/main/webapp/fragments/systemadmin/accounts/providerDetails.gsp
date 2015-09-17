@@ -46,7 +46,7 @@
             <ul>
                 <% account.providerAccounts.each { %>
                 <li ng-class="{'ui-state-disabled':inEditMode}">
-                    <a href="#${ it.uuid }" ng-click="add('${it.uuid}')" <% if(!it.providerId) { %>
+                    <a href="#${ it.uuid }" <% if(!it.providerId) { %> ng-click="add('${it.uuid}')"
                        title="${ ui.message("adminui.account.addAnotherProviderAccount") }"<% } %>>
                         <% if(it.providerId) { %>
                         <span ng-class="{retired: uuidProviderMap['${it.uuid}'].retired}">
