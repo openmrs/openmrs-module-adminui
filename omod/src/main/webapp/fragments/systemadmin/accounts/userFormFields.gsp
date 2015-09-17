@@ -140,7 +140,7 @@
         <td valign="top">
             <input id="adminui-capabilities-${cap.role}${userUuid}" type="checkbox" name='capabilities${userUuid}'
                 ng-model="uuidUserMap['${userUuid}'].capabilities['${cap.uuid}']" value="${cap.uuid}"
-            <% if (user && account.getCapabilities(user).contains(it)) { %> checked='checked'<% } %> /> ${label}
+            <% if (user && account.getCapabilities(user).contains(cap)) { %> checked='checked'<% } %> /> ${label}
         </td>
     <% if(index % 2 != 0 || index == (capabilities.size - 1)) { %>
     ${index % 2 == 0 ? '<td valign="top"></td>' : ''}

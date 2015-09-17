@@ -58,7 +58,7 @@
 		<appuiVersion>1.4</appuiVersion>
 		<uiframeworkVersion>3.4-SNAPSHOT</uiframeworkVersion>
 		<appframeworkVersion>2.0</appframeworkVersion>
-		<providermanagementVersion>2.2</providermanagementVersion>
+		<providermanagementVersion>2.3-SNAPSHOT</providermanagementVersion>
 	</properties>
 
 	<dependencyManagement>
