@@ -47,14 +47,14 @@
                 <ul>
                     <% account.userAccounts.each { %>
                     <li ng-class="{'ui-state-disabled':inEditMode}">
-                        <a href="#${ it.uuid }" <% if(!it.userId) { %>
+                        <a href="#${ it.uuid }" ng-click="add('${it.uuid}')" <% if(!it.userId) { %>
                            title="${ ui.message("adminui.account.addAnotherUserAccount") }"<% } %>>
                             <% if(it.userId) { %>
                             <span ng-class="{retired: uuidUserMap['${it.uuid}'].retired}">
                                 {{getTabLabel('${it.uuid}')}}
                             </span>&nbsp;&nbsp;
                             <% } else { %>
-                            <i class="icon-plus add-action right ng-class:{'invisible':inEditMode}" ng-click="add('${it.uuid}')"></i>
+                            <i class="icon-plus add-action right ng-class:{'invisible':inEditMode}"></i>
                             <% } %>
                         </a>
                     </li>

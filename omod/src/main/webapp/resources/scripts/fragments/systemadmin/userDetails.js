@@ -166,8 +166,10 @@ angular.module("adminui.userDetails", ["userService", "ngDialog", "adminui.shoul
                         $scope.enableActionsAndOtherTabs();
                         //notify the audit info app so that it updates the audit info
                         angular.element('#account-audit-info').scope().$broadcast('event.auditInfo.changed');
+                        $scope.afterRequest();
                     }
-                }).finally(function(){
+                },
+                function () {
                     $scope.afterRequest();
                 });
             }

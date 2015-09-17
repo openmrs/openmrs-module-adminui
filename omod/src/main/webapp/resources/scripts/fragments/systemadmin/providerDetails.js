@@ -135,9 +135,11 @@ angular.module("adminui.providerDetails", ["ngDialog", "pmProviderService"])
                         $scope.enableActionsAndOtherTabs();
                         //notify the audit info app so that it updates the audit info
                         angular.element('#account-audit-info').scope().$broadcast('event.auditInfo.changed');
+                        $scope.afterRequest();
                     }
                 },
                  function (resp) {
+                     $scope.afterRequest();
                      var errorMessage = "";
                      if(resp.data.globalErrors){
                         errorMessage+=(resp.data.globalErrors.join("</br>"));
@@ -148,8 +150,6 @@ angular.module("adminui.providerDetails", ["ngDialog", "pmProviderService"])
                          });
                      }
                      emr.errorMessage(errorMessage);
-                }).finally(function(){
-                     $scope.afterRequest();
                 });
             }
 
