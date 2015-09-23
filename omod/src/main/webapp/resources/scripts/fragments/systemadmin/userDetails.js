@@ -20,7 +20,10 @@ angular.module("adminui.userDetails", ["userService", "ngDialog", "adminui.shoul
 
     .controller("UserDetailsController", ["$scope", "ngDialog" ,"User",
         function($scope, ngDialog, User) {
+            //This is use across all apps on teh account form
             $scope.inEditMode = false;
+            //This is only used by this app
+            $scope.editing = false;
             $scope.requesting = false;
             $scope.uuidUserMap = uuidAndUserMap;
             $scope.originalState = angular.copy($scope.uuidUserMap);
@@ -61,6 +64,7 @@ angular.module("adminui.userDetails", ["userService", "ngDialog", "adminui.shoul
             }
 
             $scope.toggleOtherActions = function(value){
+                $scope.editing = value;
                 //Disable the edit,remove,add buttons in the other apps
                 var personScope = angular.element("#adminui-person-details").scope();
                 personScope.$apply(function(){

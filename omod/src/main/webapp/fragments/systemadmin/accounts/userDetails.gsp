@@ -48,6 +48,7 @@
                     <% account.userAccounts.each { %>
                     <li ng-class="{'ui-state-disabled':inEditMode}">
                         <a href="#${ it.uuid }" <% if(!it.userId) { %> ng-click="add('${it.uuid}')"
+                           ng-show="!editing && !inEditMode"
                            title="${ ui.message("adminui.account.addAnotherUserAccount") }"<% } %>>
                             <% if(it.userId) { %>
                             <span ng-class="{retired: uuidUserMap['${it.uuid}'].retired}">

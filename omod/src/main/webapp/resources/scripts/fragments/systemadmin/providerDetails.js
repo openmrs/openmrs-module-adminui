@@ -30,7 +30,10 @@ angular.module("adminui.providerDetails", ["ngDialog", "pmProviderService"])
 
     .controller("ProviderDetailsController", ["$scope", "ngDialog", "PmProvider",
         function($scope, ngDialog, PmProvider) {
+            //This is use across all apps on teh account form
             $scope.inEditMode = false;
+            //This is only used by this app
+            $scope.editing = false;
             $scope.requesting = false;
             $scope.uuidProviderMap = uuidAndProviderMap;
             $scope.originalState = angular.copy($scope.uuidProviderMap);
@@ -53,6 +56,7 @@ angular.module("adminui.providerDetails", ["ngDialog", "pmProviderService"])
             }
 
             $scope.toggleOtherActions = function(value){
+                $scope.editing = value;
                 //Disable the edit,remove,add buttons in the other apps
                 var personScope = angular.element("#adminui-person-details").scope();
                 personScope.$apply(function(){
