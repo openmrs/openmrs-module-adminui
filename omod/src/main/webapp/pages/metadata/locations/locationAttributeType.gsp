@@ -137,7 +137,7 @@
         </table>
     </div>
     ${ ui.includeFragment("uicommons", "field/dropDown", [
-            label: ui.message("adminui.locationAttributeType.datatype")+"<span class='adminui-text-red'>*</span>",
+            label: ui.message("adminui.datatype")+"<span class='adminui-text-red'>*</span>",
             emptyOptionLabel: ui.message("adminui.chooseOne"),
             formFieldName: "datatypeClassname",
             id           : "datatypeClassname",
