@@ -191,6 +191,11 @@
 					<excludes>
 						<exclude>.rubygems/**</exclude>
 						<exclude>.rubygems-provided/**</exclude>
+                        <!--
+                            The bamboo stage that releases the module copies the release scripts
+                            into the project root, we need to ignore those files
+                         -->
+                        <exclude>release-scripts/**</exclude>
 					</excludes>
 				</configuration>
 				<executions>
