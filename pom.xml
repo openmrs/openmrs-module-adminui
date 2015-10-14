@@ -169,8 +169,6 @@
 					<artifactId>maven-release-plugin</artifactId>
 					<version>2.5</version>
 					<configuration>
-						<!-- refapp distro contains SNAPSHOT dependencies -->
-						<allowTimestampedSnapshots>true</allowTimestampedSnapshots>
 						<tagNameFormat>@{project.version}</tagNameFormat>
 					</configuration>
 				</plugin>
