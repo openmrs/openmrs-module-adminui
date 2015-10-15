@@ -1,4 +1,4 @@
 adminui
 =======
 
-Administration tools for OpenMRS Reference Application
+Administration tools for the OpenMRS Reference Application

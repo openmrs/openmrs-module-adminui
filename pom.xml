@@ -20,7 +20,7 @@
 	<version>1.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>Admin UI Module</name>
-	<description>Administration Tools for Reference Application</description>
+	<description>Administration Tools for the Reference Application</description>
 	<url>https://wiki.openmrs.org/x/NJO-B</url>
 	
 	<developers>
