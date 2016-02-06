@@ -15,7 +15,7 @@ public class AdminUiConstants {
 	
 	//from EmrApi module
 	
-	public static final String ROLE_PREFIX_CAPABILITY = "Application Role: ";
+	public static final String ROLE_PREFIX_CAPABILITY = "Application: ";
 	
 	public static final String ROLE_PREFIX_PRIVILEGE_LEVEL = "Privilege Level: ";
 	
