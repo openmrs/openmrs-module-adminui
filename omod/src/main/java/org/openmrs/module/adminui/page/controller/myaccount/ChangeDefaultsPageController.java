@@ -18,6 +18,7 @@ import org.openmrs.api.UserService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.uicommons.UiCommonsConstants;
 import org.openmrs.module.uicommons.util.InfoErrorMessageUtil;
+import org.openmrs.ui.framework.UiUtils;
 import org.openmrs.ui.framework.annotation.BindParams;
 import org.openmrs.ui.framework.annotation.MethodParam;
 import org.openmrs.ui.framework.annotation.SpringBean;
@@ -39,7 +40,7 @@ public class ChangeDefaultsPageController {
     }
 
     public String post(PageModel model, @MethodParam("getUserDefaults") @BindParams UserDefaults userDefaults,
-                       BindingResult errors,
+                       BindingResult errors, UiUtils ui,
                        @SpringBean("userService") UserService userService,
                        HttpServletRequest request) {
 
@@ -55,12 +56,10 @@ public class ChangeDefaultsPageController {
         } catch (Exception ex) {
             request.getSession().setAttribute(
                     UiCommonsConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE, "adminui.account.defaults.fail");
-            return "account/changeDefaults";
+            return "redirect:" + ui.pageLink("adminui", "myaccount/changeDefaults");
         }
 
-        model.addAttribute("userDefaults", userDefaults);
-        model.addAttribute("locales", Context.getAdministrationService().getPresentationLocales());
-        return "myaccount/myAccount";
+        return "redirect:" + ui.pageLink("adminui", "myaccount/myAccount");
     }
     
     public UserDefaults getUserDefaults(@RequestParam(value = "defaultLocale", required = false) String defaultLocale,
