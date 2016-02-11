@@ -16,11 +16,11 @@
     </p>
     <p>
         <label>${ui.message('general.description')}</label>
-        <textarea ng-model="systemSetting.description" cols="54" required></textarea>
+        <textarea ng-model="systemSetting.description" cols="54"></textarea>
     </p>
     <p>
         <label>${ui.message('general.value')}</label>
-        <textarea ng-model="systemSetting.value" cols="54" required></textarea>
+        <textarea ng-model="systemSetting.value" cols="54"></textarea>
     </p>
 
     <p>
