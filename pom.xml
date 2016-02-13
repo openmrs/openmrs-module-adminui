@@ -57,6 +57,7 @@
 		<uiframeworkVersion>3.4</uiframeworkVersion>
 		<appframeworkVersion>2.0</appframeworkVersion>
 		<providermanagementVersion>2.3</providermanagementVersion>
+		<webservicesRestVersion>2.14-SNAPSHOT</webservicesRestVersion>
 	</properties>
 
 	<dependencyManagement>
