@@ -4,7 +4,7 @@
     ui.includeCss("adminui", "adminui.css")
 
     def primaryLocaleOptions = []
-    primaryLocale.each {
+    primaryLocales.each {
         primaryLocaleOptions.add([label: it.displayName, value: it.toString()])
     }
 %>
@@ -36,7 +36,7 @@
 
     <label>${ui.message("adminui.account.proficientLocales")}</label>
     <div class="adminui-section-padded-top">
-    <% proficientLocale.each { %>
+    <% proficientLocales.each { %>
         <input type="checkbox" name="proficientLocales" value="${it.toString()}"
             <% if (userDefaults.proficientLocales && userDefaults.proficientLocales.contains(it.toString())) { %> checked='checked'<% } %>>
             ${it.displayName} <br />
