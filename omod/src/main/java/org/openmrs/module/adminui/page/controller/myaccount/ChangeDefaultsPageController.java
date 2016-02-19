@@ -9,6 +9,7 @@
  */
 package org.openmrs.module.adminui.page.controller.myaccount;
 
+import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,9 +24,11 @@ import org.openmrs.ui.framework.annotation.BindParams;
 import org.openmrs.ui.framework.annotation.MethodParam;
 import org.openmrs.ui.framework.annotation.SpringBean;
 import org.openmrs.ui.framework.page.PageModel;
+import org.openmrs.util.LocaleUtility;
 import org.openmrs.util.OpenmrsConstants;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 
 public class ChangeDefaultsPageController {
 
@@ -53,6 +56,14 @@ public class ChangeDefaultsPageController {
             props.put(OpenmrsConstants.USER_PROPERTY_PROFICIENT_LOCALES, userDefaults.getProficientLocales());
             user.setUserProperties(props);
             userService.saveUser(user, null);
+
+            // set the locale based on the locale selected by user
+            Locale newLocale = LocaleUtility.fromSpecification(userDefaults.getDefaultLocale());
+            if (newLocale != null) {
+                Context.getUserContext().setLocale(newLocale);
+                new CookieLocaleResolver().setDefaultLocale(newLocale);
+            }
+
             InfoErrorMessageUtil.flashInfoMessage(request.getSession(), "adminui.account.defaults.success");
         } catch (Exception ex) {
             request.getSession().setAttribute(
