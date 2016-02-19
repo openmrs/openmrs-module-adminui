@@ -36,7 +36,8 @@ public class ChangeDefaultsPageController {
         userDefaults.setDefaultLocale(props.get(OpenmrsConstants.USER_PROPERTY_DEFAULT_LOCALE));
         userDefaults.setProficientLocales(props.get(OpenmrsConstants.USER_PROPERTY_PROFICIENT_LOCALES));
         pageModel.addAttribute("userDefaults", userDefaults);
-        pageModel.addAttribute("locales", Context.getAdministrationService().getPresentationLocales());
+        pageModel.addAttribute("primaryLocales", Context.getAdministrationService().getPresentationLocales());
+        pageModel.addAttribute("proficientLocales", Context.getAdministrationService().getAllowedLocales());
     }
 
     public String post(PageModel model, @MethodParam("getUserDefaults") @BindParams UserDefaults userDefaults,
@@ -58,7 +59,6 @@ public class ChangeDefaultsPageController {
                     UiCommonsConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE, "adminui.account.defaults.fail");
             return "redirect:" + ui.pageLink("adminui", "myaccount/changeDefaults");
         }
-
         return "redirect:" + ui.pageLink("adminui", "myaccount/myAccount");
     }
     

@@ -1,6 +1,7 @@
 /.classpath
 /.settings
 /.project
+.idea/
 /install_deploy_jetty.bat
 /run_jetty.bat
 /target
