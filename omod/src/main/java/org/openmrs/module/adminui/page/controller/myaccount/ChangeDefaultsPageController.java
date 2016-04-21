@@ -9,6 +9,7 @@
  */
 package org.openmrs.module.adminui.page.controller.myaccount;
 
+import java.lang.reflect.Method;
 import java.util.Locale;
 import java.util.Map;
 
@@ -55,7 +56,14 @@ public class ChangeDefaultsPageController {
             props.put(OpenmrsConstants.USER_PROPERTY_DEFAULT_LOCALE, userDefaults.getDefaultLocale());
             props.put(OpenmrsConstants.USER_PROPERTY_PROFICIENT_LOCALES, userDefaults.getProficientLocales());
             user.setUserProperties(props);
-            userService.saveUser(user, null);
+            try {
+            	userService.saveUser(user, null);
+            }
+            catch (NoSuchMethodError ex) {
+            	//must be running platforms 2.0 and above which do not have the above method
+            	Method method = userService.getClass().getMethod("saveUser", new Class[] { User.class });
+            	method.invoke(userService, new Object[] { user });
+            }
 
             // set the locale based on the locale selected by user
             Locale newLocale = LocaleUtility.fromSpecification(userDefaults.getDefaultLocale());
