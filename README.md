@@ -18,6 +18,8 @@ The project tree is set up as follows:
          	Java and resource files for building the java api jar file. It also contains the message
          	resource bundles files for translation and the moduleApplicationContext.xml file
         </td>
+    </tr>
+    <tr>
         <td>
             omod
         </td>
@@ -25,6 +27,8 @@ The project tree is set up as follows:
             Files for the web layer reside in this directory like GSPs, html, Css, Javascript files etc.
             It also contains the apps, extensions, config.xml and the webModuleApplicationContext.xml file.
         </td>
+    </tr>
+    <tr>
         <td>
             pom.xml
         </td>
