@@ -8,13 +8,13 @@
     </p>
     <p>
         ${ui.message('general.createdBy')}:
-        {{ encounterType.auditInfo.creator | omrs.display }}
+        {{ encounterType.auditInfo.creator | omrsDisplay }}
         ${ui.message('general.onDate')}
         {{ encounterType.auditInfo.dateCreated | serverDate }}
     </p>
     <p ng-show="encounterType.changedBy">
         ${ui.message('general.changedBy')}:
-        {{ encounterType.auditInfo.changedBy | omrs.display }}
+        {{ encounterType.auditInfo.changedBy | omrsDisplay }}
         ${ui.message('general.onDate')}
         {{ encounterType.auditInfo.dateChanged | serverDate }}
     </p>
