@@ -8,13 +8,13 @@
     </p>
     <p>
         ${ui.message('general.createdBy')}:
-        {{ providerAttributeType.auditInfo.creator | omrs.display }}
+        {{ providerAttributeType.auditInfo.creator | omrsDisplay }}
         ${ui.message('general.onDate')}
         {{ providerAttributeType.auditInfo.dateCreated | serverDate }}
     </p>
     <p ng-show="providerAttributeType.changedBy">
         ${ui.message('general.changedBy')}:
-        {{ providerAttributeType.auditInfo.changedBy | omrs.display }}
+        {{ providerAttributeType.auditInfo.changedBy | omrsDisplay }}
         ${ui.message('general.onDate')}
         {{ providerAttributeType.auditInfo.dateChanged | serverDate }}
     </p>
