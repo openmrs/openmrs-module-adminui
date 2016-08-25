@@ -100,7 +100,7 @@
             formFieldName: "name",
             id           : "name",
             maxLength    : 101,
-            initialValue : (locationAttributeType.name ?: '')
+            initialValue : ui.escapeJs((locationAttributeType.name ?: ''))
     ])}
 
     ${ui.includeFragment("uicommons", "field/textarea", [
@@ -108,7 +108,7 @@
             formFieldName: "description",
             id           : "description",
 
-            initialValue : (locationAttributeType.description ?: ''),
+            initialValue : ui.escapeJs((locationAttributeType.description ?: '')),
             cols         : 54,
             rows: 3
     ])}

@@ -43,16 +43,16 @@
 	 			<% for (i = 1; i <= it.depth; i++) { %>
 	 				&nbsp;&nbsp;
 	 			<% } %>
-				${ it.location.name }
+				${ ui.escapeJs(it.location.name) }
 			</td>
 
 			<td valign="top" <% if (it.location.retired) { %> class="retired" <% } %>>
-				${ it.location.description ?: '' }
+				${ ui.escapeJs(it.location.description ?: '') }
 			</td>
 
             <td valign="top" <% if (it.location.retired) { %> class="retired" <% } %>>
                 <% it.location.tags.eachWithIndex { tag, index -> %>
-					${ ui.format(tag)} <% if (index < it.location.tags.size() - 1) { %> , <% } %>
+					${ ui.escapeJs(ui.format(tag))} <% if (index < it.location.tags.size() - 1) { %> , <% } %>
 				<% } %>
             </td>
 
@@ -62,14 +62,14 @@
 					   onclick="location.href='${ui.pageLink("adminui", "metadata/locations/location",[locationId: it.location.id])}'">
 					</i>
 					
-					<i class="icon-remove delete-action" title="${ui.message("emr.delete")}" onclick="retireLocation('${ it.location.name }', ${ it.location.id})"></i>
+					<i class="icon-remove delete-action" title="${ui.message("emr.delete")}" onclick="retireLocation('${ ui.escapeJs(it.location.name) }', ${ it.location.id})"></i>
 				<% } %>
 				
 	            <% if (it.location.retired) { %>
 	                <i class="icon-reply edit-action" title="${ui.message("general.restore")}" onclick="restoreLocation(${ it.location.id})"></i>
 	            <% } %>
 
-	            &nbsp;&nbsp;<i class="icon-trash delete-action" title="${ui.message("general.purge")}" onclick="purgeLocation('${ it.location.name }', ${ it.location.id})"></i>
+	            &nbsp;&nbsp;<i class="icon-trash delete-action" title="${ui.message("general.purge")}" onclick="purgeLocation('${ ui.escapeJs(it.location.name) }', ${ it.location.id})"></i>
         	</td>
 		</tr>
 		<% } %>

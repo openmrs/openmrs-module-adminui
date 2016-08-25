@@ -29,19 +29,19 @@
 	<tbody>
 		<% locationAttributeTypes.each{  %>
 	 	<tr>
-            <td valign="top" ${it.retired ? 'class="retired"' : ''}>${ ui.format(it.name) }</td>
-            <td valign="top" ${it.retired ? 'class="retired"' : ''}>${ ui.format(it.description) }</td>
+            <td valign="top" ${it.retired ? 'class="retired"' : ''}>${ ui.escapeJs(ui.format(it.name)) }</td>
+            <td valign="top" ${it.retired ? 'class="retired"' : ''}>${ ui.escapeJs(ui.format(it.description)) }</td>
             <td valign="top">
                 <form id="adminui-restore-form-${it.id}" method="POST">
                     <i class="icon-pencil edit-action${it.retired ? ' invisible' : ''}" title="${ ui.message("general.edit") }"
                     onclick="location.href='${ui.pageLink("adminui", "metadata/locations/locationAttributeType",[locationAttributeTypeId: it.id])}'"></i>
                     <% if(!it.retired) { %>
-                    <i class="icon-remove delete-action" title="${ ui.message("general.retire") }" onclick="adminui_retireLocationAttributeType(${it.id}, '${it.name}')"></i>
+                    <i class="icon-remove delete-action" title="${ ui.message("general.retire") }" onclick="adminui_retireLocationAttributeType(${it.id}, '${ui.escapeJs(it.name)}')"></i>
                     <% } else { %>
                     <i class="icon-reply edit-action" title="${ ui.message("general.restore") }" onclick="adminui_restoreLocationAttributeType(${it.id})"></i>
                     <% } %>
                     <% if(context.hasPrivilege('Purge Location Attribute Types')) { %>
-                    <i class="icon-trash delete-action right" title="${ ui.message("general.purge") }" onclick="adminui_purgeLocationAttributeType(${it.id}, '${it.name}')"></i>
+                    <i class="icon-trash delete-action right" title="${ ui.message("general.purge") }" onclick="adminui_purgeLocationAttributeType(${it.id}, '${ui.escapeJs(it.name)}')"></i>
                     <% } %>
                     <input type="hidden" name="locationAttributeTypeId" value="${it.id}" />
                     <input id="adminui-restore-action" type="hidden" name="action" value="restore" />

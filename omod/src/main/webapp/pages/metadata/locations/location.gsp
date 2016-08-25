@@ -9,7 +9,7 @@
 
     def parentLocationOptions = []
     existingLocations.each {
-        parentLocationOptions.push([ label: ui.format(it), value: it.id ])
+        parentLocationOptions.push([ label: ui.escapeJs(ui.format(it)), value: it.id ])
     }
 %>
 
@@ -71,14 +71,14 @@
             formFieldName: "name",
             id           : "name",
             maxLength    : 101,
-            initialValue : (location.name ?: '')
+            initialValue : ui.escapeJs((location.name ?: ''))
     ])}
 
     ${ui.includeFragment("uicommons", "field/textarea", [
             label        : ui.message("general.description"),
             formFieldName: "description",
             id           : "description",
-            initialValue : (location.description ?: '')
+            initialValue : ui.escapeJs((location.description ?: ''))
     ])}
 
     <p>
@@ -86,28 +86,28 @@
             label        : ui.message("adminui.location.address1"),
             formFieldName: "address1",
             id           : "address1",
-            initialValue : (location.address1 ?: '')
+            initialValue : ui.escapeJs((location.address1 ?: ''))
     ])}
 
 	${ui.includeFragment("uicommons", "field/text", [
             label        : ui.message("adminui.location.address2"),
             formFieldName: "address2",
             id           : "address2",
-            initialValue : (location.address2 ?: '')
+            initialValue : ui.escapeJs((location.address2 ?: ''))
     ])}
 
     ${ui.includeFragment("uicommons", "field/text", [
             label        : ui.message("adminui.location.city_village"),
             formFieldName: "cityVillage",
             id           : "cityVillage",
-            initialValue : (location.cityVillage ?: '')
+            initialValue : ui.escapeJs((location.cityVillage ?: ''))
     ])}
 
     ${ui.includeFragment("uicommons", "field/text", [
             label        : ui.message("adminui.location.state_province"),
             formFieldName: "stateProvince",
             id           : "stateProvince",
-            initialValue : (location.stateProvince ?: '')
+            initialValue : ui.escapeJs((location.stateProvince ?: ''))
     ])}
 
 
@@ -115,14 +115,14 @@
             label        : ui.message("adminui.location.country"),
             formFieldName: "country",
             id           : "country",
-            initialValue : (location.country ?: '')
+            initialValue : ui.escapeJs((location.country ?: ''))
     ])}
 
     ${ui.includeFragment("uicommons", "field/text", [
             label        : ui.message("adminui.location.postalCode"),
             formFieldName: "postalCode",
             id           : "postalCode",
-            initialValue : (location.postalCode ?: '')
+            initialValue : ui.escapeJs((location.postalCode ?: ''))
     ])}
     </p>
 
@@ -136,7 +136,7 @@
 
     <% attributeTypes.each{ %>
 	${ ui.includeFragment("uicommons", "field/text", [
-	       	label: ui.format(it),
+	       	label: ui.escapeJs(ui.format(it)),
 	        formFieldName: "attribute."+it.id+"",
 		    value: it.id,
 		    checked: false
@@ -150,7 +150,7 @@
     	<% locationTags.eachWithIndex { tag, index -> %>
 			<td valign="top">
 		        <input type="checkbox" name="locTags" value="${tag.id}"
-                    <% if (location.tags && location.tags.contains(tag)) { %> checked='checked'<% } %>> ${ui.format(tag)}
+                    <% if (location.tags && location.tags.contains(tag)) { %> checked='checked'<% } %>> ${ui.escapeJs(ui.format(tag))}
 	        </td>
 	        <% if ((index + 1) % 2 == 0) { %> </tr> <tr> <% } %>
     	<% } %>
