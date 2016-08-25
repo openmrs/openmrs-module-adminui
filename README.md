@@ -1,5 +1,7 @@
-adminui
-=======
+[![Build Status](https://travis-ci.org/openmrs/openmrs-module-adminui.svg?branch=master)](https://travis-ci.org/openmrs/openmrs-module-adminui)
+
+Admin UI Module
+================
 
 Administration tools for the OpenMRS Reference Application.
 
