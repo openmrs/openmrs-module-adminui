@@ -68,7 +68,7 @@
             formFieldName: "privilege",
             id           : "privilege",
             maxLength    : 101,
-            initialValue : privilege.privilege
+            initialValue : ui.escapeJs(privilege.privilege)
         ])}
     <% } else{ %>
         <b>${ui.message("general.name")}:</b> ${privilege.privilege}
@@ -78,7 +78,7 @@
             label        : ui.message("general.description"),
             formFieldName: "description",
             id           : "description",
-            initialValue : (privilege.description) ? privilege.description.trim() : ""
+            initialValue : ui.escapeJs((privilege.description) ? privilege.description.trim() : "")
     ])}
 
     <div>
