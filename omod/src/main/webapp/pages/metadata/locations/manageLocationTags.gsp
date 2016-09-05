@@ -62,6 +62,7 @@
             <br/>
             <input type="hidden" name="action" value="retire">
             <input type="hidden" id="retire-location-tag-id" name="locationTagId" value="">
+            <input type="hidden" id="retireLocationTagMessageTemplate" value="${ui.message('adminui.retire')}">
             <div>
                 <button class="confirm right">${ ui.message("uicommons.confirm") }</button>
                 <button class="cancel">${ ui.message("uicommons.cancel") }</button>
@@ -79,6 +80,7 @@
          <form id="purgeLocationTagForm" method="post">
              <input type="hidden" name="action" value="purge" />
              <input type="hidden" id="purge-location-tag-id" name="locationTagId" value="" />
+             <input type="hidden" id="purgeLocationTagMessageTemplate" value="${ui.message('adminui.purge')}" />
              <br />
              <div>
                  <button class="confirm right">${ ui.message("uicommons.confirm") }</button>

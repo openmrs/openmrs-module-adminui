@@ -65,6 +65,7 @@
              <br/>
              <input type="hidden" name="action" value="retire">
              <input type="hidden" id="retire-location-attribute-type-id" name="locationAttributeTypeId" value="">
+             <input type="hidden" id="retireLocationAttributeTypeMessageTemplate" value="${ui.message('adminui.retire')}">
              <div>
                  <button class="confirm right">${ ui.message("uicommons.confirm") }</button>
                  <button class="cancel">${ ui.message("uicommons.cancel") }</button>
@@ -82,6 +83,7 @@
          <form id="purgeLocationAttributeTypeForm" method="post">
              <input type="hidden" name="action" value="purge" />
              <input type="hidden" id="purge-location-attribute-type-id" name="locationAttributeTypeId" value="" />
+             <input type="hidden" id="purgeLocationAttributeTypeMessageTemplate" value="${ui.message('adminui.purge')}" />
              <br />
              <div>
                  <button class="confirm right">${ ui.message("uicommons.confirm") }</button>

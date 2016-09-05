@@ -57,6 +57,7 @@
          <form id="purgePrivilegeForm" method="post">
              <input type="hidden" name="action" value="purge" />
              <input type="hidden" id="purge-privilege-name" name="privilegeName" value="" />
+             <input type="hidden" id="purgePrivilegeMessageTemplate" value="${ui.message('adminui.purge')}"/>
              <br />
              <div>
                  <button class="confirm right">${ ui.message("uicommons.confirm") }</button>

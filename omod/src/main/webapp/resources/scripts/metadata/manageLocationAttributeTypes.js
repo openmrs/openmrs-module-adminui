@@ -25,7 +25,7 @@ $(document).ready( function() {
 
 function adminui_retireLocationAttributeType(locationAttributeTypeId, name) {
     jq("#retire-location-attribute-type-id").val(locationAttributeTypeId);
-    jq("#retireLocationAttributeTypeMessage").text(jq("#retireLocationAttributeTypeMessage").text().replace("{0}", "\""+name+"\""));
+    jq("#retireLocationAttributeTypeMessage").text(jq("#retireLocationAttributeTypeMessageTemplate").val().replace("{0}", "\""+name+"\""));
     retireLocationAttributeTypeDialog.show();
 }
 
@@ -35,6 +35,6 @@ function adminui_restoreLocationAttributeType(locationAttributeTypeId) {
 
 function adminui_purgeLocationAttributeType(locationAttributeTypeId, name) {
     jq("#purge-location-attribute-type-id").val(locationAttributeTypeId);
-    jq("#purgeLocationAttributeTypeMessage").text(jq("#purgeLocationAttributeTypeMessage").text().replace("{0}", "\""+name+"\""));
+    jq("#purgeLocationAttributeTypeMessage").text(jq("#purgeLocationAttributeTypeMessageTemplate").val().replace("{0}", "\""+name+"\""));
     purgeLocationAttributeTypeDialog.show();
 }

@@ -15,6 +15,6 @@ $(document).ready( function() {
 
 function adminui_purgePrivilege(privilegeName, name) {
     jq("#purge-privilege-name").val(privilegeName);
-    jq("#purgePrivilegeMessage").text(jq("#purgePrivilegeMessage").text().replace("{0}", "\""+name+"\""));
+    jq("#purgePrivilegeMessage").text(jq("#purgePrivilegeMessageTemplate").val().replace("{0}", "\""+name+"\""));
     purgePrivilegeDialog.show();
 }

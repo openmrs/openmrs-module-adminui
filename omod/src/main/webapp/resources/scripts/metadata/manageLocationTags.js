@@ -25,7 +25,7 @@ $(document).ready( function() {
 
 function adminui_retireLocationTag(locationTagId, name) {
     jq("#retire-location-tag-id").val(locationTagId);
-    jq("#retireLocationTagMessage").text(jq("#retireLocationTagMessage").text().replace("{0}", "\""+name+"\""));
+    jq("#retireLocationTagMessage").text(jq("#retireLocationTagMessageTemplate").val().replace("{0}", "\""+name+"\""));
     retireLocationTagDialog.show();
 }
 
@@ -35,6 +35,6 @@ function adminui_restoreLocationTag(locationTagId) {
 
 function adminui_purgeLocationTag(locationTagId, name) {
     jq("#purge-location-tag-id").val(locationTagId);
-    jq("#purgeLocationTagMessage").text(jq("#purgeLocationTagMessage").text().replace("{0}", "\""+name+"\""));
+    jq("#purgeLocationTagMessage").text(jq("#purgeLocationTagMessageTemplate").val().replace("{0}", "\""+name+"\""));
     purgeLocationTagDialog.show();
 }
