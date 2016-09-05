@@ -29,17 +29,17 @@
 		<% privileges.each{  %>
 	 	<tr >
 	 		<td valign="top">
-				 ${ ui.escapeJs(ui.format(it.name)) }
+				 ${ ui.encodeHtmlContent(ui.format(it.name)) }
 			</td>
 			<td valign="top">
-                ${ ui.escapeJs(ui.format(it.description)) }
+                ${ ui.encodeHtmlContent(ui.format(it.description)) }
             </td>
 			<td valign="top">
-                <form id="adminui-restore-form-${it.name}" method="POST">
+                <form id="adminui-restore-form-${ui.encodeHtmlContent(it.name)}" method="POST">
                     <i class="icon-pencil edit-action${''}" title="${ ui.message("general.edit") }"
-                       onclick="location.href='${ui.pageLink("adminui", "metadata/privileges/privilege",[privilegeName: ui.escapeJs(it.name), action: 'edit'])}'"></i>
-                    <i class="icon-trash delete-action right" title="${ ui.message("general.purge") }" onclick="adminui_purgePrivilege('${ui.escapeJs(it.name)}', '${ui.escapeJs(it.name)}')"></i>
-                    <input type="hidden" name="privilegeName" value="${ui.escapeJs(it.name)}" />
+                       onclick="location.href='${ui.pageLink("adminui", "metadata/privileges/privilege",[privilegeName: ui.encodeJavaScriptAttribute(it.name), action: 'edit'])}'"></i>
+                    <i class="icon-trash delete-action right" title="${ ui.message("general.purge") }" onclick="adminui_purgePrivilege('${ui.encodeJavaScriptAttribute(it.name)}', '${ui.encodeJavaScriptAttribute(it.name)}')"></i>
+                    <input type="hidden" name="privilegeName" value="${ui.encodeHtmlContent(it.name)}" />
                     <input id="adminui-restore-action" type="hidden" name="action" value="restore" />
                 </form>
         	</td>

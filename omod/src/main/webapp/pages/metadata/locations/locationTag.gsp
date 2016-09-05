@@ -82,14 +82,14 @@
             formFieldName: "name",
             id           : "name",
             maxLength    : 101,
-            initialValue : ui.escapeJs((locationTag.name ?: ''))
+            initialValue : ui.encodeHtmlContent((locationTag.name ?: ''))
     ])}
 
     ${ui.includeFragment("uicommons", "field/textarea", [
             label        : ui.message("general.description"),
             formFieldName: "description",
             id           : "description",
-            initialValue : ui.escapeJs((locationTag.description ?: '')),
+            initialValue : ui.encodeHtmlContent((locationTag.description ?: '')),
             cols         : 54
     ])}
 

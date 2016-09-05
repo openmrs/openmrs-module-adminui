@@ -35,13 +35,13 @@
             def isLinkedToPerson = false
             if((it.person != null && it.person.personId != null)){
                 isLinkedToPerson = true
-                name = ui.escapeJs(ui.format(it.person))
+                name = ui.encodeHtmlContent(ui.format(it.person))
             }
             if(name == null || name.trim() == ""){
-                name = ui.escapeJs(providerNameMap[it.providerAccounts[0]])
+                name = ui.encodeHtmlContent(providerNameMap[it.providerAccounts[0]])
             }
             if(name == null || name.trim() == ""){
-                name = ui.escapeJs(it.providerAccounts[0].identifier)
+                name = ui.encodeHtmlContent(it.providerAccounts[0].identifier)
             }
             if(name == null || name.trim() == ""){
                 name = "<i>"+ui.message("adminui.noname")+"</i>"
