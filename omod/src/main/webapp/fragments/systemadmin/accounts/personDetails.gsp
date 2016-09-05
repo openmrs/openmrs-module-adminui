@@ -12,7 +12,7 @@
 <% if(!createAccount) { %>
 <div id="adminui-person-details" ng-controller="EditPersonDetailsController"
      ng-init="init('${account.person.uuid}', '${account.gender}', '${account.person.personName.uuid}',
-                   '${account.familyName}', '${account.givenName}', '${ui.message("Person.gender.male")}',
+                   '${ui.encodeJavaScriptAttribute(account.familyName)}', '${ui.encodeJavaScriptAttribute(account.givenName)}', '${ui.message("Person.gender.male")}',
                    '${ui.message("Person.gender.female")}')">
 
     <form name="personDetailsForm" class="simple-form-ui" novalidate ng-submit="save()">
@@ -56,7 +56,7 @@
                 label: ui.message("PersonName.familyName")+"<span class='adminui-text-red'>*</span>",
                 id: "adminui-familyName",
                 formFieldName: "familyName",
-                initialValue: (account.familyName ?: ''),
+                initialValue: ui.encodeHtmlContent((account.familyName ?: '')),
                 otherAttributes:['ng-model': 'person.familyName', 'required': '', 'ng-maxlength': propertyMaxLengthMap['familyName']]
             ])}
             <span class="field-error" ng-show="${formName}.familyName.\$dirty && ${formName}.familyName.\$invalid">
@@ -72,7 +72,7 @@
                 label: ui.message("adminui.person.givenName")+"<span class='adminui-text-red'>*</span>",
                 id: "adminui-givenName",
                 formFieldName: "givenName",
-                initialValue: (account.givenName ?: ''),
+                initialValue: ui.encodeHtmlContent((account.givenName ?: '')),
                 otherAttributes:['ng-model': 'person.givenName', 'required':'', 'ng-maxlength': propertyMaxLengthMap['givenName']]
             ])}
             <span class="field-error" ng-show="${formName}.givenName.\$dirty && ${formName}.givenName.\$invalid">

@@ -57,10 +57,10 @@
         def createAuditInfo = '';
         def changeAuditInfo = '';
         if(account.creator) {
-            createAuditInfo = ui.message('adminui.createdByOn', ui.format(account.creator), ui.format(account.dateCreated));
+            createAuditInfo = ui.message('adminui.createdByOn', ui.encodeJavaScriptAttribute(ui.format(account.creator)), ui.format(account.dateCreated));
         }
         if(account.changedBy) {
-            changeAuditInfo = ui.message('adminui.changedByOn', ui.format(account.changedBy), ui.format(account.dateChanged));
+            changeAuditInfo = ui.message('adminui.changedByOn', ui.encodeJavaScriptAttribute(ui.format(account.changedBy)), ui.format(account.dateChanged));
         }
 %>
 
