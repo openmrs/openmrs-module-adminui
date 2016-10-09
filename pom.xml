@@ -52,12 +52,12 @@
 	<properties>
 		<openMRSVersion>1.11.4</openMRSVersion>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<uicommonsVersion>1.7</uicommonsVersion>
-		<appuiVersion>1.4</appuiVersion>
-		<uiframeworkVersion>3.4</uiframeworkVersion>
-		<appframeworkVersion>2.0</appframeworkVersion>
-		<providermanagementVersion>2.3</providermanagementVersion>
-		<webservicesRestVersion>2.14-SNAPSHOT</webservicesRestVersion>
+		<uicommonsVersion>2.1</uicommonsVersion>
+		<appuiVersion>1.7</appuiVersion>
+		<uiframeworkVersion>3.9</uiframeworkVersion>
+		<appframeworkVersion>2.9</appframeworkVersion>
+		<providermanagementVersion>2.5.0</providermanagementVersion>
+		<webservicesRestVersion>2.16</webservicesRestVersion>
 	</properties>
 
 	<dependencyManagement>
