@@ -71,14 +71,14 @@
             formFieldName: "name",
             id           : "name",
             maxLength    : 101,
-            initialValue : ui.encodeHtmlContent((location.name ?: ''))
+            initialValue : ui.encodeHtml((location.name ?: ''))
     ])}
 
     ${ui.includeFragment("uicommons", "field/textarea", [
             label        : ui.message("general.description"),
             formFieldName: "description",
             id           : "description",
-            initialValue : ui.encodeHtmlContent((location.description ?: ''))
+            initialValue : ui.encodeHtml((location.description ?: ''))
     ])}
 
     <p>
@@ -86,28 +86,28 @@
             label        : ui.message("adminui.location.address1"),
             formFieldName: "address1",
             id           : "address1",
-            initialValue : ui.encodeHtmlContent((location.address1 ?: ''))
+            initialValue : ui.encodeHtml((location.address1 ?: ''))
     ])}
 
 	${ui.includeFragment("uicommons", "field/text", [
             label        : ui.message("adminui.location.address2"),
             formFieldName: "address2",
             id           : "address2",
-            initialValue : ui.encodeHtmlContent((location.address2 ?: ''))
+            initialValue : ui.encodeHtml((location.address2 ?: ''))
     ])}
 
     ${ui.includeFragment("uicommons", "field/text", [
             label        : ui.message("adminui.location.city_village"),
             formFieldName: "cityVillage",
             id           : "cityVillage",
-            initialValue : ui.encodeHtmlContent((location.cityVillage ?: ''))
+            initialValue : ui.encodeHtml((location.cityVillage ?: ''))
     ])}
 
     ${ui.includeFragment("uicommons", "field/text", [
             label        : ui.message("adminui.location.state_province"),
             formFieldName: "stateProvince",
             id           : "stateProvince",
-            initialValue : ui.encodeHtmlContent((location.stateProvince ?: ''))
+            initialValue : ui.encodeHtml((location.stateProvince ?: ''))
     ])}
 
 
@@ -115,14 +115,14 @@
             label        : ui.message("adminui.location.country"),
             formFieldName: "country",
             id           : "country",
-            initialValue : ui.encodeHtmlContent((location.country ?: ''))
+            initialValue : ui.encodeHtml((location.country ?: ''))
     ])}
 
     ${ui.includeFragment("uicommons", "field/text", [
             label        : ui.message("adminui.location.postalCode"),
             formFieldName: "postalCode",
             id           : "postalCode",
-            initialValue : ui.encodeHtmlContent((location.postalCode ?: ''))
+            initialValue : ui.encodeHtml((location.postalCode ?: ''))
     ])}
     </p>
 
@@ -136,7 +136,7 @@
 
     <% attributeTypes.each{ %>
 	${ ui.includeFragment("uicommons", "field/text", [
-	       	label: ui.encodeHtmlContent(ui.format(it)),
+	       	label: ui.encodeHtml(ui.format(it)),
 	        formFieldName: "attribute."+it.id+"",
 		    value: it.id,
 		    checked: false
@@ -150,15 +150,15 @@
     	<% locationTags.eachWithIndex { tag, index -> %>
 			<td valign="top">
 		        <input type="checkbox" name="locTags" value="${tag.id}"
-                    <% if (location.tags && location.tags.contains(tag)) { %> checked='checked'<% } %>> ${ui.encodeHtmlContent(ui.format(tag))}
+                    <% if (location.tags && location.tags.contains(tag)) { %> checked='checked'<% } %>> ${ui.encodeHtml(ui.format(tag))}
 	        </td>
 	        <% if ((index + 1) % 2 == 0) { %> </tr> <tr> <% } %>
     	<% } %>
     	</tr>
 	</table>
-    
+
     </fieldset>
-    
+
     <div>
         <input type="button" class="cancel left" value='${ui.message("general.cancel")}' onclick='window.location="/${ contextPath }/adminui/metadata/locations/manageLocations.page"' />
         <input type="submit" class="confirm right" name="save" id="save-button" value="${ui.message("general.save")}"/>
