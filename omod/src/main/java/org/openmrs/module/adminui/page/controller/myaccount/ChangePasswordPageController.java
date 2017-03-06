@@ -9,6 +9,8 @@
  */
 package org.openmrs.module.adminui.page.controller.myaccount;
 
+import java.lang.reflect.Method;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
@@ -92,7 +94,14 @@ public class ChangePasswordPageController {
 						user = userService.getUser(user.getUserId());
 						userProperties = new UserProperties(user.getUserProperties());
 						userProperties.setSupposedToChangePassword(false);
-						userService.saveUser(user, null);
+						try {
+							userService.saveUser(user, null);
+						}
+						catch (NoSuchMethodError ex) {
+			            	//must be running platforms 2.0 and above which do not have the above method
+			            	Method method = userService.getClass().getMethod("saveUser", new Class[] { User.class });
+			            	method.invoke(userService, new Object[] { user });
+			            }
 					}
 					catch (Exception e) {
 						log.warn("Failed to set forcePassword user property to false", e);

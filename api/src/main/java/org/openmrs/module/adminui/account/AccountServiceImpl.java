@@ -9,6 +9,7 @@
  */
 package org.openmrs.module.adminui.account;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -19,6 +20,7 @@ import org.openmrs.Person;
 import org.openmrs.Provider;
 import org.openmrs.Role;
 import org.openmrs.User;
+import org.openmrs.api.APIException;
 import org.openmrs.api.AdministrationService;
 import org.openmrs.api.PersonService;
 import org.openmrs.api.ProviderService;
@@ -76,11 +78,25 @@ public class AccountServiceImpl extends BaseOpenmrsService implements AccountSer
 			providerService.saveProvider(provider);
 		}
 		for (User user : account.getUserAccounts()) {
-			String password = null;
 			if (user.getUserId() == null && StringUtils.isNotBlank(account.getPassword(user))) {
-				password = account.getPassword(user);
+				String password = account.getPassword(user);
+				userService.createUser(user, password);
 			}
-			userService.saveUser(user, password);
+			else {
+				try {
+					userService.saveUser(user, null);
+				}
+				catch (NoSuchMethodError ex) {
+					try {
+		            	//must be running platforms 2.0 and above which do not have the above method
+		            	Method method = userService.getClass().getMethod("saveUser", new Class[] { User.class });
+		            	method.invoke(userService, new Object[] { user });
+					}
+					catch (Exception e) {
+						throw new APIException("Failed to save user account", e);
+					}
+	            }
+			}
 		}
 	}
 	
