@@ -82,7 +82,7 @@
             formFieldName: "name",
             id           : "name",
             maxLength    : 101,
-            initialValue : ui.encodeHtmlContent((locationTag.name ?: ''))
+            initialValue : ui.encodeHtmlAttribute((locationTag.name ?: ''))
     ])}
 
     ${ui.includeFragment("uicommons", "field/textarea", [

@@ -100,7 +100,7 @@
             formFieldName: "name",
             id           : "name",
             maxLength    : 101,
-            initialValue : ui.encodeHtmlContent((locationAttributeType.name ?: ''))
+            initialValue : ui.encodeHtmlAttribute((locationAttributeType.name ?: ''))
     ])}
 
     ${ui.includeFragment("uicommons", "field/textarea", [
@@ -167,7 +167,7 @@
             label        : ui.message("adminui.handlerConfig"),
             formFieldName: "handlerConfig",
             id           : "handlerConfig",
-            initialValue : (locationAttributeType.handlerConfig ?: ''),
+            initialValue : ui.encodeHtmlContent((locationAttributeType.handlerConfig ?: '')),
             cols         : 54,
             rows: 3
     ])}
