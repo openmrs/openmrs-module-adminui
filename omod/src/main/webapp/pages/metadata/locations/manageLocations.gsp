@@ -43,16 +43,16 @@
 	 			<% for (i = 1; i <= it.depth; i++) { %>
 	 				&nbsp;&nbsp;
 	 			<% } %>
-				${ ui.escapeJs(ui.encodeHtmlContent(it.location.name)) }
+				${ ui.encodeHtmlContent(it.location.name) }
 			</td>
 
 			<td valign="top" <% if (it.location.retired) { %> class="retired" <% } %>>
-				${ ui.escapeJs(ui.encodeHtmlContent(it.location.description ?: '')) }
+				${ ui.encodeHtmlContent(it.location.description ?: '') }
 			</td>
 
             <td valign="top" <% if (it.location.retired) { %> class="retired" <% } %>>
                 <% it.location.tags.eachWithIndex { tag, index -> %>
-					${ ui.escapeJs(ui.encodeHtmlContent(ui.format(tag)))} <% if (index < it.location.tags.size() - 1) { %> , <% } %>
+					${ ui.encodeHtmlContent(ui.format(tag))} <% if (index < it.location.tags.size() - 1) { %> , <% } %>
 				<% } %>
             </td>
 
