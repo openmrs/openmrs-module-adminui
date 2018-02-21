@@ -1,30 +1,32 @@
 <%
-    ui.decorateWith("appui", "standardEmrPage", ["title": "Change User Defaults"])
+    ui.decorateWith("appui", "standardEmrPage", ["title": ui.message("adminui.myAccount.myLanguages.title")])
     
     ui.includeCss("adminui", "adminui.css")
-
+    ui.includeJavascript("uicommons", "angular.min.js")
+    ui.includeJavascript("adminui","myaccount/changeLanguage.js")
+    
     def primaryLocaleOptions = []
     primaryLocales.each {
         primaryLocaleOptions.add([label: it.displayName, value: it.toString()])
     }
 %>
-
 <script type="text/javascript">
 
-    var breadcrumbs = [
+       var breadcrumbs = [
         {icon: "icon-home", link: '/' + OPENMRS_CONTEXT_PATH + '/index.htm'},
         {
             label: "${ ui.message("adminui.app.myAccount.label")}",
             link: '${ui.pageLink("adminui", "myaccount/myAccount")}'
         },
-        {label: "${ ui.message("adminui.myAccount.defaultSettings.label")}"}
+        {label: "${ ui.message("adminui.myAccount.myLanguages.label")}"}
 
     ];
+   
 </script>
 
-<h2>${ui.message("adminui.myAccount.defaultSettings.label")}</h2>
-
-<form class="simple-form-ui" method="post">
+<h2>${ui.message("adminui.myAccount.myLanguages.label")}</h2>
+<div ng-app="changeLanguage" ng-controller="changeLanguageController">
+<form class="simple-form-ui" method="post" >
 
     ${ui.includeFragment("uicommons", "field/dropDown", [
         id           : "default-locale",
@@ -34,7 +36,7 @@
         initialValue : userDefaults.defaultLocale
     ])}
 
-    <label>${ui.message("adminui.account.proficientLocales")}</label>
+    <label title="${ui.message("adminui.account.proficientLang.desc")}">${ui.message("adminui.account.proficientLocales")}</label>
     <div class="adminui-section-padded-top">
     <% proficientLocales.each { %>
         <input type="checkbox" name="proficientLocales" value="${it.toString()}"
@@ -50,3 +52,4 @@
     </div>
 
 </form>
+</div>

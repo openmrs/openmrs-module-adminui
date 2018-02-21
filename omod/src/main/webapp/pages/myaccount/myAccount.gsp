@@ -30,7 +30,7 @@
     <a class="button app big" href="${ ui.pageLink("adminui", "myaccount/changeDefaults") }">
         <div class="task">
             <i class="icon-cog"></i>
-            ${ ui.message("adminui.myAccount.defaultSettings.label") }
+            ${ ui.message("adminui.myAccount.myLanguages.label") }
         </div>
     </a>
 </div>
