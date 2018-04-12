@@ -48,6 +48,18 @@
     },
 
     {
+        "id": "${project.parent.groupId}.${project.parent.artifactId}.visits",
+        "extensionPointId": "${project.parent.groupId}.${project.parent.artifactId}.adminLinks",
+        "type": "link",
+        "label": "${project.parent.artifactId}.manageVisitTypes.title",
+        "url": "${project.parent.artifactId}/metadata/visits/visittypes/manageVisitTypes.page",
+        "requiredPrivilege": "Manage Visit Types",
+        "extensionParams":{
+            "group": "${project.parent.groupId}.${project.parent.artifactId}.visits.group"
+        }
+    },
+
+    {
         "id": "${project.parent.groupId}.${project.parent.artifactId}.encounters",
         "extensionPointId": "${project.parent.groupId}.${project.parent.artifactId}.adminLinks",
         "type": "link",
