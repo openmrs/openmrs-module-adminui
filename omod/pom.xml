@@ -145,7 +145,7 @@
 			<type>gem</type>
 			<scope>provided</scope>
 		</dependency>
-		
+
 	</dependencies>
 
 	<build>
