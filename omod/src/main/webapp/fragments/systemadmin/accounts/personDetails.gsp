@@ -10,6 +10,10 @@
 %>
 
 <% if(!createAccount) { %>
+<script type="text/javascript">
+    initPersonDetails(${customPersonAttributeJson});
+</script>
+
 <div id="adminui-person-details" ng-controller="EditPersonDetailsController"
      ng-init="init('${account.person.uuid}', '${account.gender}', '${account.person.personName.uuid}',
                    '${ui.encodeJavaScriptAttribute(account.familyName)}', '${ui.encodeJavaScriptAttribute(account.givenName)}', '${ui.message("Person.gender.male")}',
@@ -38,6 +42,19 @@
                     <th valign="top">${ui.message("Person.gender")}</th>
                     <td valign="top">{{genders[person.gender]}}</td>
                 </tr>
+
+                <% customPersonAttributeViewFragments.each { fragment ->
+                    if(fragment.extensionParams.type == 'personAttribute') { %>
+                    ${ ui.includeFragment(fragment.extensionParams.provider, fragment.extensionParams.fragment, [
+                            label : ui.message(fragment.extensionParams.label),
+                            personId : account.person.personId,
+                            personUuid : account.person.uuid,
+                            initialValue : ui.message(account.getPersonAttribute(fragment.extensionParams.uuid) != null ?
+                                    account.getPersonAttribute(fragment.extensionParams.uuid).value : '')
+                    ])}
+                    <% }
+                } %>
+
             </table>
         </div>
         <% } %>
@@ -97,6 +114,20 @@
                     ${ui.message("adminui.field.required")}
                 </span>
             </span>
+
+            <% customPersonAttributeEditFragments.each { fragment ->
+                if(fragment.extensionParams.type == 'personAttribute') {%>
+                ${ ui.includeFragment(fragment.extensionParams.provider, fragment.extensionParams.fragment, [
+                        formFieldName : fragment.extensionParams.formFieldName,
+                        id : fragment.extensionParams.formFieldName,
+                        title : ui.message(fragment.extensionParams.title),
+                        label : ui.message(fragment.extensionParams.label),
+                        initialValue : ui.message(account.getPersonAttribute(fragment.extensionParams.uuid) != null ?
+                                account.getPersonAttribute(fragment.extensionParams.uuid).value : '')
+                ])}
+            <% }
+            }%>
+
         </div>
         </fieldset>
 <% if(!createAccount) { %>

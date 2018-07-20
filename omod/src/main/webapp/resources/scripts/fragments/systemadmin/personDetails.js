@@ -1,3 +1,10 @@
+
+var personAttributesMap;
+
+function initPersonDetails(personAttributes){
+    personAttributesMap = personAttributes;
+}
+
 angular.module("adminui.personDetails", ["personService"])
 
     .controller("EditPersonDetailsController", ["$scope", "Person",
@@ -13,6 +20,7 @@ angular.module("adminui.personDetails", ["personService"])
                 $scope.person.familyName = familyName;
                 $scope.person.givenName = givenName;
                 $scope.genders = {M: male, F: female};
+                $scope.personAttributesMap = personAttributesMap;
 
                 //cache the original state so that we can use it to reset later on cancel
                 $scope.originalState = angular.copy($scope.person);
@@ -45,13 +53,28 @@ angular.module("adminui.personDetails", ["personService"])
 
             $scope.save = function() {
                 $scope.beforeRequest();
+                attributesSet = []
+                angular.forEach($scope.personAttributesMap , function(value, key) {
+                    personAttributeUuid = value.personAttributeUuid;
+                    formFieldName = value.formFieldName;
+                    currentValue = document.getElementById(formFieldName).value;
+                    if (currentValue) {
+                        attributesSet.push({
+                            uuid : personAttributeUuid,
+                            value : currentValue
+                        })
+                    }
+                });
+
                 var personToSave = {
                     uuid: $scope.person.personUuid,
                     gender: $scope.person.gender,
                     names: [{
                         uuid: $scope.person.personNameUuid,
                         familyName: $scope.person.familyName,
-                        givenName: $scope.person.givenName}]
+                        givenName: $scope.person.givenName
+                    }],
+                    attributes: attributesSet
                 }
 
                 Person.save(personToSave).$promise.then(function () {

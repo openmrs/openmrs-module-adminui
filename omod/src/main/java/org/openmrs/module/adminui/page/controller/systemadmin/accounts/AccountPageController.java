@@ -14,9 +14,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Collections;
 
 import javax.servlet.http.HttpServletRequest;
-
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -28,11 +29,14 @@ import org.openmrs.User;
 import org.openmrs.api.APIException;
 import org.openmrs.api.AdministrationService;
 import org.openmrs.api.UserService;
+import org.openmrs.api.context.Context;
 import org.openmrs.messagesource.MessageSourceService;
 import org.openmrs.module.adminui.AdminUiConstants;
 import org.openmrs.module.adminui.account.Account;
 import org.openmrs.module.adminui.account.AccountService;
 import org.openmrs.module.adminui.account.AdminUiAccountValidator;
+import org.openmrs.module.appframework.domain.Extension;
+import org.openmrs.module.appframework.service.AppFrameworkService;
 import org.openmrs.module.providermanagement.Provider;
 import org.openmrs.module.providermanagement.ProviderRole;
 import org.openmrs.module.providermanagement.api.ProviderManagementService;
@@ -49,6 +53,8 @@ import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.openmrs.PersonAttributeType;
+import org.openmrs.PersonAttribute;
 
 /**
  * This controller only handles requests to create a new account and doesn't support editing
@@ -82,10 +88,12 @@ public class AccountPageController {
 	public void get(PageModel model, @MethodParam("getAccount") Account account,
 	                @SpringBean("adminAccountService") AccountService accountService,
 	                @SpringBean("adminService") AdministrationService administrationService,
-	                @SpringBean("providerManagementService") ProviderManagementService providerManagementService, UiUtils uu)
+	                @SpringBean("providerManagementService") ProviderManagementService providerManagementService,
+					UiUtils uu,
+					@SpringBean("appFrameworkService") AppFrameworkService appFrameworkService)
 	    throws IOException {
 		
-		setModelAttributes(model, account, null, accountService, administrationService, providerManagementService, uu);
+		setModelAttributes(model, account, null, accountService, administrationService, providerManagementService, uu, appFrameworkService);
 		if (account.getPerson().getPersonId() == null) {
 			setJsonFormData(model, account, null);
 		}
@@ -109,9 +117,54 @@ public class AccountPageController {
 	                   @SpringBean("adminService") AdministrationService administrationService,
 	                   @SpringBean("adminUiAccountValidator") AdminUiAccountValidator accountValidator,
 	                   @SpringBean("providerManagementService") ProviderManagementService providerManagementService,
+					   @SpringBean("appFrameworkService") AppFrameworkService appFrameworkService,
 	                   HttpServletRequest request, UiUtils uu) throws IOException {
 		
 		Errors errors = new BeanPropertyBindingResult(account, "account");
+
+        List<Extension> customUserPropertyEditFragments =
+				appFrameworkService.getExtensionsForCurrentUser("userAccount.userPropertyEditFragment");
+        Map<String, String[]> parameterMap = request.getParameterMap();
+        for(Extension ext : customUserPropertyEditFragments) {
+            if (StringUtils.equals(ext.getExtensionParams().get("type").toString(), "userProperty")) {
+                String userPropertyName = ext.getExtensionParams().get("userPropertyName").toString();
+                String[] parameterValues = parameterMap.get(userPropertyName);
+                if (parameterValues != null && parameterValues.length > 0) {
+                    if (parameterValues.length > 1) {
+                        log.warn("Multiple userProperty for a single user type not supported, ignoring extra values");
+                    }
+                    String parameterValue = parameterValues[0];
+                    if (userPropertyName != null && parameterValue != null) {
+                        user.setUserProperty(userPropertyName, parameterValue);
+                    }
+                }
+            }
+        }
+
+        List<Extension> customPersonAttributeEditFragments =
+				appFrameworkService.getExtensionsForCurrentUser("userAccount.personAttributeEditFragment");
+        for(Extension ext : customPersonAttributeEditFragments) {
+            if (StringUtils.equals(ext.getExtensionParams().get("type").toString(), "personAttribute")) {
+                String formFiledName = ext.getExtensionParams().get("formFieldName").toString();
+                String personAttributeTypeUuid = ext.getExtensionParams().get("uuid").toString();
+                String[] parameterValues = parameterMap.get(formFiledName);
+                if (parameterValues != null && parameterValues.length > 0) {
+                    if (parameterValues.length > 1) {
+                        log.warn("Multiple values for a single person attribute type not supported, ignoring extra values");
+                    }
+                    String parameterValue = parameterValues[0];
+                    if (parameterValue != null) {
+                        PersonAttributeType personAttributeByUuid = Context.getPersonService()
+                                .getPersonAttributeTypeByUuid(personAttributeTypeUuid);
+                        if (personAttributeByUuid != null) {
+                            PersonAttribute attribute = new PersonAttribute(personAttributeByUuid, parameterValue);
+                            account.getPerson().addAttribute(attribute);
+                        }
+                    }
+                }
+            }
+        }
+
 		if (otherAccountData.getAddUserAccount()) {
 			//The StringToRoleConverter emrapi for some reason is taking precedence over the
 			//one in uiframework module and it doesn't get role by uuid, so we have to do this
@@ -125,7 +178,6 @@ public class AccountPageController {
 			
 			String forcePassword = otherAccountData.getForceChangePassword() ? "true" : "false";
 			user.setUserProperty(OpenmrsConstants.USER_PROPERTY_CHANGE_PASSWORD, forcePassword);
-			
 			account.addUserAccount(user);
 		}
 		if (otherAccountData.getAddProviderAccount()) {
@@ -160,7 +212,7 @@ public class AccountPageController {
 		}
 		
 		setModelAttributes(model, account, otherAccountData, accountService, administrationService,
-		    providerManagementService, uu);
+		    providerManagementService, uu, appFrameworkService);
 		
 		sendErrorMessage(errors, model, messageSourceService, request);
 		
@@ -174,8 +226,9 @@ public class AccountPageController {
 	
 	public void setModelAttributes(PageModel model, Account account, OtherAccountData otherAccountData,
 	                               AccountService accountService, AdministrationService administrationService,
-	                               ProviderManagementService providerManagementService, UiUtils uu) throws IOException {
-		
+	                               ProviderManagementService providerManagementService, UiUtils uu,
+								   AppFrameworkService appFrameworkService) throws IOException {
+
 		model.addAttribute("account", account);
 		Boolean forcePasswordChange = null;
 		if (otherAccountData == null) {
@@ -203,7 +256,25 @@ public class AccountPageController {
 		model.addAttribute("allowedLocales", administrationService.getAllowedLocales());
 		List<ProviderRole> providerRoles = providerManagementService.getAllProviderRoles(false);
 		model.addAttribute("providerRoles", providerRoles);
-		
+
+		List<Extension> customPersonAttributeEditFragments =
+				appFrameworkService.getExtensionsForCurrentUser("userAccount.personAttributeEditFragment");
+		Collections.sort(customPersonAttributeEditFragments);
+		model.addAttribute("customPersonAttributeEditFragments", customPersonAttributeEditFragments);
+		List<Extension> customPersonAttributeViewFragments =
+				appFrameworkService.getExtensionsForCurrentUser("userAccount.personAttributeViewFragment");
+		Collections.sort(customPersonAttributeViewFragments);
+		model.addAttribute("customPersonAttributeViewFragments", customPersonAttributeViewFragments);
+
+		List<Extension> customUserPropertyEditFragments =
+				appFrameworkService.getExtensionsForCurrentUser("userAccount.userPropertyEditFragment");
+		Collections.sort(customUserPropertyEditFragments);
+		model.addAttribute("customUserPropertyEditFragments", customUserPropertyEditFragments);
+		List<Extension> customUserPropertyViewFragments =
+				appFrameworkService.getExtensionsForCurrentUser("userAccount.userPropertyViewFragment");
+		Collections.sort(customUserPropertyViewFragments);
+		model.addAttribute("customUserPropertyViewFragments", customUserPropertyViewFragments);
+
 		Map<String, Integer> propertyMaxLengthMap = new HashMap<String, Integer>();
 		propertyMaxLengthMap.put("familyName",
 		    administrationService.getMaximumPropertyLength(PersonName.class, "family_name"));
@@ -250,6 +321,12 @@ public class AccountPageController {
 				force = (user.getUserId() == null) ? true : account.isSupposedToChangePassword(user);
 			}
 			userProperties.put(OpenmrsConstants.USER_PROPERTY_CHANGE_PASSWORD, force);
+			for(Extension ext : customUserPropertyViewFragments) {
+				if (ext.getExtensionParams().get("type").equals("userProperty")) {
+					String userPropertyName = ext.getExtensionParams().get("userPropertyName").toString();
+					userProperties.put(userPropertyName, user.getUserProperty(userPropertyName));
+				}
+			}
 			simpleUser.put("userProperties", userProperties);
 			simpleUser.put("retired", user.getRetired());
 			
@@ -290,7 +367,28 @@ public class AccountPageController {
 		so.put("restored", uu.message("adminui.restored"));
 		so.put("changedByOn", uu.message("adminui.changedByOn"));
 		so.put("auditInfoFail", uu.message("adminui.getAuditInfo.fail"));
-		
+
+		so = new SimpleObject();
+		for(Extension ext : customPersonAttributeEditFragments) {
+			Object type = ext.getExtensionParams().get("type");
+			Object personAttributeTypeUuid = ext.getExtensionParams().get("uuid");
+			Person person = account.getPerson();
+			if (person != null && type != null && personAttributeTypeUuid != null &&
+					type.toString().equals("personAttribute")) {
+				String formFieldName = ext.getExtensionParams().get("formFieldName").toString();
+				PersonAttribute personAttribute = person.getAttribute(Context.getPersonService()
+						.getPersonAttributeTypeByUuid(personAttributeTypeUuid.toString()));
+				if(personAttribute != null) {
+					String personAttributeUuid = personAttribute.getUuid();
+					SimpleObject personAttributeInfo = new SimpleObject();
+					personAttributeInfo.put("formFieldName", formFieldName);
+					personAttributeInfo.put("personAttributeUuid", personAttributeUuid);
+					so.put("personAttributeInfo", personAttributeInfo);
+				}
+			}
+		}
+		model.addAttribute("customPersonAttributeJson", mapper.writeValueAsString(so));
+
 		model.addAttribute("messages", mapper.writeValueAsString(so));
 	}
 	

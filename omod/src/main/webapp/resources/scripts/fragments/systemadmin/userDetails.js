@@ -138,6 +138,15 @@ angular.module("adminui.userDetails", ["userService", "ngDialog", "adminui.shoul
                 if(modelUser.userProperties.forcePassword){
                     uProperties.forcePassword = "true";
                 }
+                angular.forEach(modelUser.userProperties, function(value, key) {
+                    if(key != "forcePassword") {
+                        var domElement = document.getElementById(key + userUuid);
+                        if (domElement) {
+                            uProperties[key] = domElement.value;
+                        }
+                    }
+                });
+                
                 var toSave = {
                     username: modelUser.username,
                     roles: privilegesLevelAndCapabilities,
