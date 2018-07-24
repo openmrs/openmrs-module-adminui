@@ -31,6 +31,7 @@ import org.openmrs.api.context.Context;
 import org.openmrs.module.adminui.AdminUiConstants;
 import org.openmrs.util.OpenmrsUtil;
 import org.openmrs.web.user.UserProperties;
+import org.openmrs.PersonAttribute;
 
 public class Account {
 	
@@ -130,7 +131,21 @@ public class Account {
 	public String getGender() {
 		return getPerson().getGender();
 	}
-	
+
+	public List<PersonAttribute> getActiveAttributes() {
+		return getPerson().getActiveAttributes();
+	}
+
+	public PersonAttribute getPersonAttribute(String attributeTypeUuid) {
+		Person person = getPerson();
+		if (person != null) {
+			PersonAttribute attr = person.getAttribute(Context.getPersonService().getPersonAttributeTypeByUuid(
+					attributeTypeUuid));
+			return attr;
+		}
+		return null;
+	}
+
 	public Role getPrivilegeLevel(User user) {
 		if (user != null && user.getRoles() != null) {
 			for (Role r : user.getRoles()) {

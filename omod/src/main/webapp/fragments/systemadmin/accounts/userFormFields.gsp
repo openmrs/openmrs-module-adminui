@@ -128,6 +128,16 @@
        ng-model="uuidUserMap['${userUuid}'].userProperties.forcePassword" />${ ui.message("adminui.account.user.forcePasswordChange") }
 </p>
 
+<% customUserPropertyEditFragments.each { fragment -> %>
+    ${ ui.includeFragment(fragment.extensionParams.provider, fragment.extensionParams.fragment, [
+            formFieldName : fragment.extensionParams.userPropertyName + userUuid,
+            id : fragment.extensionParams.userPropertyName + userUuid,
+            title : ui.message(fragment.extensionParams.title),
+            label : ui.message(fragment.extensionParams.label),
+            initialValue : ''
+    ])}
+<% } %>
+
 <label>${ ui.message('adminui.account.capabilities') }</label>
 <table class="adminui-display-table" cellspacing="0" cellpadding="0">
     <%/* Group the them into 2 columns */%>

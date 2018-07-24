@@ -3,6 +3,7 @@
 
     def user = config.user;
     def uuid = user.uuid ?: '';
+
 %>
 
 <div class="user-${uuid}" ${user.userId ? "" : "hidden"}>
@@ -30,6 +31,18 @@
                 {{yesOrNo[uuidUserMap['${uuid}'].userProperties.forcePassword]}}
             </td>
         </tr>
+
+        <% customUserPropertyViewFragments.each { fragment -> %>
+            ${ ui.includeFragment(fragment.extensionParams.provider, fragment.extensionParams.fragment, [
+                    label : ui.message(fragment.extensionParams.label),
+                    personId : account.person.personId,
+                    personUuid : account.person.uuid,
+                    userId : user.userId,
+                    userUuid : user.uuid
+            ])}
+        <% }
+        %>
+
         <tr>
             <th valign="top">${ui.message("adminui.account.capabilities")}</th>
             <td valign="top" ng-class="{retired: uuidUserMap['${uuid}'].retired}">
