@@ -134,7 +134,9 @@
             id : fragment.extensionParams.userPropertyName + userUuid,
             title : ui.message(fragment.extensionParams.title),
             label : ui.message(fragment.extensionParams.label),
-            initialValue : ''
+            initialValue : '',
+            userId : user ? user.userId : "" ,
+            userUuid : user ? user.uuid : ""
     ])}
 <% } %>
 
