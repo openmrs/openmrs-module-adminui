@@ -123,7 +123,9 @@
                         title : ui.message(fragment.extensionParams.title),
                         label : ui.message(fragment.extensionParams.label),
                         initialValue : ui.message(account.getPersonAttribute(fragment.extensionParams.uuid) != null ?
-                                account.getPersonAttribute(fragment.extensionParams.uuid).value : '')
+                                account.getPersonAttribute(fragment.extensionParams.uuid).value : ''),
+                        personId : account.person ? account.person.personId : "",
+                        personUuid : account.person ? account.person.uuid : ""
                 ])}
             <% }
             }%>

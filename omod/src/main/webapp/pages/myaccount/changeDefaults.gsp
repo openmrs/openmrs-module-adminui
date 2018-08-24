@@ -26,7 +26,7 @@
 
 <h2>${ui.message("adminui.myAccount.myLanguages.label")}</h2>
 <div ng-app="changeLanguage" ng-controller="changeLanguageController">
-<form class="simple-form-ui" method="post" >
+<form class="simple-form-ui" method="post" name="languagesForm">
 
     ${ui.includeFragment("uicommons", "field/dropDown", [
         id           : "default-locale",
@@ -46,7 +46,8 @@
     </div>
 
     <div class="adminui-section-padded-top">
-        <input type="submit" class="confirm right" value="${ui.message("general.save")}"/>
+        <input type="submit" class="confirm right" value="${ui.message("general.save")}" 
+        		onclick="document.languagesForm.submit()"/>
         <input type="button" id="cancel-button" class="cancel" value="${ui.message("general.cancel")}"
                onclick="window.location='${ui.pageLink("adminui", "myaccount/myAccount")}'" />
     </div>
