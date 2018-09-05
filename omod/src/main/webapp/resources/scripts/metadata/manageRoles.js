@@ -122,11 +122,33 @@ angular.module("manageRoles", [ "roleService", "privilegeService", "ngDialog", "
                         $scope.privileges = results;
                         $scope.inheritedPrivilegeFlags = Array($scope.privileges.length);
                         $scope.privilegeFlags = Array($scope.privileges.length);
-                                                
+                        if ($scope.role.name.indexOf(':') > -1) {
+                        	var roleType = $scope.role.name.slice(0, $scope.role.name.indexOf(':'));
+                        	if (roleType == 'Application') {
+                        		filterPrivileges();
+                        	}
+                        }
+                                               
                         loadInheritedPrivileges();
 
                     });
                 });
+            }
+            // Filters Privileges to required criteria. ie Only "Application privileges" are required.
+            function filterPrivileges() {
+            	var inheritedPrivileges =[];
+            	$scope.privileges.forEach(function(val, idx) {
+            		if ($scope.privileges[idx].name.indexOf(":") > -1) {
+            		   var privType = $scope.privileges[idx].name.slice(0, $scope.privileges[idx].name.indexOf(":"));
+            		   if (privType == "App"|| privType == "Task") {
+            			   inheritedPrivileges.push(val);
+            		   }
+            		}
+                });   
+            	$scope.privileges = [];
+            	inheritedPrivileges.forEach(function(val, idx) {
+            		$scope.privileges.push(val);
+            	});
             }
 
             function loadPrivilegeFlags() {
@@ -165,9 +187,23 @@ angular.module("manageRoles", [ "roleService", "privilegeService", "ngDialog", "
                 }
                 loadPrivilegeFlags();
             }
-
+            // Filter roles ie Remove roles that aren't of type "Privilege Level"
+            function filterInheritedRoles() {
+            	var inheritedRoles = [];
+            	$scope.roles.forEach(function(val, idx) {
+            		var roleType = $scope.roles[idx].name.slice(0, $scope.roles[idx].name.indexOf(":"));
+            		if (roleType == "Privilege Level") {
+            			inheritedRoles.push(val);
+            		}
+                });   
+            	$scope.roles = [];
+            	inheritedRoles.forEach(function(val, idx) {
+            		$scope.roles.push(val);	
+            	});
+            }
             function loadInheritedRoles() {                
-                if ($scope.roles != null) {                                         
+                if ($scope.roles != null) {  
+                	filterInheritedRoles();
                 	$scope.roles.forEach(function(val, idx) {
 	                    $scope.inheritedRoles[idx] = isInArray($scope.role.allInheritedRoles, val);
                     });   
