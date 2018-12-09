@@ -23,6 +23,7 @@ import org.openmrs.api.UserService;
 import org.openmrs.api.context.Context;
 import org.openmrs.api.db.DAOException;
 import org.openmrs.messagesource.MessageSourceService;
+import org.openmrs.module.adminui.page.controller.PasswordValidation;
 import org.openmrs.module.uicommons.UiCommonsConstants;
 import org.openmrs.module.uicommons.util.InfoErrorMessageUtil;
 import org.openmrs.ui.framework.annotation.SpringBean;
@@ -53,8 +54,7 @@ public class ChangePasswordPageController {
 	}
 	
 	public void setModelAttributes(PageModel model, AdministrationService adminService) {
-		model.addAttribute("passwordMinLength",
-		    adminService.getGlobalProperty(OpenmrsConstants.GP_PASSWORD_MINIMUM_LENGTH, "8"));
+		PasswordValidation.addPasswordValidationAttributes(model, adminService);
 	}
 	
 	public String post(PageModel model, @SpringBean("userService") UserService userService,

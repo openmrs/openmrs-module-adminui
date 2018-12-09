@@ -35,6 +35,7 @@ import org.openmrs.module.adminui.AdminUiConstants;
 import org.openmrs.module.adminui.account.Account;
 import org.openmrs.module.adminui.account.AccountService;
 import org.openmrs.module.adminui.account.AdminUiAccountValidator;
+import org.openmrs.module.adminui.page.controller.PasswordValidation;
 import org.openmrs.module.appframework.domain.Extension;
 import org.openmrs.module.appframework.service.AppFrameworkService;
 import org.openmrs.module.providermanagement.Provider;
@@ -284,8 +285,7 @@ public class AccountPageController {
 		propertyMaxLengthMap.put("username", administrationService.getMaximumPropertyLength(User.class, "username"));
 		propertyMaxLengthMap.put("password", administrationService.getMaximumPropertyLength(User.class, "password"));
 		model.addAttribute("propertyMaxLengthMap", propertyMaxLengthMap);
-		model.addAttribute("passwordMinLength",
-		    administrationService.getGlobalProperty(OpenmrsConstants.GP_PASSWORD_MINIMUM_LENGTH, "8"));
+		PasswordValidation.addPasswordValidationAttributes(model, administrationService);
 		
 		ObjectMapper mapper = new ObjectMapper();
 		SimpleObject so = new SimpleObject();

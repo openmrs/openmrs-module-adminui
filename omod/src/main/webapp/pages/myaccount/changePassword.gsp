@@ -7,6 +7,37 @@
 
     ui.includeCss("adminui", "adminui.css")
 
+    def passwordAttributes = ["ng-model": "newPassword", required:"", "ng-minlength": passwordMinLength]
+
+    def pattern
+    def patternErrorMessage
+    if (passwordReqUpperAndLowerCase || passwordReqDigit || passwordReqNonDigit || passwordReqRegex) {
+        pattern = "/^"
+        patternErrorMessage = ui.message("adminui.field.require.pattern.begin");
+        if (passwordReqUpperAndLowerCase) {
+            pattern += "(?=.*?[A-Z])(?=.*?[a-z])"
+            patternErrorMessage += " " + ui.message("adminui.field.require.pattern.reqUpperAndLowerCase") + ","
+        }
+        if (passwordReqDigit) {
+            pattern += "(?=.*\\d)"
+            patternErrorMessage += " " + ui.message("adminui.field.require.pattern.reqDigit") + ","
+        }
+        if (passwordReqNonDigit) {
+            pattern += "(?=.*[^\\d])"
+            patternErrorMessage += " " + ui.message("adminui.field.require.pattern.reqNonDigit") + ","
+        }
+        if (passwordReqRegex) {
+            pattern += "(?="
+            pattern += passwordReqRegex
+            pattern += ")"
+            patternErrorMessage += " " + ui.message("adminui.field.require.pattern.reqRegex", passwordReqRegex) + ","
+        }
+        patternErrorMessage = patternErrorMessage.substring(0, patternErrorMessage.length() - 1)
+        pattern += "[\\w|\\W]*\$/"
+
+        passwordAttributes.put("ng-pattern", pattern)
+    }
+
 %>
 
 <script type="text/javascript">
@@ -45,7 +76,7 @@
             id: "newPassword",
             label: ui.message("adminui.account.newPassword")+"<span class='adminui-text-red'>*</span>",
             formFieldName: "newPassword",
-            otherAttributes: ["ng-model": "newPassword", required:"", "ng-minlength": passwordMinLength]
+            otherAttributes: passwordAttributes
     ]) }
     <span class="field-error" ng-show="changePasswordForm.newPassword.\$dirty
             && changePasswordForm.newPassword.\$invalid">
@@ -53,8 +84,13 @@
             ${ui.message("adminui.field.required")}
         </span>
         <span ng-show="changePasswordForm.newPassword.\$error.minlength">
-            ${ui.message("adminui.field.require.minChars", passwordMinLength)}
+            ${ui.message("adminui.field.require.minChars", passwordMinLength)}<br>
         </span>
+        <% if (pattern) { %>
+        <span ng-show="changePasswordForm.newPassword.\$error.pattern">
+            ${patternErrorMessage}
+        </span>
+        <% } %>
     </span>
 
     ${ ui.includeFragment("uicommons", "field/passwordField", [
