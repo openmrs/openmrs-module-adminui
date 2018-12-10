@@ -49,12 +49,14 @@ public class ChangePasswordPageController {
 		return "forward:/adminui/myaccount/changePassword.page";
 	}
 	
-	public void get(PageModel model, @SpringBean("adminService") AdministrationService adminService) {
-		setModelAttributes(model, adminService);
+	public void get(PageModel model,
+			        @SpringBean("adminService") AdministrationService adminService,
+			        @SpringBean("messageSourceService") MessageSourceService mss) {
+		setModelAttributes(model, adminService, mss);
 	}
 	
-	public void setModelAttributes(PageModel model, AdministrationService adminService) {
-		PasswordValidation.addPasswordValidationAttributes(model, adminService);
+	public void setModelAttributes(PageModel model, AdministrationService adminService, MessageSourceService mss) {
+		PasswordValidation.addPasswordValidationAttributes(model, adminService, mss);
 	}
 	
 	public String post(PageModel model, @SpringBean("userService") UserService userService,
@@ -77,7 +79,7 @@ public class ChangePasswordPageController {
 		if (errorMessage == null) {
 			try {
 				OpenmrsUtil.validatePassword(user.getUsername(), newPassword, user.getSystemId());
-				
+
 				String nextPage = "redirect:/index.htm";
 				try {
 					userService.changePassword(oldPassword, newPassword);
@@ -132,7 +134,7 @@ public class ChangePasswordPageController {
 		
 		request.getSession().setAttribute(UiCommonsConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE, errorMessage);
 		
-		setModelAttributes(model, adminService);
+		setModelAttributes(model, adminService, mss);
 		
 		return "myaccount/changePassword";
 	}

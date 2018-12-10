@@ -42,33 +42,8 @@
         passwordAttributes[requiredAttribute] = requiredAttributeValue;
     }
 
-    def pattern
-    def patternErrorMessage
-    if (passwordReqUpperAndLowerCase || passwordReqDigit || passwordReqNonDigit || passwordReqRegex) {
-        pattern = "/^"
-        patternErrorMessage = ui.message("adminui.field.require.pattern.begin");
-        if (passwordReqUpperAndLowerCase) {
-            pattern += "(?=.*?[A-Z])(?=.*?[a-z])"
-            patternErrorMessage += " " + ui.message("adminui.field.require.pattern.reqUpperAndLowerCase") + ","
-        }
-        if (passwordReqDigit) {
-            pattern += "(?=.*\\d)"
-            patternErrorMessage += " " + ui.message("adminui.field.require.pattern.reqDigit") + ","
-        }
-        if (passwordReqNonDigit) {
-            pattern += "(?=.*[^\\d])"
-            patternErrorMessage += " " + ui.message("adminui.field.require.pattern.reqNonDigit") + ","
-        }
-        if (passwordReqRegex) {
-            pattern += "(?="
-            pattern += passwordReqRegex
-            pattern += ")"
-            patternErrorMessage += " " + ui.message("adminui.field.require.pattern.reqRegex", passwordReqRegex) + ","
-        }
-        patternErrorMessage = patternErrorMessage.substring(0, patternErrorMessage.length() - 1)
-        pattern += "[\\w|\\W]*\$/"
-
-        passwordAttributes.put("ng-pattern", pattern)
+    if (pattern) {
+        passwordAttributes.put("ng-pattern", pattern);
     }
 
     def otherPasswordAttributes= ["ng-model": "uuidUserMap['"+userUuid+"'].password"]
