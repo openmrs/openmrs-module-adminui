@@ -130,10 +130,15 @@ public class AccountPageController {
                 String userPropertyName = ext.getExtensionParams().get("userPropertyName").toString();
                 String[] parameterValues = parameterMap.get(userPropertyName);
                 if (parameterValues != null && parameterValues.length > 0) {
-                    if (parameterValues.length > 1) {
-                        log.warn("Multiple userProperty for a single user type not supported, ignoring extra values");
+                    String parameterValue;
+                    if (userPropertyName == "locationUuid") {
+                    	parameterValue = String.join(",", parameterValues);
+                    } else {
+                        if (parameterValues.length > 1) {
+                            log.warn("Multiple userProperty for a single user type not supported, ignoring extra values");
+                        }
+                        parameterValue = parameterValues[0];
                     }
-                    String parameterValue = parameterValues[0];
                     if (userPropertyName != null && parameterValue != null) {
                         user.setUserProperty(userPropertyName, parameterValue);
                     }
