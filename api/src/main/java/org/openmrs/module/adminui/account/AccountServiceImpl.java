@@ -188,5 +188,83 @@ public class AccountServiceImpl extends BaseOpenmrsService implements AccountSer
 		}
 		return privilegeLevels;
 	}
+
+	@Override
+	public List<Account> getAllRetiredProviderAccounts() {
+
+		Map<Person, Account> personAccountMap = new LinkedHashMap<Person, Account>();
+		List<Provider> unknownProviders = new ArrayList<Provider>();
+		String unknownProviderUuid = adminService.getGlobalProperty("emr.unknownProvider");
+		if (StringUtils.isNotBlank(unknownProviderUuid)) {
+			unknownProviders.add(providerService.getProviderByUuid(unknownProviderUuid));
+		}
+		// Include also the unknown provider from core
+		if (providerService.getUnknownProvider() != null) {
+			unknownProviders.add(providerService.getUnknownProvider());
+		}
+		for (Provider provider : providerService.getAllProviders()) {
+			// skip the unknown providers
+			if (unknownProviders.contains(provider)) {
+				continue;
+			}
+			// skip active provider accounts
+			if (provider.getRetired().equals(false)) {
+				continue;
+			}
+
+			Person person = provider.getPerson();
+			if (person == null) {
+				person = new Person();
+			}
+			Account account = personAccountMap.get(person);
+			if (account == null) {
+				account = new Account(person);
+				personAccountMap.put(person, account);
+			}
+			if (!account.getProviderAccounts().contains(provider)) {
+				// We don't use account.addProviderAccount because
+				// If the session gets auto flushed, the new person object
+				// that account.addProviderAccount sets might get saved to the DB
+				account.getProviderAccounts().add(provider);
+			}
+		}
+
+		List<Account> accounts = new ArrayList<Account>();
+		accounts.addAll(personAccountMap.values());
+
+		return accounts;
+	}
+
+	@Override
+	public List<Account> getAllRetiredUserAccounts() {
+		Map<Person, Account> personAccountMap = new LinkedHashMap<Person, Account>();
+
+		for (User user : userService.getAllUsers()) {
+			// exclude daemon user
+			if (AdminUiConstants.DAEMON_USER_UUID.equals(user.getUuid())) {
+				continue;
+			}
+			// exclude non retired users
+			if (user.getRetired().equals(false)) {
+				continue;
+			}
+
+			Person person = user.getPerson();
+			Account account = personAccountMap.get(person);
+			if (account == null) {
+				account = new Account(person);
+				personAccountMap.put(person, account);
+			}
+			if (!account.getUserAccounts().contains(user)) {
+				account.addUserAccount(user);
+			}
+		}
+
+		List<Account> accounts = new ArrayList<Account>();
+		accounts.addAll(personAccountMap.values());
+
+		return accounts;
+
+	}
 	
 }

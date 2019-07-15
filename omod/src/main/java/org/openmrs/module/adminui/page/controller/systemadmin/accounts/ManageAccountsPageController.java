@@ -28,8 +28,9 @@ public class ManageAccountsPageController {
 	 */
 	public void get(PageModel model, @SpringBean("adminAccountService") AccountService accountService,
 	                @SpringBean("adminService") AdministrationService adminService) {
-		
+		List<Account> retiredUserAccounts = accountService.getAllRetiredUserAccounts();
 		List<Account> accounts = accountService.getAllAccounts();
+		accounts.removeAll(retiredUserAccounts);
 		model.addAttribute("accounts", accounts);
 		Map<Provider, String> providerNameMap = new HashMap<Provider, String>();
 		for (Account a : accountService.getAllAccounts()) {
@@ -44,6 +45,7 @@ public class ManageAccountsPageController {
 					
 					providerNameMap.put(p, (String) rows.get(0).get(0));
 				}
+
 			}
 		}
 		

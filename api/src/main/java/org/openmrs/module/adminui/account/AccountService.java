@@ -14,7 +14,7 @@ import java.util.List;
 import org.openmrs.Role;
 
 public interface AccountService {
-	
+
 	/**
 	 * Save the account details to the database
 	 *
@@ -22,22 +22,35 @@ public interface AccountService {
 	 * @should save the account
 	 */
 	void saveAccount(Account account);
-	
+
 	/**
 	 * @return
 	 * @should get all unique accounts
 	 */
 	List<Account> getAllAccounts();
-	
+
+	/**
+	 * @return
+	 * @should get all retired provider accounts
+	 */
+	List<Account> getAllRetiredProviderAccounts();
+
+	/**
+	 * @return
+	 * @should get all retired user accounts
+	 */
+	List<Account> getAllRetiredUserAccounts();
+
 	/**
 	 * Gets all Capabilities, i.e roles with the
-	 * {@link org.openmrs.module.adminui.AdminUiConstants#ROLE_PREFIX_CAPABILITY} prefix
+	 * {@link org.openmrs.module.adminui.AdminUiConstants#ROLE_PREFIX_CAPABILITY}
+	 * prefix
 	 *
 	 * @return a list of Roles
 	 * @should return all roles with the capability prefix
 	 */
 	List<Role> getAllCapabilities();
-	
+
 	/**
 	 * Gets all Privilege Levels, i.e roles with the
 	 *
@@ -45,5 +58,5 @@ public interface AccountService {
 	 * @should return all roles with the privilege level prefix
 	 */
 	List<Role> getAllPrivilegeLevels();
-	
+
 }
