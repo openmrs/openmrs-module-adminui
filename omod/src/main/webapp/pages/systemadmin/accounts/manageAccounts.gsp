@@ -16,7 +16,7 @@
 </a>
 
 <hr>
-<table id="list-accounts" cellspacing="0" cellpadding="2">
+<table id="list-accounts" class="table table-sm table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl"  cellspacing="0" cellpadding="2">
     <thead>
     <tr>
         <th class="adminui-expand-column ">${ ui.message("general.name")}</th>

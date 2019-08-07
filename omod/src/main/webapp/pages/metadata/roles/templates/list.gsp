@@ -2,7 +2,7 @@
 <br/>
 <br/>
 
-<table id="list-roles" cellspacing="0" cellpadding="2">
+<table class="table table-sm table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl" id="list-roles" cellspacing="0" cellpadding="2">
     <thead>
     <tr>
         <th class="adminui-name-column">${ui.message('adminui.role.role')}</th>

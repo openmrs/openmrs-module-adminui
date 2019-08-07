@@ -2,7 +2,7 @@
 <br/>
 <br/>
 
-<table>
+<table class="table table-sm table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl">
     <thead>
     <tr>
         <th class="adminui-name-column">${ui.message('general.name')}</th>

@@ -17,7 +17,7 @@
 			${ ui.message("adminui.role.containedRoles.label") } {{role.name}}
 	    </p>
 	    <p>
-            <table>
+            <table class="table table-sm table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl">
                 <tbody>
                     <tr ng-repeat="(idx, val) in dependantRoles" ng-hide="idx % 2">
                         <td >
@@ -35,7 +35,7 @@
         <label>${ ui.message("adminui.role.inheritedRoles") }</label>
     </p>
     <p>
-        <table>
+        <table class="table table-sm table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl">
             <tbody>
                 <tr ng-repeat="(idx, val) in roles" ng-hide="idx % 2">
                     <td>
@@ -55,7 +55,7 @@
         <label>${ ui.message("adminui.role.inheritedPrivileges.label") }</label>
     </p>
      <p>
-        <table>
+        <table class="table table-sm table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl">
             <tbody>
                 <tr ng-repeat="(idx, val) in privileges" ng-hide="idx % 2">
                     <td ng-class="{disabled: inheritedPrivilegeFlags[idx] }">

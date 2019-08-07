@@ -69,7 +69,7 @@
             changeAuditInfo='${changeAuditInfo}'; personUuid='${account.person.uuid}'">
 
         <fieldset class="right">
-            <legend>${ui.message('adminui.auditInfo')}</legend>
+            <legend class="w-auto">${ui.message('adminui.auditInfo')}</legend>
             <p>
                 <span class="adminui-label">${ui.message('general.uuid')}:</span> ${ account.person.uuid }
             </p>

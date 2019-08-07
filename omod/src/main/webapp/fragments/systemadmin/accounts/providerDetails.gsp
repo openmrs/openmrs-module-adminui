@@ -15,7 +15,7 @@
 <form name="providerDetailsForm" class="simple-form-ui" novalidate>
 <% } %>
     <fieldset class="adminui-account-fieldset">
-    <legend><b>${ ui.message("adminui.provider.details") }</b></legend>
+    <legend class="w-auto"><b>${ ui.message("adminui.provider.details") }</b></legend>
     <% if(createAccount) { %>
         <input id="adminui-addProviderAccount" type="checkbox" name="addProviderAccount" value="true"
         <% if (otherAccountData.getAddProviderAccount()) { %> checked='checked'<% } %>
