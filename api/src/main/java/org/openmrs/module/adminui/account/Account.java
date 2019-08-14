@@ -34,15 +34,15 @@ import org.openmrs.web.user.UserProperties;
 import org.openmrs.PersonAttribute;
 
 public class Account {
-	
+
 	private Person person;
-	
+
 	private List<User> userAccounts;
-	
+
 	private List<Provider> providerAccounts;
-	
+
 	private Map<User, String> userPasswordMap = new HashMap<User, String>();
-	
+
 	public Account(Person person) {
 		this.person = person;
 		if (getPerson().getPersonId() != null) {
@@ -56,28 +56,28 @@ public class Account {
 			}
 		}
 	}
-	
+
 	public Person getPerson() {
 		if (person == null) {
 			person = new Person();
 		}
 		return person;
 	}
-	
+
 	public List<User> getUserAccounts() {
 		if (userAccounts == null) {
 			userAccounts = new ArrayList<User>();
 		}
 		return userAccounts;
 	}
-	
+
 	public List<Provider> getProviderAccounts() {
 		if (providerAccounts == null) {
 			providerAccounts = new ArrayList<Provider>();
 		}
 		return providerAccounts;
 	}
-	
+
 	public void addUserAccount(User user) {
 		if (user.getPerson() == null) {
 			user.setPerson(getPerson());
@@ -88,7 +88,7 @@ public class Account {
 		}
 		getUserAccounts().add(user);
 	}
-	
+
 	public void addProviderAccount(Provider provider) {
 		if (provider.getPerson() == null) {
 			provider.setPerson(getPerson());
@@ -99,35 +99,35 @@ public class Account {
 		}
 		getProviderAccounts().add(provider);
 	}
-	
+
 	private void initializePersonNameIfNecessary() {
 		if (getPerson().getPersonName() == null) {
 			getPerson().addName(new PersonName());
 		}
 	}
-	
+
 	public void setGivenName(String givenName) {
 		initializePersonNameIfNecessary();
 		getPerson().getPersonName().setGivenName(givenName);
 	}
-	
+
 	public String getGivenName() {
 		return getPerson().getGivenName();
 	}
-	
+
 	public void setFamilyName(String familyName) {
 		initializePersonNameIfNecessary();
 		getPerson().getPersonName().setFamilyName(familyName);
 	}
-	
+
 	public String getFamilyName() {
 		return getPerson().getFamilyName();
 	}
-	
+
 	public void setGender(String gender) {
 		getPerson().setGender(gender);
 	}
-	
+
 	public String getGender() {
 		return getPerson().getGender();
 	}
@@ -156,7 +156,7 @@ public class Account {
 		}
 		return null;
 	}
-	
+
 	public Set<Role> getCapabilities(User user) {
 		Set<Role> capabilities = new HashSet<Role>();
 		if (user != null && user.getRoles() != null) {
@@ -168,19 +168,19 @@ public class Account {
 		}
 		return capabilities;
 	}
-	
+
 	public User getCreator() {
 		return getPerson().getCreator();
 	}
-	
+
 	public Date getDateCreated() {
 		return getPerson().getDateCreated();
 	}
-	
+
 	/**
 	 * Gets changedBy value for the most recently edited entity of the account i.e the person,
 	 * providers and user accounts
-	 * 
+	 *
 	 * @return the most recent changedBy value
 	 * @should return the most recent changedBy value
 	 */
@@ -188,10 +188,10 @@ public class Account {
 		if (getSortedAuditables().isEmpty()) {
 			return null;
 		}
-		
+
 		return getSortedAuditables().get(0).getChangedBy();
 	}
-	
+
 	/**
 	 * Get dateChanged value for the most recently edited entity of the account i.e the person,
 	 * providers and user accounts
@@ -203,23 +203,23 @@ public class Account {
 		if (getSortedAuditables().isEmpty()) {
 			return null;
 		}
-		
+
 		return getSortedAuditables().get(0).getDateChanged();
-		
+
 	}
-	
+
 	public boolean isSupposedToChangePassword(User user) {
 		return new UserProperties(user.getUserProperties()).isSupposedToChangePassword();
 	}
-	
+
 	public String getPassword(User user) {
 		return userPasswordMap.get(user);
 	}
-	
+
 	public String setPassword(User user, String password) {
 		return userPasswordMap.put(user, password);
 	}
-	
+
 	private List<Auditable> getSortedAuditables() {
 		List<Auditable> auditables = new ArrayList<Auditable>();
 		auditables.add(getPerson());
@@ -231,7 +231,7 @@ public class Account {
 		auditables.addAll(getUserAccounts());
 		auditables.addAll(getProviderAccounts());
 		Collections.sort(auditables, Collections.reverseOrder(new Comparator<Auditable>() {
-			
+
 			@Override
 			public int compare(Auditable a1, Auditable a2) {
 				Date date1 = (a1 != null) ? a1.getDateChanged() : null;
@@ -239,9 +239,9 @@ public class Account {
 				return OpenmrsUtil.compareWithNullAsEarliest(date1, date2);
 			}
 		}));
-		
+
 		return auditables;
-		
+
 	}
-	
+
 }

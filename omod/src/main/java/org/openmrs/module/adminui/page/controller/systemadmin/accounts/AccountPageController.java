@@ -60,13 +60,13 @@ import org.openmrs.PersonAttribute;
  * This controller only handles requests to create a new account and doesn't support editing
  */
 public class AccountPageController {
-	
+
 	protected final Log log = LogFactory.getLog(getClass());
-	
+
 	public Account getAccount(@RequestParam(value = "personId", required = false) Person person) {
-		
+
 		Account account;
-		
+
 		if (person == null) {
 			account = new Account(new Person());
 		} else {
@@ -75,10 +75,10 @@ public class AccountPageController {
 				throw new APIException("Failed to find user account matching person with id:" + person.getPersonId());
 			}
 		}
-		
+
 		return account;
 	}
-	
+
 	/**
 	 * @param model
 	 * @param account
@@ -92,13 +92,13 @@ public class AccountPageController {
 					UiUtils uu,
 					@SpringBean("appFrameworkService") AppFrameworkService appFrameworkService)
 	    throws IOException {
-		
+
 		setModelAttributes(model, account, null, accountService, administrationService, providerManagementService, uu, appFrameworkService);
 		if (account.getPerson().getPersonId() == null) {
 			setJsonFormData(model, account, null);
 		}
 	}
-	
+
 	/**
 	 * @param account
 	 * @param messageSourceService
@@ -119,7 +119,6 @@ public class AccountPageController {
 	                   @SpringBean("providerManagementService") ProviderManagementService providerManagementService,
 					   @SpringBean("appFrameworkService") AppFrameworkService appFrameworkService,
 	                   HttpServletRequest request, UiUtils uu) throws IOException {
-		
 		Errors errors = new BeanPropertyBindingResult(account, "account");
 
         List<Extension> customUserPropertyEditFragments =
@@ -128,7 +127,7 @@ public class AccountPageController {
         for(Extension ext : customUserPropertyEditFragments) {
             if (StringUtils.equals(ext.getExtensionParams().get("type").toString(), "userProperty")) {
                 String userPropertyName = ext.getExtensionParams().get("userPropertyName").toString();
-                String[] parameterValues = parameterMap.get(userPropertyName);
+				String[] parameterValues = parameterMap.get(userPropertyName);
                 if (parameterValues != null && parameterValues.length > 0) {
                     String parameterValue;
                     if (userPropertyName == "locationUuid") {
@@ -180,7 +179,7 @@ public class AccountPageController {
 					user.addRole(userService.getRoleByUuid(uuid));
 				}
 			}
-			
+
 			String forcePassword = otherAccountData.getForceChangePassword() ? "true" : "false";
 			user.setUserProperty(OpenmrsConstants.USER_PROPERTY_CHANGE_PASSWORD, forcePassword);
 			account.addUserAccount(user);
@@ -191,9 +190,9 @@ public class AccountPageController {
 			provider.setProviderRole(providerManagementService.getProviderRoleByUuid(request.getParameter("providerRole")));
 			account.addProviderAccount(provider);
 		}
-		
+
 		accountValidator.validate(account, errors);
-		
+
 		if (!errors.hasErrors()) {
 			try {
 				account.setPassword(user, otherAccountData.getPassword());
@@ -215,20 +214,20 @@ public class AccountPageController {
 				}
 			}
 		}
-		
+
 		setModelAttributes(model, account, otherAccountData, accountService, administrationService,
 		    providerManagementService, uu, appFrameworkService);
-		
+
 		sendErrorMessage(errors, model, messageSourceService, request);
-		
+
 		if (account.getPerson().getPersonId() == null) {
 			setJsonFormData(model, account, otherAccountData);
 		}
-		
+
 		return "systemadmin/accounts/account";
-		
+
 	}
-	
+
 	public void setModelAttributes(PageModel model, Account account, OtherAccountData otherAccountData,
 	                               AccountService accountService, AdministrationService administrationService,
 	                               ProviderManagementService providerManagementService, UiUtils uu,
@@ -248,7 +247,7 @@ public class AccountPageController {
 			//had previously selected
 			forcePasswordChange = otherAccountData.getForceChangePassword();
 		}
-		
+
 		model.addAttribute("otherAccountData", otherAccountData);
 		List<Role> capabilities = accountService.getAllCapabilities();
 		model.addAttribute("capabilities", accountService.getAllCapabilities());
@@ -291,7 +290,7 @@ public class AccountPageController {
 		model.addAttribute("propertyMaxLengthMap", propertyMaxLengthMap);
 		model.addAttribute("passwordMinLength",
 		    administrationService.getGlobalProperty(OpenmrsConstants.GP_PASSWORD_MINIMUM_LENGTH, "8"));
-		
+
 		ObjectMapper mapper = new ObjectMapper();
 		SimpleObject so = new SimpleObject();
 		for (Role cap : capabilities) {
@@ -305,7 +304,7 @@ public class AccountPageController {
 			so.put(role.getUuid(), str.substring(str.indexOf(privilegeLevelPrefix) + privilegeLevelPrefix.length()));
 		}
 		model.addAttribute("privilegeLevelsJson", mapper.writeValueAsString(so));
-		
+
 		if (account.getPerson().getPersonId() != null) {
 			account.getProviderAccounts().add(new Provider());
 			account.getUserAccounts().add(new User());
@@ -315,6 +314,7 @@ public class AccountPageController {
 			SimpleObject simpleUser = new SimpleObject();
 			simpleUser.put("username", user.getUsername());
 			simpleUser.put("systemId", user.getSystemId());
+			simpleUser.put("email", user.getEmail());
 			simpleUser.put("privilegeLevel", account.getPrivilegeLevel(user) != null ? account.getPrivilegeLevel(user)
 			        .getUuid() : "");
 			SimpleObject userProperties = new SimpleObject();
@@ -334,24 +334,24 @@ public class AccountPageController {
 			}
 			simpleUser.put("userProperties", userProperties);
 			simpleUser.put("retired", user.getRetired());
-			
+
 			SimpleObject simpleUserCapabilities = new SimpleObject();
 			Set<Role> userCapabilities = account.getCapabilities(user);
 			for (Role cap : capabilities) {
 				simpleUserCapabilities.put(cap.getUuid(), userCapabilities.contains(cap));
 			}
 			simpleUser.put("capabilities", simpleUserCapabilities);
-			
+
 			so.put(user.getUuid(), simpleUser);
 		}
 		model.addAttribute("uuidAndUserMapJson", mapper.writeValueAsString(so));
-		
+
 		so = new SimpleObject();
 		for (ProviderRole pr : providerRoles) {
 			so.put(pr.getUuid(), uu.format(pr));
 		}
 		model.addAttribute("providerRolesJson", mapper.writeValueAsString(so));
-		
+
 		so = new SimpleObject();
 		for (OpenmrsObject o : account.getProviderAccounts()) {
 			Provider p = (Provider) o;
@@ -360,11 +360,11 @@ public class AccountPageController {
 			simpleProvider.put("identifier", p.getIdentifier());
 			simpleProvider.put("providerRole", (p.getProviderRole() != null) ? p.getProviderRole().getUuid() : "");
 			simpleProvider.put("retired", p.isRetired());
-			
+
 			so.put(p.getUuid(), simpleProvider);
 		}
 		model.addAttribute("uuidAndProviderJson", mapper.writeValueAsString(so));
-		
+
 		so = new SimpleObject();
 		so.put("savedChanges", uu.message("adminui.savedChanges"));
 		so.put("saved", uu.message("adminui.saved"));
@@ -396,7 +396,7 @@ public class AccountPageController {
 
 		model.addAttribute("messages", mapper.writeValueAsString(so));
 	}
-	
+
 	private void sendErrorMessage(Errors errors, PageModel model, MessageSourceService mss, HttpServletRequest request) {
 		model.addAttribute("errors", errors);
 		StringBuffer errorMessage = new StringBuffer(mss.getMessage("error.failed.validation"));
@@ -409,22 +409,23 @@ public class AccountPageController {
 		errorMessage.append("</ul>");
 		request.getSession().setAttribute(UiCommonsConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE, errorMessage.toString());
 	}
-	
+
 	private void setJsonFormData(PageModel model, Account account, OtherAccountData otherAccountData) throws IOException {
-		
+
 		ObjectMapper mapper = new ObjectMapper();
 		SimpleObject simplePerson = new SimpleObject();
 		simplePerson.put("familyName", account.getFamilyName());
 		simplePerson.put("givenName", account.getGivenName());
 		simplePerson.put("gender", account.getGender() != null ? account.getGender() : "");
 		model.addAttribute("personJson", mapper.writeValueAsString(simplePerson));
-		
+
 		SimpleObject simpleUser = new SimpleObject();
 		SimpleObject simpleProvider = new SimpleObject();
 		if (otherAccountData != null) {
 			if (otherAccountData.getAddUserAccount()) {
 				User u = account.getUserAccounts().get(0);
 				simpleUser.put("username", u.getUsername());
+				simpleUser.put("email", u.getEmail());
 				simpleUser.put("privilegeLevel", account.getPrivilegeLevel(u).getUuid());
 				SimpleObject userProperties = new SimpleObject();
 				userProperties
@@ -436,16 +437,16 @@ public class AccountPageController {
 				}
 				simpleUser.put("capabilities", simpleUserCapabilities);
 			}
-			
+
 			if (otherAccountData.getAddProviderAccount()) {
 				Provider prov = (Provider) account.getProviderAccounts().get(0);
 				simpleProvider.put("identifier", prov.getIdentifier());
 				simpleProvider.put("providerRole", prov.getProviderRole().getUuid());
 			}
 		}
-		
+
 		model.addAttribute("userJson", mapper.writeValueAsString(simpleUser));
 		model.addAttribute("providerJson", mapper.writeValueAsString(simpleProvider));
 	}
-	
+
 }

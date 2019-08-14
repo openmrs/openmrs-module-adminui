@@ -57,7 +57,7 @@ public class ChangeDefaultsPageController {
             props.put(OpenmrsConstants.USER_PROPERTY_PROFICIENT_LOCALES, userDefaults.getProficientLocales());
             user.setUserProperties(props);
             try {
-            	userService.saveUser(user, null);
+            	userService.saveUser(user);
             }
             catch (NoSuchMethodError ex) {
             	//must be running platforms 2.0 and above which do not have the above method
@@ -80,10 +80,10 @@ public class ChangeDefaultsPageController {
         }
         return "redirect:" + ui.pageLink("adminui", "myaccount/myAccount");
     }
-    
+
     public UserDefaults getUserDefaults(@RequestParam(value = "defaultLocale", required = false) String defaultLocale,
     		@RequestParam(value = "proficientLocales", required = false) String proficientLocales) {
-    	
+
     	return new UserDefaults(defaultLocale, proficientLocales);
     }
 

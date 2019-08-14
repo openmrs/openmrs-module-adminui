@@ -1,6 +1,7 @@
 <%
     def userUuid = ''
     def username = ''
+    def email = ''
     def privilegeLevelUuid = ''
     def user = null;
     def showPasswordFields = false
@@ -11,6 +12,7 @@
         user = config.user
         userUuid = user.uuid
         username = user.username ?: ''
+        email = user.email ?: ''
         changePassword = account.isSupposedToChangePassword(user)
         if(account.getPrivilegeLevel(user)){
             privilegeLevelUuid = account.getPrivilegeLevel(user).uuid
@@ -33,6 +35,9 @@
     def usernameAttributes = ["ng-model": "uuidUserMap['"+userUuid+"'].username",
                               "ng-maxlength": propertyMaxLengthMap['username']]
     usernameAttributes[requiredAttribute] = requiredAttributeValue;
+
+    def userEmailAttributes = ["ng-model": "uuidUserMap['"+userUuid+"'].email"]
+    userEmailAttributes[requiredAttribute] = requiredAttributeValue;
 
     def privilegeLevelAttributes = ["ng-model": "uuidUserMap['"+userUuid+"'].privilegeLevel"]
     privilegeLevelAttributes[requiredAttribute] = requiredAttributeValue
@@ -64,6 +69,21 @@
                     </span>
                     <span ng-show="${formName}['username${userUuid}'].\$error.maxlength">
                         ${ui.message("adminui.field.exceeded.maxChars", propertyMaxLengthMap['username'])}
+                    </span>
+                </span>
+            </td>
+            <td valign="top">
+                ${ ui.includeFragment("uicommons", "field/text", [
+                        label: ui.message("adminui.user.email")+"<span class='adminui-text-red'>*</span>",
+                        id: "adminui-email"+userUuid,
+                        formFieldName: "email"+userUuid,
+                        initialValue: email,
+                        otherAttributes: userEmailAttributes
+                ]) }
+                <span class="field-error" ng-show="${formName}['email${userUuid}'].\$dirty
+                    && ${formName}['email${userUuid}'].\$invalid">
+                    <span ng-show="${formName}['email${userUuid}'].\$error.required">
+                        ${ui.message("adminui.field.required")}
                     </span>
                 </span>
             </td>
