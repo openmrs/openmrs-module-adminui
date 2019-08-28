@@ -16,7 +16,7 @@
     <form name="userDetailsForm" class="simple-form-ui" novalidate>
         <% } %>
         <fieldset class="adminui-account-fieldset">
-            <legend><b>${ ui.message("adminui.user.account.details") }</b></legend>
+            <legend class="w-auto"><b>${ ui.message("adminui.user.account.details") }</b></legend>
             <% if(createAccount) { %>
             <input id="adminui-addUserAccount" type="checkbox" name="addUserAccount" value="true"
                 <% if (otherAccountData.getAddUserAccount()) { %> checked='checked'<% } %>

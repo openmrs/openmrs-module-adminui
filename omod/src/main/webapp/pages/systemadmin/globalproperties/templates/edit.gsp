@@ -12,15 +12,15 @@
 <form class="simple-form-ui" name="systemSettingForm" novalidate ng-submit="save()">
     <p>
         <label>${ui.message('general.name')}</label>
-        <input ng-model="systemSetting.property" ng-disabled="systemSetting.uuid" required/>
+        <input  class="form-control form-control-sm form-control-lg form-control-md" ng-model="systemSetting.property" ng-disabled="systemSetting.uuid" required/>
     </p>
     <p>
         <label>${ui.message('general.description')}</label>
-        <textarea ng-model="systemSetting.description" cols="54"></textarea>
+        <textarea  class="form-control form-control-sm form-control-lg form-control-md" ng-model="systemSetting.description" cols="54"></textarea>
     </p>
     <p>
         <label>${ui.message('general.value')}</label>
-        <textarea ng-model="systemSetting.value" cols="54"></textarea>
+        <textarea  class="form-control form-control-sm form-control-lg form-control-md" ng-model="systemSetting.value" cols="54"></textarea>
     </p>
 
     <p>

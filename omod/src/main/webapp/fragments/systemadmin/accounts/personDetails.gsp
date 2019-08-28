@@ -23,7 +23,7 @@
     <div class="adminui-form-person-details-panel">
 <% } %>
         <fieldset class="<% if(createAccount) { %>adminui-account-fieldset<% } else { %>adminui-form-person-details-panel<% } %>">
-        <legend><b>${ ui.message("adminui.person.details") }</b></legend>
+        <legend class="w-auto"><b>${ ui.message("adminui.person.details") }</b></legend>
         <% if(!createAccount) { %>
         <div class="adminui-account-person-details">
             <i class="icon-edit edit-action right" title="${ ui.message("general.edit") }"

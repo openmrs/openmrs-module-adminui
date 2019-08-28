@@ -17,7 +17,7 @@
 <input type="submit" class="button" value="${ui.message("adminui.addNewPrivilege.label")}" onclick="window.location='${ui.pageLink("adminui","metadata/privileges/privilege", [action: 'add'])}'"/>
 <br />
 <br />
-<table id="list-privileges" cellspacing="0" cellpadding="2">
+<table class="table table-sm table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl" id="list-privileges" cellspacing="0" cellpadding="2">
 	<thead>
 		<tr>
 			<th class="adminui-name-column">${ ui.message("general.name") }</th>

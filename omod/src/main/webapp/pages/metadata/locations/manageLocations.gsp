@@ -27,7 +27,7 @@
     </a>
 
 <hr>
-<table id="list-locations" cellspacing="0" cellpadding="2">
+<table  class="table table-sm table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl" id="list-locations" cellspacing="0" cellpadding="2">
 	<thead>
 		<tr>
 			<th>${ ui.message("general.name")}</th>
