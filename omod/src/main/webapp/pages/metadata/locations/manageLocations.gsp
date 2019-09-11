@@ -2,6 +2,7 @@
     ui.decorateWith("appui", "standardEmrPage")
     
     ui.includeCss("adminui", "adminui.css")
+	ui.includeJavascript("appui", "jquery-3.4.1.min.js")
 %>
 
 <style type="text/css">
