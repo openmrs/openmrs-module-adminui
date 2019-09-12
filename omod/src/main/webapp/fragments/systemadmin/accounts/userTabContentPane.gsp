@@ -6,7 +6,7 @@
 
 %>
 
-<div class="user-${uuid}" ${user.userId ? "" : "hidden"}>
+<div class="user-${uuid} ${user.userId ? '' : 'hidden'}">
     <i class="icon-edit edit-action right" title="${ ui.message("general.edit") }"
        ng-show="!inEditMode && !uuidUserMap['${uuid}'].retired" ng-click="edit('${uuid}')"></i>
 
@@ -58,7 +58,7 @@
     </div>
 </div>
 
-<div class="user-${uuid}" ${user.userId ? "hidden" : ""}>
+<div class="user-${uuid} ${user.userId ? 'hidden' : ''}">
     <div class="right">
         <button id="adminui-user-cancel${uuid}" type="button" class="cancel"
             ng-click="cancel('${uuid}'<% if(!user.userId) { %>, true<% } %>)">
