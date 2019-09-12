@@ -5,7 +5,7 @@
     def uuid = provider.uuid ?: '';
 %>
 
-<div class="provider-${uuid}" ${provider.providerId ? "" : "hidden"}>
+<div class="provider-${uuid} ${provider.providerId ? '' : 'hidden'}">
     <i class="icon-edit edit-action right" title="${ ui.message("general.edit") }"
        ng-show="!inEditMode && !uuidProviderMap['${uuid}'].retired" ng-click="edit('${uuid}')"></i>
 
@@ -31,7 +31,7 @@
     </div>
 </div>
 
-<div class="provider-${uuid}" ${provider.providerId ? "hidden" : ""}>
+<div class="provider-${uuid} ${provider.providerId ? 'hidden' : ''}">
     <div class="right">
         <button id="adminui-provider-cancel${uuid}" type="button" class="cancel"
             ng-click="cancel('${uuid}'<% if(!provider.providerId) { %>, true<% } %>)">
