@@ -16,7 +16,7 @@
 
 	<groupId>org.openmrs.module</groupId>
 	<artifactId>adminui</artifactId>
-	<version>1.3.0-SNAPSHOT</version>
+	<version>1.3.0</version>
 	<packaging>pom</packaging>
 	<name>Admin UI Module</name>
 	<description>Administration Tools for the Reference Application</description>
@@ -40,7 +40,7 @@
 		<connection>scm:git:git@github.com:openmrs/openmrs-module-adminui.git</connection>
 		<developerConnection>scm:git:git@github.com:openmrs/openmrs-module-adminui.git</developerConnection>
 		<url>https://github.com/openmrs/openmrs-module-adminui.git</url>
-	  <tag>HEAD</tag>
+	  <tag>1.3.0</tag>
   </scm>
 
 	<modules>
