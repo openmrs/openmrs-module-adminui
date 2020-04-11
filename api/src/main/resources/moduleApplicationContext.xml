@@ -58,7 +58,7 @@
         <property name="moduleService">
             <list merge="true">
                 <value>${project.parent.groupId}.${project.parent.artifactId}.account.AccountService</value>
-                <ref local="adminAccountService"/>
+                <ref bean="adminAccountService"/>
             </list>
         </property>
     </bean>
