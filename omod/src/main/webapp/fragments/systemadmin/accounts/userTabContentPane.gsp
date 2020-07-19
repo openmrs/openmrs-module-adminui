@@ -18,6 +18,12 @@
             </td>
         </tr>
         <tr class="adminui-border-bottom">
+            <th valign="top">${ui.message("adminui.user.email")}</th>
+            <td valign="top" ng-class="{retired: uuidUserMap['${uuid}'].retired}">
+                {{uuidUserMap['${uuid}'].email}}
+            </td>
+        </tr>
+        <tr class="adminui-border-bottom">
             <th valign="top">${ui.message("adminui.account.privilegeLevel")}</th>
             <td valign="top" ng-class="{retired: uuidUserMap['${uuid}'].retired}">
                 {{privilegeLevels[uuidUserMap['${uuid}'].privilegeLevel]}}
@@ -68,6 +74,7 @@
             ng-click="save('${uuid}'<% if(!user.userId) { %>, '${account.person.uuid}'<% } %>)"
             ng-disabled="userDetailsForm['username${uuid}'].\$invalid
                         || userDetailsForm['privilegeLevel${uuid}'].\$invalid
+                        || userDetailsForm['email${uuid}'].\$invalid
                         || userDetailsForm['password${uuid}'].\$invalid
                         || userDetailsForm['confirmPassword${uuid}'].\$invalid || requesting">
             ${ ui.message("general.save") }

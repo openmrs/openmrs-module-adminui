@@ -21,7 +21,7 @@
 	<name>Admin UI Module</name>
 	<description>Administration Tools for the Reference Application</description>
 	<url>https://wiki.openmrs.org/x/NJO-B</url>
-	
+
 	<developers>
 		<developer>
 			<name>Ujjwal Arora</name>
@@ -30,7 +30,7 @@
             <name>OpenMRS Developers</name>
         </developer>
 	</developers>
-	
+
 	<organization>
 		<name>OpenMRS</name>
 		<url>http://openmrs.org</url>
@@ -47,7 +47,7 @@
 		<module>api</module>
 		<module>omod</module>
 	</modules>
-	
+
 	<properties>
 		<openMRSVersion>1.11.4</openMRSVersion>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -63,11 +63,11 @@
 		<dependencies>
 
 			<!-- Begin OpenMRS core -->
-			
+
 			<dependency>
 				<groupId>org.openmrs.api</groupId>
 				<artifactId>openmrs-api</artifactId>
-				<version>${openMRSVersion}</version>
+				<version>2.2.0-alpha</version>
 				<type>jar</type>
 				<scope>provided</scope>
 			</dependency>
@@ -79,15 +79,15 @@
 				<type>jar</type>
 				<scope>provided</scope>
 			</dependency>
-						
+
 			<dependency>
 				<groupId>org.openmrs.api</groupId>
 				<artifactId>openmrs-api</artifactId>
-				<version>${openMRSVersion}</version>
+				<version>2.2.0-alpha</version>
 				<type>test-jar</type>
 				<scope>test</scope>
 			</dependency>
-			
+
 			<dependency>
 				<groupId>org.openmrs.web</groupId>
 				<artifactId>openmrs-web</artifactId>
@@ -95,7 +95,7 @@
 				<type>test-jar</type>
 				<scope>test</scope>
 			</dependency>
-			
+
 			<dependency>
 				<groupId>org.openmrs.test</groupId>
 				<artifactId>openmrs-test</artifactId>
@@ -103,11 +103,11 @@
 				<type>pom</type>
 				<scope>test</scope>
 			</dependency>
-						
+
 			<!-- End OpenMRS core -->
-			
-			<!-- Begin OpenMRS modules --> 
-			
+
+			<!-- Begin OpenMRS modules -->
+
 			<dependency>
 				<groupId>org.openmrs.module</groupId>
 				<artifactId>appframework-api</artifactId>
@@ -115,7 +115,7 @@
 				<type>jar</type>
 				<scope>provided</scope>
 			</dependency>
-        
+
 			<dependency>
 				<groupId>org.openmrs.module</groupId>
 				<artifactId>appframework-api</artifactId>
@@ -131,7 +131,7 @@
 				<type>jar</type>
 				<scope>provided</scope>
 			</dependency>
-			
+
 			 <!-- Depends on uiframework module -->
 			<dependency>
 				<groupId>org.openmrs.module</groupId>
@@ -190,12 +190,12 @@
 				<version>3.0</version>
 				<configuration>
 					<inlineHeader>
-This Source Code Form is subject to the terms of the Mozilla Public License, 
-v. 2.0. If a copy of the MPL was not distributed with this file, You can 
-obtain one at http://mozilla.org/MPL/2.0/. OpenMRS is also distributed under 
+This Source Code Form is subject to the terms of the Mozilla Public License,
+v. 2.0. If a copy of the MPL was not distributed with this file, You can
+obtain one at http://mozilla.org/MPL/2.0/. OpenMRS is also distributed under
 the terms of the Healthcare Disclaimer located at http://openmrs.org/license.
 
-Copyright (C) OpenMRS Inc. OpenMRS is a registered trademark and the OpenMRS 
+Copyright (C) OpenMRS Inc. OpenMRS is a registered trademark and the OpenMRS
 graphic logo is a trademark of OpenMRS Inc.
 					</inlineHeader>
 					<includes>

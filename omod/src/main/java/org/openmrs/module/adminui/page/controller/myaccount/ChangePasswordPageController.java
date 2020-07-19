@@ -35,49 +35,49 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 public class ChangePasswordPageController {
-	
+
 	protected final Log log = LogFactory.getLog(getClass());
-	
+
 	@RequestMapping(method = RequestMethod.GET)
 	public String overrideGetChangePasswordPage() {
 		return "forward:/adminui/myaccount/changePassword.page";
 	}
-	
+
 	@RequestMapping(method = RequestMethod.POST)
 	public String overridePostChangePassword() {
 		return "forward:/adminui/myaccount/changePassword.page";
 	}
-	
+
 	public void get(PageModel model, @SpringBean("adminService") AdministrationService adminService) {
 		setModelAttributes(model, adminService);
 	}
-	
+
 	public void setModelAttributes(PageModel model, AdministrationService adminService) {
 		model.addAttribute("passwordMinLength",
 		    adminService.getGlobalProperty(OpenmrsConstants.GP_PASSWORD_MINIMUM_LENGTH, "8"));
 	}
-	
+
 	public String post(PageModel model, @SpringBean("userService") UserService userService,
 	                   @RequestParam("oldPassword") String oldPassword, @RequestParam("newPassword") String newPassword,
 	                   @RequestParam("confirmPassword") String confirmPassword,
 	                   @SpringBean("adminService") AdministrationService adminService,
 	                   @SpringBean("messageSourceService") MessageSourceService mss, HttpServletRequest request) {
-		
+
 		User user = Context.getAuthenticatedUser();
 		String errorMessage = null;
 		if (StringUtils.isBlank(oldPassword) || StringUtils.isBlank(newPassword) || StringUtils.isBlank(confirmPassword)) {
 			errorMessage = "adminui.missing.requiredFields";
 		}
-		
+
 		if (StringUtils.isNotBlank(newPassword) && StringUtils.isNotBlank(confirmPassword)
 		        && !newPassword.equals(confirmPassword)) {
 			errorMessage = "adminui.account.changePassword.newAndConfirmPassword.dontMatch";
 		}
-		
+
 		if (errorMessage == null) {
 			try {
 				OpenmrsUtil.validatePassword(user.getUsername(), newPassword, user.getSystemId());
-				
+
 				String nextPage = "redirect:/index.htm";
 				try {
 					userService.changePassword(oldPassword, newPassword);
@@ -95,7 +95,7 @@ public class ChangePasswordPageController {
 						userProperties = new UserProperties(user.getUserProperties());
 						userProperties.setSupposedToChangePassword(false);
 						try {
-							userService.saveUser(user, null);
+							userService.saveUser(user);
 						}
 						catch (NoSuchMethodError ex) {
 			            	//must be running platforms 2.0 and above which do not have the above method
@@ -110,12 +110,12 @@ public class ChangePasswordPageController {
 				} else {
 					nextPage = "myaccount/myAccount";
 				}
-				
+
 				InfoErrorMessageUtil
 				        .flashInfoMessage(request.getSession(), mss.getMessage("adminui.changePassword.success"));
-				
+
 				Context.refreshAuthenticatedUser();
-				
+
 				return nextPage;
 			}
 			catch (PasswordException e) {
@@ -125,15 +125,15 @@ public class ChangePasswordPageController {
 				log.error("Failed to change user password:", e);
 			}
 		}
-		
+
 		if (errorMessage == null) {
 			errorMessage = "adminui.account.changePassword.fail";
 		}
-		
+
 		request.getSession().setAttribute(UiCommonsConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE, errorMessage);
-		
+
 		setModelAttributes(model, adminService);
-		
+
 		return "myaccount/changePassword";
 	}
 }

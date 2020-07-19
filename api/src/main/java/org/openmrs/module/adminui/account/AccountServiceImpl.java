@@ -31,43 +31,43 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 public class AccountServiceImpl extends BaseOpenmrsService implements AccountService {
-	
+
 	private UserService userService;
-	
+
 	private PersonService personService;
-	
+
 	private ProviderService providerService;
-	
+
 	private AdministrationService adminService;
-	
+
 	/**
 	 * @param userService the userService to set
 	 */
 	public void setUserService(UserService userService) {
 		this.userService = userService;
 	}
-	
+
 	/**
 	 * @param providerService
 	 */
 	public void setProviderService(ProviderService providerService) {
 		this.providerService = providerService;
 	}
-	
+
 	/**
 	 * @param personService the personService to set
 	 */
 	public void setPersonService(PersonService personService) {
 		this.personService = personService;
 	}
-	
+
 	/**
 	 * @param adminService the adminService to set
 	 */
 	public void setAdminService(AdministrationService adminService) {
 		this.adminService = adminService;
 	}
-	
+
 	/**
 	 * @see AccountService#saveAccount(Account)
 	 */
@@ -84,7 +84,7 @@ public class AccountServiceImpl extends BaseOpenmrsService implements AccountSer
 			}
 			else {
 				try {
-					userService.saveUser(user, null);
+					userService.saveUser(user);
 				}
 				catch (NoSuchMethodError ex) {
 					try {
@@ -99,19 +99,19 @@ public class AccountServiceImpl extends BaseOpenmrsService implements AccountSer
 			}
 		}
 	}
-	
+
 	@Override
 	@Transactional(readOnly = true)
 	public List<Account> getAllAccounts() {
-		
+
 		Map<Person, Account> personAccountMap = new LinkedHashMap<Person, Account>();
-		
+
 		for (User user : userService.getAllUsers()) {
 			//exclude daemon user
 			if (AdminUiConstants.DAEMON_USER_UUID.equals(user.getUuid())) {
 				continue;
 			}
-			
+
 			Person person = user.getPerson();
 			Account account = personAccountMap.get(person);
 			if (account == null) {
@@ -122,7 +122,7 @@ public class AccountServiceImpl extends BaseOpenmrsService implements AccountSer
 				account.addUserAccount(user);
 			}
 		}
-		
+
 		List<Provider> unknownProviders = new ArrayList<Provider>();
 		String unknownProviderUuid = adminService.getGlobalProperty("emr.unknownProvider");
 		if (StringUtils.isNotBlank(unknownProviderUuid)) {
@@ -137,7 +137,7 @@ public class AccountServiceImpl extends BaseOpenmrsService implements AccountSer
 			if (unknownProviders.contains(provider)) {
 				continue;
 			}
-			
+
 			Person person = provider.getPerson();
 			if (person == null) {
 				person = new Person();
@@ -154,13 +154,13 @@ public class AccountServiceImpl extends BaseOpenmrsService implements AccountSer
 				account.getProviderAccounts().add(provider);
 			}
 		}
-		
+
 		List<Account> accounts = new ArrayList<Account>();
 		accounts.addAll(personAccountMap.values());
-		
+
 		return accounts;
 	}
-	
+
 	/**
 	 * @see org.openmrs.module.adminui.account.AccountService#getAllCapabilities()
 	 */
@@ -174,7 +174,7 @@ public class AccountServiceImpl extends BaseOpenmrsService implements AccountSer
 		}
 		return capabilities;
 	}
-	
+
 	/**
 	 * @see org.openmrs.module.adminui.account.AccountService#getAllPrivilegeLevels()
 	 */
@@ -188,5 +188,5 @@ public class AccountServiceImpl extends BaseOpenmrsService implements AccountSer
 		}
 		return privilegeLevels;
 	}
-	
+
 }

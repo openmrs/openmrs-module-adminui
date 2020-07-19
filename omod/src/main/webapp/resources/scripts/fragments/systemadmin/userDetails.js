@@ -146,9 +146,10 @@ angular.module("adminui.userDetails", ["userService", "ngDialog", "adminui.shoul
                         }
                     }
                 });
-                
+
                 var toSave = {
                     username: modelUser.username,
+                    email: modelUser.email,
                     roles: privilegesLevelAndCapabilities,
                     userProperties: uProperties
                 };
