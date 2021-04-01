@@ -71,7 +71,7 @@
             initialValue : ui.encodeHtmlContent(privilege.privilege)
         ])}
     <% } else{ %>
-        <b>${ui.message("general.name")}:</b> ${ui.encodeHtmlAttribute(privilege.privilege)}
+        <b>${ui.message("general.name")}:</b> ${ui.encodeHtmlContent(privilege.privilege)}
         <input type="hidden" name="privilegeName" value="${ui.encodeHtmlAttribute(privilege.privilege)}" />
     <% } %>
     ${ui.includeFragment("uicommons", "field/textarea", [
