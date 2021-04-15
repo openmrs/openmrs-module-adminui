@@ -176,7 +176,7 @@ public class LocationPageController {
     private String replaceArguments(String message, Object[] arguments) {
         if (arguments != null) {
             for (int i = 0; i < arguments.length; i++) {
-                String argument = (String) arguments[i];
+                String argument = String.valueOf(arguments[i]);
                 message = message.replaceAll("\\{" + i + "\\}", argument);
             }
         }
