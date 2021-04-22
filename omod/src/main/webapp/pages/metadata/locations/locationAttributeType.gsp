@@ -43,6 +43,7 @@
                 },
                 "minOccurs": {
                     required: true
+                    maxlength: 9
                 },
                 "datatypeClassname": {
                     required: true,
@@ -120,7 +121,7 @@
                     label        : ui.message("adminui.minOccurs")+"<span class='adminui-text-red'>*</span>",
                     formFieldName: "minOccurs",
                     id           : "minOccurs",
-                    maxLength    : 101,
+                    maxLength    : 9,
                     initialValue : (locationAttributeType.minOccurs ?: '0')
                 ])}
                 </td>
@@ -129,7 +130,7 @@
                     label        : ui.message("adminui.maxOccurs"),
                     formFieldName: "maxOccurs",
                     id           : "maxOccurs",
-                    maxLength    : 101,
+                    maxLength    : 9,
                     initialValue : (locationAttributeType.maxOccurs ?: '')
                 ])}
                 </td>
