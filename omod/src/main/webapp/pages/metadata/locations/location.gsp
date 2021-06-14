@@ -9,7 +9,7 @@
 
     def parentLocationOptions = []
     existingLocations.each {
-        parentLocationOptions.push([ label: ui.escapeJs(ui.format(it)), value: it.id ])
+        parentLocationOptions.push([ label: ui.encodeJavaScript(ui.format(it)), value: it.id ])
     }
 %>
 
