@@ -55,35 +55,42 @@
     });
 </script>
 
-<h1>
-    <h3>${ ui.message((createPrivilege) ? "adminui.addNewPrivilege.label" : "adminui.editPrivilege.label")}</h3>
-</h1>
-
-<form class="simple-form-ui" method="post" id="privilegeForm" autocomplete="off">
-
-<fieldset>
-    <% if(createPrivilege){ %>
-        ${ui.includeFragment("uicommons", "field/text", [
-            label        : ui.message("general.name")+"<span class='adminui-text-red'>*</span>",
-            formFieldName: "privilege",
-            id           : "privilege",
-            maxLength    : 101,
-            initialValue : ui.encodeHtmlContent(privilege.privilege)
-        ])}
-    <% } else{ %>
-        <b>${ui.message("general.name")}:</b> ${ui.encodeHtmlContent(privilege.privilege)}
-        <input type="hidden" name="privilegeName" value="${ui.encodeHtmlAttribute(privilege.privilege)}" />
-    <% } %>
-    ${ui.includeFragment("uicommons", "field/textarea", [
-            label        : ui.message("general.description"),
-            formFieldName: "description",
-            id           : "description",
-            initialValue : ui.encodeHtmlContent((privilege.description) ? privilege.description.trim() : "")
-    ])}
-
-    <div>
-        <input type="button" class="cancel" value="${ui.message("general.cancel")}" onclick="window.location='/${ contextPath }/adminui/metadata/privileges/managePrivileges.page'"/>
-        <input type="submit" class="confirm" id="save-button" value="${ui.message("general.save")}"/>
+<% if(privilege == null) {%>
+    <div align="center">
+        <h1>${ui.message('adminui.privilege.unknown')} "${ui.encodeHtmlAttribute(unknownPrivilegeName)}"</h1>
+        <input type="button" class="confirm" value="${ui.message("general.back")}" onclick="window.location='/${ contextPath }/adminui/metadata/privileges/managePrivileges.page'"/>
     </div>
-    </fieldset>
-</form>
+<% } else { %>
+    <h1>
+        <h3>${ ui.message((createPrivilege) ? "adminui.addNewPrivilege.label" : "adminui.editPrivilege.label")}</h3>
+    </h1>
+
+    <form class="simple-form-ui" method="post" id="privilegeForm" autocomplete="off">
+
+    <fieldset>
+        <% if(createPrivilege){ %>
+            ${ui.includeFragment("uicommons", "field/text", [
+                label        : ui.message("general.name")+"<span class='adminui-text-red'>*</span>",
+                formFieldName: "privilege",
+                id           : "privilege",
+                maxLength    : 101,
+                initialValue : ui.encodeHtmlContent(privilege.privilege)
+            ])}
+        <% } else{ %>
+            <b>${ui.message("general.name")}:</b> ${ui.encodeHtmlContent(privilege.privilege)}
+            <input type="hidden" name="privilegeName" value="${ui.encodeHtmlAttribute(privilege.privilege)}" />
+        <% } %>
+        ${ui.includeFragment("uicommons", "field/textarea", [
+                label        : ui.message("general.description"),
+                formFieldName: "description",
+                id           : "description",
+                initialValue : ui.encodeHtmlContent((privilege.description) ? privilege.description.trim() : "")
+        ])}
+
+        <div>
+            <input type="button" class="cancel" value="${ui.message("general.cancel")}" onclick="window.location='/${ contextPath }/adminui/metadata/privileges/managePrivileges.page'"/>
+            <input type="submit" class="confirm" id="save-button" value="${ui.message("general.save")}"/>
+        </div>
+        </fieldset>
+    </form>
+<% } %>

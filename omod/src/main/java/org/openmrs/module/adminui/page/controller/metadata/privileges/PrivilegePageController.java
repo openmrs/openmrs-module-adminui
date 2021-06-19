@@ -40,7 +40,7 @@ public class PrivilegePageController {
 			privilege = userService.getPrivilege(privilegeName);
 		}
 		if (privilege == null) {
-			throw new APIException("No privilege found with name '" + privilegeName + "'");
+			model.addAttribute("unknownPrivilegeName", privilegeName);
 		}
 		
 		model.addAttribute("privilege", privilege);
