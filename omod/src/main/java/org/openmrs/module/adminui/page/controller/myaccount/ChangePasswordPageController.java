@@ -29,6 +29,7 @@ import org.openmrs.ui.framework.annotation.SpringBean;
 import org.openmrs.ui.framework.page.PageModel;
 import org.openmrs.util.OpenmrsConstants;
 import org.openmrs.util.OpenmrsUtil;
+import org.openmrs.web.user.CurrentUsers;
 import org.openmrs.web.user.UserProperties;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -111,11 +112,11 @@ public class ChangePasswordPageController {
 					nextPage = "myaccount/myAccount";
 				}
 				
-				InfoErrorMessageUtil
-				        .flashInfoMessage(request.getSession(), mss.getMessage("adminui.changePassword.success"));
-				
 				Context.refreshAuthenticatedUser();
+				CurrentUsers.removeUser(request.getSession());
 				
+				InfoErrorMessageUtil
+						.flashInfoMessage(request.getSession(), mss.getMessage("adminui.changePassword.success"));
 				return nextPage;
 			}
 			catch (PasswordException e) {
