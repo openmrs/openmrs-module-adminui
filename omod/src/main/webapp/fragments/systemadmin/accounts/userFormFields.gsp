@@ -42,6 +42,10 @@
         passwordAttributes[requiredAttribute] = requiredAttributeValue;
     }
 
+    if (pattern) {
+        passwordAttributes.put("ng-pattern", pattern);
+    }
+
     def otherPasswordAttributes= ["ng-model": "uuidUserMap['"+userUuid+"'].password"]
     otherPasswordAttributes.putAll(passwordAttributes)
 %>
@@ -104,8 +108,13 @@
                         ${ui.message("adminui.field.required")}
                     </span>
                     <span ng-show="${formName}['password${userUuid}'].\$error.minlength">
-                     ${ui.message("adminui.field.require.minChars", passwordMinLength)}
+                        ${ui.message("adminui.field.require.minChars", passwordMinLength)}<br>
                     </span>
+                    <% if (pattern) { %>
+                    <span ng-show="${formName}['password${userUuid}'].\$error.pattern">
+                        ${patternErrorMessage}
+                    </span>
+                    <% } %>
                 </span>
             </td>
             <td valign="top">

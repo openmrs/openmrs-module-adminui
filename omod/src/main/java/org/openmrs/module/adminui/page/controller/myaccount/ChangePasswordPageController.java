@@ -23,6 +23,7 @@ import org.openmrs.api.UserService;
 import org.openmrs.api.context.Context;
 import org.openmrs.api.db.DAOException;
 import org.openmrs.messagesource.MessageSourceService;
+import org.openmrs.module.adminui.page.controller.PasswordValidation;
 import org.openmrs.module.uicommons.UiCommonsConstants;
 import org.openmrs.module.uicommons.util.InfoErrorMessageUtil;
 import org.openmrs.ui.framework.annotation.SpringBean;
@@ -48,13 +49,14 @@ public class ChangePasswordPageController {
 		return "forward:/adminui/myaccount/changePassword.page";
 	}
 	
-	public void get(PageModel model, @SpringBean("adminService") AdministrationService adminService) {
-		setModelAttributes(model, adminService);
+	public void get(PageModel model,
+			        @SpringBean("adminService") AdministrationService adminService,
+			        @SpringBean("messageSourceService") MessageSourceService mss) {
+		setModelAttributes(model, adminService, mss);
 	}
 	
-	public void setModelAttributes(PageModel model, AdministrationService adminService) {
-		model.addAttribute("passwordMinLength",
-		    adminService.getGlobalProperty(OpenmrsConstants.GP_PASSWORD_MINIMUM_LENGTH, "8"));
+	public void setModelAttributes(PageModel model, AdministrationService adminService, MessageSourceService mss) {
+		PasswordValidation.addPasswordValidationAttributes(model, adminService, mss);
 	}
 	
 	public String post(PageModel model, @SpringBean("userService") UserService userService,
@@ -77,7 +79,7 @@ public class ChangePasswordPageController {
 		if (errorMessage == null) {
 			try {
 				OpenmrsUtil.validatePassword(user.getUsername(), newPassword, user.getSystemId());
-				
+
 				String nextPage = "redirect:/index.htm";
 				try {
 					userService.changePassword(oldPassword, newPassword);
@@ -132,7 +134,7 @@ public class ChangePasswordPageController {
 		
 		request.getSession().setAttribute(UiCommonsConstants.SESSION_ATTRIBUTE_ERROR_MESSAGE, errorMessage);
 		
-		setModelAttributes(model, adminService);
+		setModelAttributes(model, adminService, mss);
 		
 		return "myaccount/changePassword";
 	}
