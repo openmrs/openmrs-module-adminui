@@ -154,7 +154,7 @@
                 ng-model="uuidUserMap['${userUuid}'].capabilities['${cap.uuid}']" value="${cap.uuid}"
             <% if (user && account.getCapabilities(user).contains(cap)) { %> checked='checked'<% } %> /> ${label}
         </td>
-    <% if(index % 2 != 0 || index == (capabilities.size - 1)) { %>
+    <% if(index % 2 != 0 || index == (capabilities.size() - 1)) { %>
     ${index % 2 == 0 ? '<td valign="top"></td>' : ''}
     </tr>
     <% } %>

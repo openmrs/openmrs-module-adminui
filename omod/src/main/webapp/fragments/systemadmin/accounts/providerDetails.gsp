@@ -27,7 +27,7 @@
         </div>
     <% } %>
 
-    <% if(!createAccount && account.providerAccounts.size == 1) { %>
+    <% if(!createAccount && account.providerAccounts.size() == 1) { %>
         <div id="adminui-first-provider-details" ng-class="{'invisible':inEditMode}">
             <div class="adminui-first-provider-ele">
                 <button id="adminui-addFirstProvider" type="button" ng-click="add('${account.providerAccounts[0].uuid}')">
@@ -41,7 +41,7 @@
         </div>
     <% } %>
 
-    <% if(!createAccount && account.providerAccounts.size > 1) { %>
+    <% if(!createAccount && account.providerAccounts.size() > 1) { %>
         <div id="adminui-providers">
             <ul>
                 <% account.providerAccounts.each { %>

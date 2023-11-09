@@ -28,7 +28,7 @@
             </div>
             <% } %>
 
-            <% if(!createAccount && account.userAccounts.size == 1) { %>
+            <% if(!createAccount && account.userAccounts.size() == 1) { %>
             <div id="adminui-first-user-details" ng-class="{'invisible':inEditMode}">
                 <div class="adminui-first-user-ele">
                     <button id="adminui-addFirstUser" type="button" ng-click="add('${account.userAccounts[0].uuid}')">
@@ -42,7 +42,7 @@
             </div>
             <% } %>
 
-            <% if(!createAccount && account.userAccounts.size > 1) { %>
+            <% if(!createAccount && account.userAccounts.size() > 1) { %>
             <div id="adminui-users">
                 <ul>
                     <% account.userAccounts.each { %>

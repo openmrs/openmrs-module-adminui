@@ -51,8 +51,8 @@
            ${name} ${!isLinkedToPerson ? "*" : ""}
         </td>
         <td valign="top" class="adminui-center">${ ui.format(it.person.gender) }</td>
-        <td valign="top" class="adminui-center">${ ui.format(it.userAccounts.size) }</td>
-        <td valign="top" class="adminui-center">${ ui.format(it.providerAccounts.size) }</td>
+        <td valign="top" class="adminui-center">${ ui.format(it.userAccounts.size()) }</td>
+        <td valign="top" class="adminui-center">${ ui.format(it.providerAccounts.size()) }</td>
         <td valign="top" class="adminui-center">
             <% if(isLinkedToPerson) { %>
             <i class="icon-pencil edit-action" title="${ ui.message("general.edit") }"
