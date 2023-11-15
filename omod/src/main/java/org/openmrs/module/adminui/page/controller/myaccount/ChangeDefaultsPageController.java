@@ -51,6 +51,7 @@ public class ChangeDefaultsPageController {
 
         //TODO do some validation
         try {
+        	Context.clearSession();
             User user = Context.getAuthenticatedUser();
             Map<String, String> props = user.getUserProperties();
             props.put(OpenmrsConstants.USER_PROPERTY_DEFAULT_LOCALE, userDefaults.getDefaultLocale());
