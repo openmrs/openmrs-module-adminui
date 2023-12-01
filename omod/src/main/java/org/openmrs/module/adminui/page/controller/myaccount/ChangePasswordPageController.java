@@ -95,7 +95,7 @@ public class ChangePasswordPageController {
 						userProperties = new UserProperties(user.getUserProperties());
 						userProperties.setSupposedToChangePassword(false);
 						try {
-							userService.saveUser(user, null);
+							userService.saveUser(user);
 						}
 						catch (NoSuchMethodError ex) {
 			            	//must be running platforms 2.0 and above which do not have the above method

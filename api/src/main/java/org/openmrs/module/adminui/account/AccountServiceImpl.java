@@ -84,7 +84,7 @@ public class AccountServiceImpl extends BaseOpenmrsService implements AccountSer
 			}
 			else {
 				try {
-					userService.saveUser(user, null);
+					userService.saveUser(user);
 				}
 				catch (NoSuchMethodError ex) {
 					try {
