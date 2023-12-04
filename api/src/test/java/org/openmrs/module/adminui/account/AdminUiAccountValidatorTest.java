@@ -19,6 +19,7 @@ import org.mockito.Mockito;
 import org.openmrs.api.AdministrationService;
 import org.openmrs.api.context.Context;
 import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.springframework.validation.BindException;
@@ -26,6 +27,7 @@ import org.springframework.validation.Errors;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(Context.class)
+@PowerMockIgnore("jdk.internal.reflect.*")
 public class AdminUiAccountValidatorTest {
 	
 	private AdminUiAccountValidator validator;

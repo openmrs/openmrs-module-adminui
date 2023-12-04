@@ -37,7 +37,7 @@ public class ManageLocationsPageController {
 	 * @param locationService
 	 */
     public void get(PageModel model, @SpringBean("locationService") LocationService locationService) {
-    	List<LocationAndDepth> locationAndDepths = new ArrayList<LocationAndDepth>();
+    	List<LocationAndDepth> locationAndDepths = new ArrayList<>();
 		List<Location> locations = locationService.getRootLocations(true);
 		populateLocationAndDepthList(locationAndDepths, locations, 0);
     	model.addAttribute("locations", locationAndDepths);

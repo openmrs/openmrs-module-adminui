@@ -73,6 +73,11 @@
             <groupId>org.openmrs.module</groupId>
             <artifactId>uiframework-api</artifactId>
         </dependency>
+
+		<dependency>
+			<groupId>org.openmrs.module</groupId>
+			<artifactId>legacyui-omod</artifactId>
+		</dependency>
 		
 	</dependencies>
 	

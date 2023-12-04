@@ -33,11 +33,13 @@ import org.openmrs.module.adminui.AdminUiConstants;
 import org.openmrs.module.adminui.TestUtils;
 import org.openmrs.module.providermanagement.api.ProviderManagementService;
 import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(Context.class)
+@PowerMockIgnore("jdk.internal.reflect.*")
 public class AccountServiceTest {
 	
 	private AccountServiceImpl accountService;
