@@ -10,16 +10,13 @@
 package org.openmrs.module.adminui;
 
 import org.apache.commons.beanutils.PropertyUtils;
-import org.hamcrest.Matcher;
-import org.junit.Assert;
-import org.mockito.ArgumentMatcher;
 import org.openmrs.util.OpenmrsUtil;
 
 import java.util.Collection;
 
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Various utils to help with testing
@@ -29,9 +26,10 @@ public class TestUtils {
     /**
      * To test things like: assertContainsElementWithProperty(listOfPatients, "patientId", 2)
      *
-     * @param collection
-     * @param property
-     * @param value
+     * @param collection the collection to search
+     * @param property the name of the bean property to evaluate
+     * @param value the expected value of the property
+     * @throws AssertionError if no matching element is found
      */
     public static void assertContainsElementWithProperty(Collection<?> collection, String property, Object value) {
         for (Object o : collection) {
@@ -40,50 +38,30 @@ public class TestUtils {
                     return;
                 }
             } catch (Exception ex) {
-                // pass
+                // Skip this element
             }
         }
-        Assert.fail("Collection does not contain an element with " + property + " = " + value + ". Collection: "
-                + collection);
-    }
-
-    public static <T> ArgumentMatcher<T> isCollectionOfExactlyElementsWithProperties(final String property,
-                                                                                     final Object... expectedPropertyValues) {
-        return new ArgumentMatcher<T>() {
-
-            @Override
-            public boolean matches(Object o) {
-                assertTrue(o instanceof Collection);
-                Collection actual = (Collection) o;
-                assertThat(actual.size(), is(expectedPropertyValues.length));
-                for (Object expectedPropertyValue : expectedPropertyValues) {
-                    assertContainsElementWithProperty(actual, property, expectedPropertyValue);
-                }
-                return true;
-            }
-        };
+        fail("Collection does not contain an element with " + property + " = " + value + ". Collection: " + collection);
     }
 
     /**
-     * Creates an argument matcher that tests equality based on the equals method, the developer
-     * doesn't have to type cast the returned argument when pass it to
-     * {@link org.mockito.Mockito#argThat(org.hamcrest.Matcher)} as it would be the case if we used
-     * {@link org.mockito.internal.matchers.Equals} matcher
+     * Asserts that the given collection contains exactly the expected property values, with no extra or missing values.
+     * The assertion passes if the collection contains the same number of elements as the number of expected values,
+     * and each expected property value is found in at least one element of the collection.
+     * This does not consider order or duplicates; it treats both actual and expected values as sets.
      *
-     * @param object
-     * @return Matcher
+     * @param collection the collection to check
+     * @param property the bean property to evaluate for each element
+     * @param expectedPropertyValues the expected values of the property across the collection
+     * @throws AssertionError if the size does not match or any expected value is missing
      */
-    @SuppressWarnings("unchecked")
-    public static <T> Matcher<T> equalsMatcher(final T object) {
-        return new ArgumentMatcher<T>() {
+    public static void assertCollectionHasExactlyElementsWithProperty(Collection<?> collection, String property, Object... expectedPropertyValues) {
+        assertNotNull(collection, "Collection is null");
+        assertEquals(expectedPropertyValues.length, collection.size(), "Collection size does not match expected");
 
-            /**
-             * @see org.mockito.ArgumentMatcher#matches(Object)
-             */
-            @Override
-            public boolean matches(Object arg) {
-                return OpenmrsUtil.nullSafeEquals(object, (T) arg);
-            }
-        };
+        for (Object expectedValue : expectedPropertyValues) {
+            assertContainsElementWithProperty(collection, property, expectedValue);
+        }
     }
+
 }

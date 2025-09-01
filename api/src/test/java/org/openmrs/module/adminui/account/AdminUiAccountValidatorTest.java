@@ -9,51 +9,53 @@
  */
 package org.openmrs.module.adminui.account;
 
-import static org.powermock.api.mockito.PowerMockito.when;
-
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.MockedStatic;
 import org.openmrs.api.AdministrationService;
 import org.openmrs.api.context.Context;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PowerMockIgnore;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
 import org.springframework.validation.BindException;
 import org.springframework.validation.Errors;
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest(Context.class)
-@PowerMockIgnore("jdk.internal.reflect.*")
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+@ExtendWith(MockitoExtension.class)
 public class AdminUiAccountValidatorTest {
-	
-	private AdminUiAccountValidator validator;
-	
+
+	private Account account;
+	private Errors errors;
+
+	@Mock
 	private AdministrationService adminService;
-	
-	@Before
-	public void setValidator() {
-		PowerMockito.mockStatic(Context.class);
-		adminService = Mockito.mock(AdministrationService.class);
-		when(Context.getAdministrationService()).thenReturn(adminService);
-		
+
+	private AdminUiAccountValidator validator;
+
+	@BeforeEach
+	public void setUp() {
+		account = new Account(null);
+		errors = new BindException(account, "account");
 		validator = new AdminUiAccountValidator();
 	}
-	
+
 	/**
 	 * @see AdminUiAccountValidator#validate(Object,org.springframework.validation.Errors)
 	 * @verifies reject an account with no user or provider account
 	 */
 	@Test
 	public void validate_shouldRejectAnAccountWithNoUserOrProviderAccount() throws Exception {
-		Account account = new Account(null);
-		Errors errors = new BindException(account, "account");
-		validator.validate(account, errors);
-		Assert.assertTrue(errors.hasErrors());
-		Assert.assertEquals(1, errors.getAllErrors().size());
-		Assert.assertEquals("adminui.account.userOrProvider.required", errors.getAllErrors().get(0).getCode());
+		try (MockedStatic<Context> mockedContext = Mockito.mockStatic(Context.class)) {
+			mockedContext.when(Context::getAdministrationService).thenReturn(adminService);
+
+			validator.validate(account, errors);
+
+			assertTrue(errors.hasErrors());
+			assertEquals(1, errors.getAllErrors().size());
+			assertEquals("adminui.account.userOrProvider.required", errors.getAllErrors().get(0).getCode());
+		}
 	}
 }

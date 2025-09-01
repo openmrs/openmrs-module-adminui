@@ -9,30 +9,30 @@
  */
 package org.openmrs.module.adminui.account;
 
-import static org.junit.Assert.assertNotNull;
-
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.openmrs.Provider;
 import org.openmrs.User;
+import org.openmrs.api.ProviderService;
 import org.openmrs.api.UserService;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.providermanagement.Provider;
-import org.openmrs.module.providermanagement.api.ProviderManagementService;
-import org.openmrs.test.BaseModuleContextSensitiveTest;
+import org.openmrs.test.jupiter.BaseModuleContextSensitiveTest;
 
-public class AccountServiceComponentTest extends BaseModuleContextSensitiveTest {
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+public class AccountServiceComponentTest extends BaseModuleContextSensitiveTest{
 	
 	private AccountService accountService;
 	
 	private UserService userService;
+
+	private ProviderService providerService;
 	
-	private ProviderManagementService providerManagementService;
-	
-	@Before
+	@BeforeEach
 	public void setup() {
 		userService = Context.getUserService();
 		accountService = Context.getService(AccountService.class);
-		providerManagementService = Context.getService(ProviderManagementService.class);
+		providerService = Context.getProviderService();
 	}
 	
 	/**
@@ -48,7 +48,7 @@ public class AccountServiceComponentTest extends BaseModuleContextSensitiveTest 
 		user.addRole(userService.getRole("Application Role: Archives"));//capability
 		
 		Provider provider = new Provider();
-		provider.setProviderRole(providerManagementService.getProviderRole(1001));
+		provider.setProviderRole(providerService.getProviderRole(1001));
 		Account account = new Account(null);
 		account.setFamilyName("some");
 		account.setGivenName("tester");

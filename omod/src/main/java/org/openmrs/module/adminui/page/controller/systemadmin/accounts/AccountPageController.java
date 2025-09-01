@@ -24,10 +24,13 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.openmrs.OpenmrsObject;
 import org.openmrs.Person;
 import org.openmrs.PersonName;
+import org.openmrs.Provider;
+import org.openmrs.ProviderRole;
 import org.openmrs.Role;
 import org.openmrs.User;
 import org.openmrs.api.APIException;
 import org.openmrs.api.AdministrationService;
+import org.openmrs.api.ProviderService;
 import org.openmrs.api.UserService;
 import org.openmrs.api.context.Context;
 import org.openmrs.messagesource.MessageSourceService;
@@ -37,9 +40,6 @@ import org.openmrs.module.adminui.account.AccountService;
 import org.openmrs.module.adminui.account.AdminUiAccountValidator;
 import org.openmrs.module.appframework.domain.Extension;
 import org.openmrs.module.appframework.service.AppFrameworkService;
-import org.openmrs.module.providermanagement.Provider;
-import org.openmrs.module.providermanagement.ProviderRole;
-import org.openmrs.module.providermanagement.api.ProviderManagementService;
 import org.openmrs.module.uicommons.UiCommonsConstants;
 import org.openmrs.module.uicommons.util.InfoErrorMessageUtil;
 import org.openmrs.ui.framework.SimpleObject;
@@ -83,17 +83,17 @@ public class AccountPageController {
 	 * @param model
 	 * @param account
 	 * @param accountService
-	 * @param providerManagementService
+	 * @param providerService
 	 */
 	public void get(PageModel model, @MethodParam("getAccount") Account account,
 	                @SpringBean("adminAccountService") AccountService accountService,
 	                @SpringBean("adminService") AdministrationService administrationService,
-	                @SpringBean("providerManagementService") ProviderManagementService providerManagementService,
+	                @SpringBean("providerService") ProviderService providerService,
 					UiUtils uu,
 					@SpringBean("appFrameworkService") AppFrameworkService appFrameworkService)
 	    throws IOException {
 		
-		setModelAttributes(model, account, null, accountService, administrationService, providerManagementService, uu, appFrameworkService);
+		setModelAttributes(model, account, null, accountService, administrationService, providerService, uu, appFrameworkService);
 		if (account.getPerson().getPersonId() == null) {
 			setJsonFormData(model, account, null, uu);
 		}
@@ -104,7 +104,7 @@ public class AccountPageController {
 	 * @param messageSourceService
 	 * @param accountService
 	 * @param administrationService
-	 * @param providerManagementService
+	 * @param providerService
 	 * @param accountValidator
 	 * @param model
 	 * @param request
@@ -116,7 +116,7 @@ public class AccountPageController {
 	                   @SpringBean("adminAccountService") AccountService accountService,
 	                   @SpringBean("adminService") AdministrationService administrationService,
 	                   @SpringBean("adminUiAccountValidator") AdminUiAccountValidator accountValidator,
-	                   @SpringBean("providerManagementService") ProviderManagementService providerManagementService,
+	                   @SpringBean("providerService") ProviderService providerService,
 					   @SpringBean("appFrameworkService") AppFrameworkService appFrameworkService,
 	                   HttpServletRequest request, UiUtils uu) throws IOException {
 		
@@ -188,7 +188,7 @@ public class AccountPageController {
 		if (otherAccountData.getAddProviderAccount()) {
 			Provider provider = new Provider();
 			provider.setIdentifier(request.getParameter("identifier"));
-			provider.setProviderRole(providerManagementService.getProviderRoleByUuid(request.getParameter("providerRole")));
+			provider.setProviderRole(providerService.getProviderRoleByUuid(request.getParameter("providerRole")));
 			account.addProviderAccount(provider);
 		}
 		
@@ -217,7 +217,7 @@ public class AccountPageController {
 		}
 		
 		setModelAttributes(model, account, otherAccountData, accountService, administrationService,
-		    providerManagementService, uu, appFrameworkService);
+		    providerService, uu, appFrameworkService);
 		
 		sendErrorMessage(errors, model, messageSourceService, request);
 		
@@ -231,7 +231,7 @@ public class AccountPageController {
 	
 	public void setModelAttributes(PageModel model, Account account, OtherAccountData otherAccountData,
 	                               AccountService accountService, AdministrationService administrationService,
-	                               ProviderManagementService providerManagementService, UiUtils uu,
+								   ProviderService providerService, UiUtils uu,
 								   AppFrameworkService appFrameworkService) throws IOException {
 
 		model.addAttribute("account", account);
@@ -259,7 +259,7 @@ public class AccountPageController {
 		model.addAttribute("privilegeLevelPrefix", privilegeLevelPrefix);
 		model.addAttribute("rolePrefix", rolePrefix);
 		model.addAttribute("allowedLocales", administrationService.getAllowedLocales());
-		List<ProviderRole> providerRoles = providerManagementService.getAllProviderRoles(false);
+		List<ProviderRole> providerRoles = providerService.getAllProviderRoles(false);
 		model.addAttribute("providerRoles", providerRoles);
 
 		List<Extension> customPersonAttributeEditFragments =
@@ -280,7 +280,7 @@ public class AccountPageController {
 		Collections.sort(customUserPropertyViewFragments);
 		model.addAttribute("customUserPropertyViewFragments", customUserPropertyViewFragments);
 
-		Map<String, Integer> propertyMaxLengthMap = new HashMap<String, Integer>();
+		Map<String, Integer> propertyMaxLengthMap = new HashMap<>();
 		propertyMaxLengthMap.put("familyName",
 		    administrationService.getMaximumPropertyLength(PersonName.class, "family_name"));
 		propertyMaxLengthMap
