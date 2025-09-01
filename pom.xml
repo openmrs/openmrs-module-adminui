@@ -58,6 +58,7 @@
 		<webservicesRestVersion>2.50.0-SNAPSHOT</webservicesRestVersion>
 		<legacyuiVersion>2.0.0-SNAPSHOT</legacyuiVersion>
 		<javaxServletApiVersion>4.0.1</javaxServletApiVersion>
+		<mockitoInlineVersion>4.8.0</mockitoInlineVersion>
 	</properties>
 
 	<dependencyManagement>
@@ -160,6 +161,13 @@
 				<artifactId>javax.servlet-api</artifactId>
 				<version>${javaxServletApiVersion}</version>
 				<scope>provided</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>org.mockito</groupId>
+				<artifactId>mockito-inline</artifactId>
+				<version>${mockitoInlineVersion}</version>
+				<scope>test</scope>
 			</dependency>
 
 		</dependencies>
