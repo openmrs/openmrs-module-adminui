@@ -9,13 +9,10 @@
  */
 package org.openmrs.module.adminui.fragment.controller.systemadmin.accounts;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.openmrs.OpenmrsObject;
+import org.openmrs.Provider;
 import org.openmrs.api.PersonService;
 import org.openmrs.api.ProviderService;
-import org.openmrs.module.providermanagement.Provider;
-import org.openmrs.module.providermanagement.api.ProviderManagementService;
 import org.openmrs.ui.framework.UiUtils;
 import org.openmrs.ui.framework.annotation.BindParams;
 import org.openmrs.ui.framework.annotation.SpringBean;
@@ -28,6 +25,8 @@ import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpServletRequest;
+
 @Controller
 public class ProviderTabContentPaneFragmentController {
 	
@@ -39,7 +38,6 @@ public class ProviderTabContentPaneFragmentController {
 	                                    @RequestParam(value = "reason", required = false) String reason,
 	                                    @SpringBean("personService") PersonService personService,
 	                                    @SpringBean("providerService") ProviderService providerService,
-	                                    @SpringBean("providerManagementService") ProviderManagementService providerManagementService,
 	                                    HttpServletRequest request, UiUtils ui) {
 		
 		try {

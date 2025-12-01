@@ -10,18 +10,18 @@
 
 package org.openmrs.module.adminui.account;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import org.junit.Test;
 import org.openmrs.Person;
 import org.openmrs.PersonName;
 import org.openmrs.Provider;
 import org.openmrs.User;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class AccountTest {
 	

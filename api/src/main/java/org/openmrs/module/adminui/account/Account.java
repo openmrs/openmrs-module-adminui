@@ -9,6 +9,19 @@
  */
 package org.openmrs.module.adminui.account;
 
+import org.openmrs.Auditable;
+import org.openmrs.Person;
+import org.openmrs.PersonAttribute;
+import org.openmrs.PersonName;
+import org.openmrs.Provider;
+import org.openmrs.Role;
+import org.openmrs.User;
+import org.openmrs.api.APIException;
+import org.openmrs.api.context.Context;
+import org.openmrs.module.adminui.AdminUiConstants;
+import org.openmrs.util.OpenmrsConstants;
+import org.openmrs.util.OpenmrsUtil;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -19,19 +32,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import org.openmrs.Auditable;
-import org.openmrs.Person;
-import org.openmrs.PersonName;
-import org.openmrs.Provider;
-import org.openmrs.Role;
-import org.openmrs.User;
-import org.openmrs.api.APIException;
-import org.openmrs.api.context.Context;
-import org.openmrs.module.adminui.AdminUiConstants;
-import org.openmrs.util.OpenmrsUtil;
-import org.openmrs.web.user.UserProperties;
-import org.openmrs.PersonAttribute;
 
 public class Account {
 	
@@ -209,7 +209,7 @@ public class Account {
 	}
 	
 	public boolean isSupposedToChangePassword(User user) {
-		return new UserProperties(user.getUserProperties()).isSupposedToChangePassword();
+		return Boolean.parseBoolean(user.getUserProperty(OpenmrsConstants.USER_PROPERTY_CHANGE_PASSWORD, "false"));
 	}
 	
 	public String getPassword(User user) {

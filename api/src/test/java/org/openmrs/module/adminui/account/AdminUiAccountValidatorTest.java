@@ -9,38 +9,40 @@
  */
 package org.openmrs.module.adminui.account;
 
-import static org.powermock.api.mockito.PowerMockito.when;
-
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.openmrs.api.AdministrationService;
 import org.openmrs.api.context.Context;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PowerMockIgnore;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
 import org.springframework.validation.BindException;
 import org.springframework.validation.Errors;
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest(Context.class)
-@PowerMockIgnore("jdk.internal.reflect.*")
+import static org.mockito.Mockito.mockStatic;
+import static org.mockito.Mockito.when;
+
 public class AdminUiAccountValidatorTest {
 	
 	private AdminUiAccountValidator validator;
 	
 	private AdministrationService adminService;
+
+	private MockedStatic<Context> context;
 	
 	@Before
 	public void setValidator() {
-		PowerMockito.mockStatic(Context.class);
+		context = mockStatic(Context.class);
 		adminService = Mockito.mock(AdministrationService.class);
 		when(Context.getAdministrationService()).thenReturn(adminService);
 		
 		validator = new AdminUiAccountValidator();
+	}
+
+	@After
+	public void cleanup() {
+		context.close();
 	}
 	
 	/**
