@@ -9,17 +9,11 @@
  */
 package org.openmrs.module.adminui.account;
 
-import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
-import java.util.Arrays;
-import java.util.List;
-
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.mockito.MockedStatic;
 import org.openmrs.Person;
 import org.openmrs.Provider;
 import org.openmrs.Role;
@@ -30,16 +24,14 @@ import org.openmrs.api.ProviderService;
 import org.openmrs.api.UserService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.adminui.AdminUiConstants;
-import org.openmrs.module.adminui.TestUtils;
-import org.openmrs.module.providermanagement.api.ProviderManagementService;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PowerMockIgnore;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest(Context.class)
-@PowerMockIgnore("jdk.internal.reflect.*")
+import java.util.Arrays;
+import java.util.List;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.mockStatic;
+import static org.mockito.Mockito.when;
+
 public class AccountServiceTest {
 	
 	private AccountServiceImpl accountService;
@@ -50,17 +42,16 @@ public class AccountServiceTest {
 	
 	private ProviderService providerService;
 	
-	private ProviderManagementService providerManagementService;
-	
 	private AdministrationService adminService;
+
+	private MockedStatic<Context> context;
 	
 	@Before
 	public void setup() {
-		PowerMockito.mockStatic(Context.class);
+		context = mockStatic(Context.class);
 		userService = mock(UserService.class);
 		personService = mock(PersonService.class);
 		providerService = mock(ProviderService.class);
-		providerManagementService = mock(ProviderManagementService.class);
 		adminService = mock(AdministrationService.class);
 		
 		accountService = new AccountServiceImpl();
@@ -71,7 +62,12 @@ public class AccountServiceTest {
 		when(Context.getUserService()).thenReturn(userService);
 		when(Context.getProviderService()).thenReturn(providerService);
 	}
-	
+
+	@After
+	public void cleanup() {
+		context.close();
+	}
+
 	/**
 	 * @verifies get all unique accounts
 	 * @see AccountService#getAllAccounts()
@@ -117,14 +113,23 @@ public class AccountServiceTest {
 	@Test
 	public void getAllCapabilities_shouldReturnAllRolesWithTheCapabilityPrefix() throws Exception {
 		Role role1 = new Role(AdminUiConstants.ROLE_PREFIX_CAPABILITY + "role1");
-		Role role3 = new Role("role2");
-		Role role2 = new Role(AdminUiConstants.ROLE_PREFIX_CAPABILITY + "role3");
+		Role role2 = new Role("role2");
+		Role role3 = new Role(AdminUiConstants.ROLE_PREFIX_CAPABILITY + "role3");
 		
 		when(userService.getAllRoles()).thenReturn(Arrays.asList(role1, role2, role3));
 		List<Role> capabilities = accountService.getAllCapabilities();
 		Assert.assertEquals(2, capabilities.size());
-		assertThat(capabilities, TestUtils.isCollectionOfExactlyElementsWithProperties("role",
-		    AdminUiConstants.ROLE_PREFIX_CAPABILITY + "role1", AdminUiConstants.ROLE_PREFIX_CAPABILITY + "role3"));
+		for (Role role : capabilities) {
+			if (role.equals(role1)) {
+				Assert.assertEquals(AdminUiConstants.ROLE_PREFIX_CAPABILITY + "role1", role.getRole());
+			}
+			else if (role.equals(role3)) {
+				Assert.assertEquals(AdminUiConstants.ROLE_PREFIX_CAPABILITY + "role3", role.getRole());
+			}
+			else {
+				Assert.fail("Unexpected role: " + role);
+			}
+		}
 	}
 	
 	/**
@@ -134,16 +139,23 @@ public class AccountServiceTest {
 	@Test
 	public void getAllPrivilegeLevels_shouldReturnAllRolesWithThePrivilegeLevelPrefix() throws Exception {
 		Role role1 = new Role(AdminUiConstants.ROLE_PREFIX_PRIVILEGE_LEVEL + "role1");
-		Role role3 = new Role("role2");
-		Role role2 = new Role(AdminUiConstants.ROLE_PREFIX_PRIVILEGE_LEVEL + "role3");
+		Role role2 = new Role("role2");
+		Role role3 = new Role(AdminUiConstants.ROLE_PREFIX_PRIVILEGE_LEVEL + "role3");
 		
 		when(userService.getAllRoles()).thenReturn(Arrays.asList(role1, role2, role3));
 		List<Role> privilegeLevels = accountService.getAllPrivilegeLevels();
 		Assert.assertEquals(2, privilegeLevels.size());
-		assertThat(
-		    privilegeLevels,
-		    TestUtils.isCollectionOfExactlyElementsWithProperties("role", AdminUiConstants.ROLE_PREFIX_PRIVILEGE_LEVEL
-		            + "role1", AdminUiConstants.ROLE_PREFIX_PRIVILEGE_LEVEL + "role3"));
+		for (Role role : privilegeLevels) {
+			if (role.equals(role1)) {
+				Assert.assertEquals(AdminUiConstants.ROLE_PREFIX_PRIVILEGE_LEVEL + "role1", role.getRole());
+			}
+			else if (role.equals(role3)) {
+				Assert.assertEquals(AdminUiConstants.ROLE_PREFIX_PRIVILEGE_LEVEL + "role3", role.getRole());
+			}
+			else {
+				Assert.fail("Unexpected role: " + role);
+			}
+		}
 	}
 	
 }

@@ -18,7 +18,5 @@
 
 <hibernate-configuration>
     <session-factory>
-      <mapping resource="Provider.hbm.xml" />
-        <mapping resource="ProviderRole.hbm.xml" />
     </session-factory>
 </hibernate-configuration>

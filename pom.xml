@@ -1,22 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-
-    This Source Code Form is subject to the terms of the Mozilla Public License,
-    v. 2.0. If a copy of the MPL was not distributed with this file, You can
-    obtain one at http://mozilla.org/MPL/2.0/. OpenMRS is also distributed under
-    the terms of the Healthcare Disclaimer located at http://openmrs.org/license.
-
-    Copyright (C) OpenMRS Inc. OpenMRS is a registered trademark and the OpenMRS
-    graphic logo is a trademark of OpenMRS Inc.
-
--->
-
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>org.openmrs.module</groupId>
 	<artifactId>adminui</artifactId>
-	<version>1.7.0-SNAPSHOT</version>
+	<version>2.0.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>Admin UI Module</name>
 	<description>Administration Tools for the Reference Application</description>
@@ -49,13 +37,12 @@
 	</modules>
 	
 	<properties>
-		<openMRSVersion>2.0.0</openMRSVersion>
+		<openMRSVersion>2.8.2-SNAPSHOT</openMRSVersion>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<uicommonsVersion>2.1</uicommonsVersion>
 		<appuiVersion>1.7</appuiVersion>
 		<uiframeworkVersion>3.9</uiframeworkVersion>
 		<appframeworkVersion>2.9</appframeworkVersion>
-		<providermanagementVersion>2.5.0</providermanagementVersion>
 		<webservicesRestVersion>2.16</webservicesRestVersion>
 		<legacyuiVersion>1.16.0</legacyuiVersion>
 	</properties>
@@ -127,14 +114,6 @@
 
 			<dependency>
 				<groupId>org.openmrs.module</groupId>
-				<artifactId>providermanagement-api</artifactId>
-				<version>${providermanagementVersion}</version>
-				<type>jar</type>
-				<scope>provided</scope>
-			</dependency>
-
-			<dependency>
-				<groupId>org.openmrs.module</groupId>
 				<artifactId>legacyui-omod</artifactId>
 				<version>${legacyuiVersion}</version>
 				<scope>provided</scope>
@@ -149,7 +128,19 @@
 				<scope>provided</scope>
 			</dependency>
 
+			<dependency>
+				<groupId>org.mockito</groupId>
+				<artifactId>mockito-inline</artifactId>
+				<version>3.12.4</version>
+				<scope>test</scope>
+			</dependency>
 
+			<dependency>
+				<groupId>net.bytebuddy</groupId>
+				<artifactId>byte-buddy</artifactId>
+				<version>1.17.4</version>
+				<scope>test</scope>
+			</dependency>
 
 		</dependencies>
 	</dependencyManagement>
@@ -160,9 +151,10 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.14.1</version>
 					<configuration>
-						<target>1.7</target>
-						<source>1.7</source>
+						<target>8</target>
+						<source>8</source>
 					</configuration>
 				</plugin>
 				<plugin>
@@ -192,47 +184,6 @@
 				</plugin>
 			</plugins>
 		</pluginManagement>
-
-		<plugins>
-			<plugin>
-				<groupId>com.mycila</groupId>
-				<artifactId>license-maven-plugin</artifactId>
-				<version>3.0</version>
-				<configuration>
-					<inlineHeader>
-This Source Code Form is subject to the terms of the Mozilla Public License, 
-v. 2.0. If a copy of the MPL was not distributed with this file, You can 
-obtain one at http://mozilla.org/MPL/2.0/. OpenMRS is also distributed under 
-the terms of the Healthcare Disclaimer located at http://openmrs.org/license.
-
-Copyright (C) OpenMRS Inc. OpenMRS is a registered trademark and the OpenMRS 
-graphic logo is a trademark of OpenMRS Inc.
-					</inlineHeader>
-					<includes>
-						<include>**/*.java</include>
-						<include>**/*.txt</include>
-						<include>**/*.xml</include>
-					</includes>
-					<excludes>
-						<exclude>.rubygems/**</exclude>
-						<exclude>.rubygems-provided/**</exclude>
-						<!--
-							The bamboo stage that releases the module copies the release scripts
-							into the project root, we need to ignore those files
-						 -->
-						<exclude>release-scripts/**</exclude>
-					</excludes>
-				</configuration>
-				<executions>
-					<execution>
-						<goals>
-							<goal>check</goal>
-						</goals>
-						<phase>validate</phase>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
 	</build>
 
 	<repositories>
@@ -308,7 +259,7 @@ graphic logo is a trademark of OpenMRS Inc.
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-surefire-plugin</artifactId>
-						<version>3.2.2</version>
+						<version>3.5.4</version>
 						<configuration>
 							<argLine>--add-opens java.base/java.lang=ALL-UNNAMED
 								--add-opens java.base/java.util=ALL-UNNAMED

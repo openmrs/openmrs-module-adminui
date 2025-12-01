@@ -9,31 +9,26 @@
  */
 package org.openmrs.module.adminui.account;
 
+import org.junit.Test;
+import org.openmrs.Provider;
+import org.openmrs.User;
+import org.openmrs.api.ProviderService;
+import org.openmrs.api.UserService;
+import org.openmrs.test.BaseModuleContextSensitiveTest;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import static org.junit.Assert.assertNotNull;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.openmrs.User;
-import org.openmrs.api.UserService;
-import org.openmrs.api.context.Context;
-import org.openmrs.module.providermanagement.Provider;
-import org.openmrs.module.providermanagement.api.ProviderManagementService;
-import org.openmrs.test.BaseModuleContextSensitiveTest;
-
 public class AccountServiceComponentTest extends BaseModuleContextSensitiveTest {
-	
+
+	@Autowired
 	private AccountService accountService;
-	
+
+	@Autowired
 	private UserService userService;
-	
-	private ProviderManagementService providerManagementService;
-	
-	@Before
-	public void setup() {
-		userService = Context.getUserService();
-		accountService = Context.getService(AccountService.class);
-		providerManagementService = Context.getService(ProviderManagementService.class);
-	}
+
+	@Autowired
+	private ProviderService providerService;
 	
 	/**
 	 * @verifies get all unique accounts
@@ -48,7 +43,7 @@ public class AccountServiceComponentTest extends BaseModuleContextSensitiveTest 
 		user.addRole(userService.getRole("Application Role: Archives"));//capability
 		
 		Provider provider = new Provider();
-		provider.setProviderRole(providerManagementService.getProviderRole(1001));
+		provider.setProviderRole(providerService.getProviderRole(1001));
 		Account account = new Account(null);
 		account.setFamilyName("some");
 		account.setGivenName("tester");
