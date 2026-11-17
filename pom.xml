@@ -37,7 +37,7 @@
 	</modules>
 	
 	<properties>
-		<openMRSVersion>2.8.2-SNAPSHOT</openMRSVersion>
+		<openMRSVersion>2.8.2</openMRSVersion>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<uicommonsVersion>2.1</uicommonsVersion>
 		<appuiVersion>1.7</appuiVersion>
